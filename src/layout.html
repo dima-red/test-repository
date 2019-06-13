@@ -4,8 +4,9 @@
     <head>
         <meta content="text/html; charset=UTF-8" />
         <title>HTML layout</title>
-        <script src="../lib/jquery-3.4.1.min.js" async></script>
-        <link rel="stylesheet" href="./layout.css">
+        <!-- <link rel="stylesheet" href="./layout.float.css"> -->
+        <link rel="stylesheet" href="./layout.block.css">
+        <!-- <link rel="stylesheet" href="./layout.flex.css"> -->
     </head>
 
     <body>
@@ -15,7 +16,7 @@
                 </header>
 
                 <main>
-                    <aside>
+                    <aside class="right-bar">
                         <h3>Sidebar</h3>
                     </aside>
             
@@ -23,7 +24,7 @@
                         <h3>Main</h3>
                     </section>
             
-                    <aside>
+                    <aside class="left-bar">
                         <h3>Sidebar</h3>
                     </aside>
                 </main>
