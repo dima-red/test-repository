@@ -14,7 +14,6 @@ body {
 
 .wrapper {
     margin: 0 auto;
-    max-width: 700px;
 }
 
 header {
@@ -49,7 +48,7 @@ footer {
     position: absolute;
     bottom: 0;
     height: 100px;
-    min-width: 700px;
+    width: 100%;
     margin: 1vh;
 }
 

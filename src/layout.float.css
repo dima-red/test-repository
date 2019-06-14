@@ -14,7 +14,6 @@ body {
 
 .wrapper {
     margin: 0 auto;
-    max-width: 700px;
 }
 
 header {
@@ -52,18 +51,22 @@ footer {
     position: absolute;
     bottom: 0;
     height: 100px;
-    min-width: 700px;
+    width: 100%;
     margin: 1vh;
 }
 
 main {
-    background-color: greenyellow;
+    background-color: #ffdc2f;
+    font-size: 0;
+    display: table;
+    width: 100%;
 }
 
 h3 {
     text-align: center;
     color: white;
     display: block;
+    font-size: large;
 }
 
 header h3, footer h3 {

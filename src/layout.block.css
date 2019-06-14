@@ -14,13 +14,12 @@ body {
 
 .wrapper {
     margin: 0 auto;
-    max-width: 700px;
 }
 
 header {
     background-color: #ff05c0a8;
     height: 100px;
-    margin: 1vh;
+    /* margin: 1vh; */
 }
 
 .right-bar {
@@ -29,6 +28,7 @@ header {
     height: 55vh;
     /* margin: 1vh; */
     min-width: 25%;
+    margin-bottom: 100px;
 }
 
 .left-bar {
@@ -37,6 +37,7 @@ header {
     height: 55vh;
     /* margin: 1vh; */
     min-width: 25%;
+    margin-bottom: 100px;
 }
 
 .major-content {
@@ -45,6 +46,7 @@ header {
     height: 55vh;
     /* margin: 1vh; */
     min-width: 50%;
+    margin-bottom: 100px;
 }
 
 footer {
@@ -52,18 +54,19 @@ footer {
     position: absolute;
     bottom: 0;
     height: 100px;
-    min-width: 700px;
-    margin: 1vh;
+    /* margin: 1vh; */
+    width: 100%;
 }
 
 main {
-    
+    font-size: 0;
 }
 
 h3 {
     text-align: center;
     color: white;
     display: block;
+    font-size: large;
 }
 
 header h3, footer h3 {

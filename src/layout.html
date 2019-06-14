@@ -5,12 +5,14 @@
         <meta content="text/html; charset=UTF-8" />
         <title>HTML layout</title>
         <!-- <link rel="stylesheet" href="./layout.float.css"> -->
-        <link rel="stylesheet" href="./layout.block.css">
-        <!-- <link rel="stylesheet" href="./layout.flex.css"> -->
+        <!-- <link rel="stylesheet" href="./layout.block.css"> -->
+        <link rel="stylesheet" href="./layout.flex.css">
+        <!-- <link rel="stylesheet" href="./signup.css"> -->
+        <script async src="signup.js"></script>
     </head>
 
     <body>
-        <section class="wrapper">
+        <div class="wrapper">
                 <header>
                     <h3>Header</h3>
                 </header>
@@ -22,6 +24,25 @@
             
                     <section class="major-content">
                         <h3>Main</h3>
+                        <div class="signup-block">
+                            <form class="signup-form" name="RegForm">
+                                <h4>Sign Up</h4>
+                                <div class="signup-wpapper">
+                                    <input type="email" class="reg-email" name="Email" placeholder="Enter email address">
+                                    <input type="password" name="Password" placeholder="Enter password">
+                                    <input type="password" name="RepeatedPassword" placeholder="Repeat password">
+                                    <button type="button" onclick="signUp()" class="auth-btn">Sign Up</button>
+                                </div>
+                            </form>
+                            <form class="login-form">
+                                <h4>Login</h4>
+                                <div class="login-wpapper">
+                                    <input type="email" placeholder="Enter email address">
+                                    <input type="password" placeholder="Enter password">
+                                    <button type="button" onclick="login()" class="auth-btn">Login</button>
+                                </div>
+                            </form>
+                        </div>
                     </section>
             
                     <aside class="left-bar">
@@ -32,7 +53,7 @@
                 <footer>
                     <h3>Footer</h3>
                 </footer>
-        </section>
+        </div>
     </body>
 
 </html>
