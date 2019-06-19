@@ -1,6 +1,7 @@
 * {
     margin: 0;
     padding: 0;
+    font-family: sans-serif;
 }
 
 html {
@@ -17,55 +18,144 @@ body {
 }
 
 header {
-    background-color: #ff05c0a8;
+    background-color: #058cffa8;
     height: 100px;
-    margin: 1vh;
+    margin: 10px;
 }
 
 .right-bar {
-    background-color: #0762d862;
-    height: 55vh;
-    margin: 1vh;
-    min-width: 26%;
+    
 }
 
 .left-bar {
+    
+}
+
+.bar {
     background-color: #0762d862;
     height: 55vh;
-    margin: 1vh;
-    min-width: 26%;
+    width: 60%;
 }
 
 .major-content {
-    background-color: #eb0c8662;
+    background-color: #fafafa;
     height: 55vh;
-    margin: 1vh;
-    min-width: 40%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.signup-wpapper, .login-wpapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.modal-section, .signup-question, .login-question {
+    background-color: white;
+    border: 1px solid #e6e6e6;;
+    border-radius: 3px;
+    width: 70%;
+    margin: 0 auto;
+}
+
+.signup-question, .login-question {
+    margin-top: 20px;
+    height: 60px;
 }
 
 footer {
-    background-color: #ff05c0a8;
+    background-color: #058cffa8;
     position: absolute;
     bottom: 0;
     height: 100px;
     width: 100%;
-    margin: 1vh;
+}
+
+.signup-block, .login-block {
+    background-color: white;
+    padding: 10%;
 }
 
 main {
     display: flex;
+    margin: 10px;
 }
 
-h3 {
+h3, h4, p {
     text-align: center;
-    color: white;
+    color: #646464;
     display: block;
 }
 
 header h3, footer h3 {
-    padding-top: 4vh;
+    padding-top: 40px;
 }
 
 main h3 {
-    padding-top: 25vh;
+    padding-top: 100px;
+}
+
+.signup-form h4 {
+    padding: 0 10% 10%;
+}
+
+.hide {
+    display: none !important;
+}
+
+.error {
+    border: 2px solid red;
+}
+
+input {
+    height: 26px;
+    background-color: #fafafa;
+    font-size: small;
+    border: 1px solid #999;
+    border-radius: 3px;
+    -webkit-appearance: none;
+    margin-bottom: 12px;
+    padding-left: 10px;
+    font-size: 12px;
+    opacity: 0.8;
+    width: -webkit-fill-available;
+}
+
+.modal-section a {
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    border-radius: 3px;
+    color: #fff;
+    position: relative;
+    width: -webkit-fill-available;
+    height: 22px;
+    text-align: center;
+    padding-top: 4px;
+}
+
+a {
+    cursor: pointer;
+}
+
+.signup-question, .login-question {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.signup-question-btn, .login-question-btn {
+    margin-left: 12px;
+    color: #3897f0;
+    -webkit-appearance: none;
+    background-color: white;
+    border: none;
+    border-radius: 3px;
+}
+
+h1, h2, h3, h4, h5 {
+    font-weight: 600;
+    line-height: 20px;
+    font-size: 17px;
+    margin: 0 40px 10px;
 }
