@@ -150,7 +150,7 @@
             const usersLogins = {};
             usersLogins[signUpStore.email] = signUpStore.password;
             localStorage.setItem("user1", JSON.stringify(usersLogins));
-            localStorage.setItem("loggedInUser", JSON.stringify(signUpStore.email));
+            localStorage.setItem("loggedInUser", signUpStore.email);
         }
 
         console.log(signUpStore);
@@ -174,13 +174,10 @@
         if (this.isEmpty(storage)) {
             const mapFromLocalStorage = storage.getItem("user1");
             const objFromLocalStorage = JSON.parse(mapFromLocalStorage);
-            const loggedInUser = JSON.parse(storage.getItem("loggedInUser"));
+            const loggedInUser = storage.getItem("loggedInUser");
 
-            // signUpStore.email = loggedInUser;
-            // signUpStore.password = objFromLocalStorage[loggedInUser];
-            
-            console.log(objFromLocalStorage[loggedInUser]);
-            console.log(loggedInUser);
+            signUpStore.email = loggedInUser;
+            signUpStore.password = objFromLocalStorage[loggedInUser];
         }
     };
 
