@@ -85,7 +85,7 @@
 
             const homeContent = parentEl.getElementsByClassName("home-content")[0];
             const childParagraph = document.createElement("p");
-            childParagraph.textContent = "Congratulations! " + `${signUpStore.email}` + " has successfully logged in."
+            childParagraph.textContent = "Congratulations! " + `${logEmail}` + " has successfully logged in."
 
             homeContent.appendChild(childParagraph);
 
