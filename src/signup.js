@@ -1,10 +1,15 @@
 (() => {
     const signUpStore = {};
-
-    this.parentEl = null;
-    this.signUpTemplate = null;
-    this.logInTemplate = null;
-    this.homeTemplate = null;
+    let loginsObj = {};
+    let loggedInUser = null;
+    let parentEl = null;
+    let signUpTemplate = null;
+    let logInTemplate = null;
+    let homeTemplate = null;
+    let signUpQuestionTemplate = null;
+    let logInQuestionTemplate = null;
+    let loginBtn = null;
+    let signupBtn = null;
 
     this.onInit = onInit;
     this.getSignUpTemplate = getSignUpTemplate;
@@ -14,36 +19,44 @@
     this.isEmpty = isEmpty;
     this.getLocalStorageData = getLocalStorageData;
     this.isLoggedInUser = isLoggedInUser;
-    onInit();
+    this.findCredentials = findCredentials;
+    
     getLocalStorageData(localStorage);
+    onInit();
     isLoggedInUser();
     
+    console.log(loginsObj);
 
+
+    
     function onInit() {
         console.log("onInit");
-
-        this.parentEl = document.getElementsByClassName("major-content")[0];
-        this.signUpTemplate = this.parentEl.getElementsByClassName("signup-block")[0];
-        this.signUpTemplate.remove();
-        this.logInTemplate = this.parentEl.getElementsByClassName("login-block")[0];
-        this.loginBtn = this.parentEl.getElementsByClassName("login-btn")[0];
-        this.loginBtn.onclick = this.login.bind(this);
-        this.homeTemplate = this.parentEl.getElementsByClassName("home-block")[0];
-        this.homeTemplate.remove();
-        this.signUpQuestionBtn = this.parentEl.getElementsByClassName("signup-question-btn")[0];
+        
+        parentEl = document.getElementsByClassName("major-content")[0];
+        signUpTemplate = parentEl.getElementsByClassName("signup-block")[0];
+        signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
+        signupBtn.onclick = this.signUp.bind(this);
+        signUpTemplate.remove();
+        logInTemplate = parentEl.getElementsByClassName("login-block")[0];
+        loginBtn = parentEl.getElementsByClassName("login-btn")[0];
+        loginBtn.onclick = this.login.bind(this);
+        
+        homeTemplate = parentEl.getElementsByClassName("home-block")[0];
+        homeTemplate.remove();
+        this.signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
         this.signUpQuestionBtn.onclick = this.getSignUpTemplate.bind(this);
-        this.logInQuestionTemplate = this.parentEl.getElementsByClassName("login-question")[0];
-        this.logInQuestionTemplate.remove();
+        logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
+        logInQuestionTemplate.remove();
     }
 
     function login() {
         const logForm = Array.from(document.getElementsByClassName("login-form")[0]);
-        const emailInput = this.logInTemplate.getElementsByClassName("log-email")[0];
-        const passwordInput = this.logInTemplate.getElementsByClassName("log-password")[0];
+        const emailInput = logInTemplate.getElementsByClassName("log-email")[0];
+        const passwordInput = logInTemplate.getElementsByClassName("log-password")[0];
         const logEmail = logForm[0].value;
         const logPassword = logForm[1].value;
-        this.signUpQuestionTemplate = this.parentEl.getElementsByClassName("signup-question")[0];
-        this.logInQuestionTemplate = this.parentEl.getElementsByClassName("login-question")[0];
+        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
+        logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
 
         if (!logEmail.length) {
             emailInput.classList.add("error");
@@ -64,47 +77,55 @@
         if (
             !!logEmail.length &&
             !!logPassword.length &&
-            signUpStore.email === logEmail &&
-            signUpStore.password === logPassword
+            this.findCredentials(loginsObj, logEmail, logPassword)
         ) {
-            this.homeTemplate.classList.remove("hide");
-            this.logInTemplate.replaceWith(this.homeTemplate);
-            this.signUpQuestionTemplate.remove();
+            homeTemplate.classList.remove("hide");
+            logInTemplate.replaceWith(homeTemplate);
+            signUpQuestionTemplate.remove();
 
-            const homeContent = this.parentEl.getElementsByClassName("home-content")[0];
+            const homeContent = parentEl.getElementsByClassName("home-content")[0];
             const childParagraph = document.createElement("p");
             childParagraph.textContent = "Congratulations! " + `${signUpStore.email}` + " has successfully logged in."
 
             homeContent.appendChild(childParagraph);
 
-
+            localStorage.setItem("loggedInUser", JSON.stringify(logEmail));
         }
     };
 
-    function getSignUpTemplate() {
-        this.signUpQuestionTemplate = this.parentEl.getElementsByClassName("signup-question")[0];
+    function findCredentials(obj, email, password) {
+        for (const key in obj) {
+            if (key === email && obj[key] === password) {
+              return true;
+            }
+        }
+        return false;
+      }
 
-        this.signUpTemplate.classList.remove("hide");
-        this.logInTemplate.replaceWith(this.signUpTemplate);
-        this.logInQuestionTemplate.classList.remove("hide");
-        this.signUpQuestionTemplate.replaceWith(this.logInQuestionTemplate);
-        this.logInQuestionBtn = this.parentEl.getElementsByClassName("login-question-btn")[0];
+    function getSignUpTemplate() {
+        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
+
+        signUpTemplate.classList.remove("hide");
+        logInTemplate.replaceWith(signUpTemplate);
+        logInQuestionTemplate.classList.remove("hide");
+        signUpQuestionTemplate.replaceWith(logInQuestionTemplate);
+        this.logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
         this.logInQuestionBtn.onclick = this.getLogInTemplate.bind(this);
     }
 
     function getLogInTemplate() {
         this.getLocalStorageData(localStorage);
-        this.signUpTemplate.replaceWith(this.logInTemplate);
-        this.logInQuestionTemplate.replaceWith(this.signUpQuestionTemplate);
-        this.signUpQuestionBtn = this.parentEl.getElementsByClassName("signup-question-btn")[0];
+        signUpTemplate.replaceWith(logInTemplate);
+        logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
+        this.signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
         this.signUpQuestionBtn.onclick = this.getSignUpTemplate.bind(this);
     }
 
     function signUp() {
         const regForm = Array.from(document.getElementsByClassName("signup-form")[0]);
-        const emailInput = this.signUpTemplate.getElementsByClassName("reg-email")[0];
-        const passwordInput = this.signUpTemplate.getElementsByClassName("reg-password")[0];
-        const repeatedPasswordlInput = this.signUpTemplate.getElementsByClassName("reg-rePassword")[0];
+        const emailInput = signUpTemplate.getElementsByClassName("reg-email")[0];
+        const passwordInput = signUpTemplate.getElementsByClassName("reg-password")[0];
+        const repeatedPasswordlInput = signUpTemplate.getElementsByClassName("reg-rePassword")[0];
         const regEmail = regForm[0].value;
         const regPassword = regForm[1].value;
         const regRePassword = regForm[2].value;
@@ -143,14 +164,13 @@
             !!signUpStore.repeatedPassword.length &&
             signUpStore.password === signUpStore.repeatedPassword
         ) {
-            this.logInTemplate.classList.remove("hide");
-            this.signUpTemplate.replaceWith(this.logInTemplate);
-            this.logInQuestionTemplate.replaceWith(this.signUpQuestionTemplate);
-            
-            const usersLogins = {};
-            usersLogins[signUpStore.email] = signUpStore.password;
-            localStorage.setItem("user1", JSON.stringify(usersLogins));
-            localStorage.setItem("loggedInUser", signUpStore.email);
+            logInTemplate.classList.remove("hide");
+            signUpTemplate.replaceWith(logInTemplate);
+            logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
+            console.log(signUpStore);
+            loginsObj[signUpStore.email] = signUpStore.password;
+
+            localStorage.setItem("usersLogins", JSON.stringify(loginsObj));            
         }
 
         console.log(signUpStore);
@@ -172,25 +192,23 @@
 
     function getLocalStorageData(storage) {
         if (this.isEmpty(storage)) {
-            const mapFromLocalStorage = storage.getItem("user1");
+            const mapFromLocalStorage = storage.getItem("usersLogins");
             const objFromLocalStorage = JSON.parse(mapFromLocalStorage);
-            const loggedInUser = storage.getItem("loggedInUser");
-
-            signUpStore.email = loggedInUser;
-            signUpStore.password = objFromLocalStorage[loggedInUser];
+            loggedInUser = JSON.parse(storage.getItem("loggedInUser"));
+            loginsObj = objFromLocalStorage;
         }
     };
 
     function isLoggedInUser() {
-        if (this.isEmpty(localStorage) && signUpStore.email && signUpStore.email.length) {
-            this.signUpQuestionTemplate = this.parentEl.getElementsByClassName("signup-question")[0];
-            this.homeTemplate.classList.remove("hide");
-            this.logInTemplate.replaceWith(this.homeTemplate);
-            this.signUpQuestionTemplate.remove();
-            const homeContent = this.parentEl.getElementsByClassName("home-content")[0];
+        if (this.isEmpty(localStorage) && loggedInUser) {
+            signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
+            homeTemplate.classList.remove("hide");
+            logInTemplate.replaceWith(homeTemplate);
+            signUpQuestionTemplate.remove();
+            const homeContent = parentEl.getElementsByClassName("home-content")[0];
             const childParagraph = document.createElement("p");
             
-            childParagraph.textContent = "Congratulations! " + `${signUpStore.email}` + " has successfully logged in.";
+            childParagraph.textContent = "Congratulations! " + `${loggedInUser}` + " has successfully logged in.";
 
             homeContent.appendChild(childParagraph);
         }
