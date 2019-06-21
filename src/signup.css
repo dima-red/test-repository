@@ -93,7 +93,7 @@ header h3, footer h3 {
 }
 
 main h3 {
-    padding-top: 100px;
+    padding-top: 30px;
 }
 
 .signup-form h4 {
@@ -104,9 +104,9 @@ main h3 {
     display: none !important;
 }
 
-.error {
+/* .error {
     border: 2px solid red;
-}
+} */
 
 input {
     height: 26px;
@@ -158,4 +158,35 @@ h1, h2, h3, h4, h5 {
     line-height: 20px;
     font-size: 17px;
     margin: 0 40px 10px;
+}
+
+.error-message {
+    color: red;
+    display:none;
+}
+.error input{
+    border: 2px solid red;
+}
+
+/* .error .error-message-min,
+.error .error-message-max,
+.error .error-message-email,
+.error .error-message-password,
+.error .error-message-re-password {
+    display:block;
+} */
+
+.error .display {
+    display:block;
+}
+
+.error span {
+    line-height: 20px;
+    font-size: 12px;
+    margin-bottom: 12px;
+    text-align: center;
+}
+
+.form-group {
+    width: -webkit-fill-available;
 }

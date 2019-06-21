@@ -56,23 +56,22 @@
         const logEmail = logForm[0].value;
         const logPassword = logForm[1].value;
         signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
-        logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
 
-        if (!logEmail.length) {
-            emailInput.classList.add("error");
-            emailInput.focus();
-            emailInput.placeholder = "Please, type your email";
-        } else {
-            emailInput.classList.remove("error");
-        }
+        // if (!logEmail.length) {
+        //     emailInput.classList.add("error");
+        //     emailInput.focus();
+        //     emailInput.placeholder = "Please, type your email";
+        // } else {
+        //     emailInput.classList.remove("error");
+        // }
 
-        if (!logPassword.length) {
-            passwordInput.classList.add("error");
-            passwordInput.focus();
-            passwordInput.placeholder = "Please, type your password";
-        } else {
-            passwordInput.classList.remove("error");
-        }
+        // if (!logPassword.length) {
+        //     passwordInput.classList.add("error");
+        //     passwordInput.focus();
+        //     passwordInput.placeholder = "Please, type your password";
+        // } else {
+        //     passwordInput.classList.remove("error");
+        // }
 
         if (
             !!logEmail.length &&
@@ -125,53 +124,60 @@
         const regForm = Array.from(document.getElementsByClassName("signup-form")[0]);
         const emailInput = signUpTemplate.getElementsByClassName("reg-email")[0];
         const passwordInput = signUpTemplate.getElementsByClassName("reg-password")[0];
-        const repeatedPasswordlInput = signUpTemplate.getElementsByClassName("reg-rePassword")[0];
+        const repeatedPasswordlInput = signUpTemplate.getElementsByClassName("reg-re-password")[0];
         const regEmail = regForm[0].value;
         const regPassword = regForm[1].value;
         const regRePassword = regForm[2].value;
 
-        signUpStore.email = regForm[0].value;
-        signUpStore.password = regForm[1].value;
-        signUpStore.repeatedPassword = regForm[2].value;
+        signUpStore.email = regEmail;
+        signUpStore.password = regPassword;
+        signUpStore.repeatedPassword = regRePassword;
 
-        if (!regEmail.length) {
-            emailInput.classList.add("error");
-            emailInput.focus();
-            emailInput.placeholder = "Please, type your email";
-        } else {
-            emailInput.classList.remove("error");
-        }
+        checkInput("reg-email", regEmail);
+        checkInput("reg-password", regPassword);
+        inputReqs["reg-re-password"][0].param = regPassword;
+        checkInput("reg-re-password", regRePassword);
+        // checkInput("reg-password", regPassword);
+        // checkInput("reg-re-password", regRePassword);
 
-        if (!regPassword.length) {
-            passwordInput.classList.add("error");
-            passwordInput.focus();
-            passwordInput.placeholder = "Please, type your password";
-        } else {
-            passwordInput.classList.remove("error");
-        }
+        // if (!regEmail.length) {
+        //     emailInput.classList.add("error");
+        //     emailInput.focus();
+        //     emailInput.placeholder = "Please, type your email";
+        // } else {
+        //     emailInput.classList.remove("error");
+        // }
 
-        if (!regRePassword.length) {
-            repeatedPasswordlInput.classList.add("error");
-            repeatedPasswordlInput.focus();
-            repeatedPasswordlInput.placeholder = "Duplicate your password";
-        } else {
-            repeatedPasswordlInput.classList.remove("error");
-        }
+        // if (!regPassword.length) {
+        //     passwordInput.classList.add("error");
+        //     passwordInput.focus();
+        //     passwordInput.placeholder = "Please, type your password";
+        // } else {
+        //     passwordInput.classList.remove("error");
+        // }
 
-        if (
-            isEmpty(signUpStore) &&
-            !!signUpStore.password.length &&
-            !!signUpStore.repeatedPassword.length &&
-            signUpStore.password === signUpStore.repeatedPassword
-        ) {
-            logInTemplate.classList.remove("hide");
-            signUpTemplate.replaceWith(logInTemplate);
-            logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
-            console.log(signUpStore);
-            loginsObj[signUpStore.email] = signUpStore.password;
+        // if (!regRePassword.length) {
+        //     repeatedPasswordlInput.classList.add("error");
+        //     repeatedPasswordlInput.focus();
+        //     repeatedPasswordlInput.placeholder = "Duplicate your password";
+        // } else {
+        //     repeatedPasswordlInput.classList.remove("error");
+        // }
 
-            localStorage.setItem("usersLogins", JSON.stringify(loginsObj));            
-        }
+        // if (
+        //     isEmpty(signUpStore) &&
+        //     !!signUpStore.password.length &&
+        //     !!signUpStore.repeatedPassword.length &&
+        //     signUpStore.password === signUpStore.repeatedPassword
+        // ) {
+        //     logInTemplate.classList.remove("hide");
+        //     signUpTemplate.replaceWith(logInTemplate);
+        //     logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
+        //     console.log(signUpStore);
+        //     loginsObj[signUpStore.email] = signUpStore.password;
+
+        //     localStorage.setItem("usersLogins", JSON.stringify(loginsObj));            
+        // }
 
         console.log(signUpStore);
     };
