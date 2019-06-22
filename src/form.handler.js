@@ -1,6 +1,6 @@
-const errorChecker = {
+const errorChecker = { 
     min: function (value, param) {
-        return value.length >= param;
+        return value.length && value.length >= param;
     },
 
     max: function (value, param) {
@@ -12,7 +12,7 @@ const errorChecker = {
     },
 
     isTheSame: function (value, param) {
-        return value === param;
+        return param.length && value === param;
     }
 }
 
@@ -67,8 +67,8 @@ const parentEl = document.getElementsByClassName("major-content")[0];
 
 function checkInput(inputName, inputValue) {
     for (let i = 0; i < inputReqs[inputName].length; i++) {
-        const condition = errorChecker[inputReqs[inputName][i].type](inputValue, inputReqs[inputName][i].param);
-        if (!condition) {
+        const errorCheckerResult = errorChecker[inputReqs[inputName][i].type](inputValue, inputReqs[inputName][i].param);
+        if (!errorCheckerResult) {
             const formGroup = parentEl.getElementsByClassName(inputName)[0].parentElement;
             formGroup.classList.add("error");
             formGroup.getElementsByTagName("span")[i].classList.add("display");
