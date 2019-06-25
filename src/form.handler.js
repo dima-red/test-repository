@@ -65,11 +65,11 @@ const inputReqs = {
 
 const parentEl = document.getElementsByClassName("major-content")[0];
 
-function checkInput(inputName, inputValue) {
-    for (let i = 0; i < inputReqs[inputName].length; i++) {
-        const errorCheckerResult = errorChecker[inputReqs[inputName][i].type](inputValue, inputReqs[inputName][i].param);
+function checkInput(input) {
+    for (let i = 0; i < inputReqs[input.className].length; i++) {
+        const errorCheckerResult = errorChecker[inputReqs[input.className][i].type](input.value, inputReqs[input.className][i].param);
         if (!errorCheckerResult) {
-            const formGroup = parentEl.getElementsByClassName(inputName)[0].parentElement;
+            const formGroup = parentEl.getElementsByClassName(input.className)[0].parentElement;
             formGroup.classList.add("error");
             formGroup.getElementsByTagName("span")[i].classList.add("display");
         }
