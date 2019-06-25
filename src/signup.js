@@ -22,8 +22,12 @@
     function onInit() {
         console.log("onInit");
         
-        parentEl = document.getElementsByClassName("major-content")[0];
-        signUpTemplate = parentEl.getElementsByClassName("signup-block")[0];
+        parentEl = document.getElementById("majorContent");
+        // signUpTemplate = parentEl.getElementsByClassName("signup-block")[0];
+        // signUpTemplate = parentEl.getElementById("signupBlock");
+        // signUpTemplate = document.getElementById("signupBlock");
+        signUpTemplate = parentEl.querySelector("#signupBlock");
+
         signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
         signupBtn.addEventListener("click", signUp);
 

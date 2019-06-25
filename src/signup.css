@@ -18,7 +18,8 @@ body {
 }
 
 header {
-    background-color: #058cffa8;
+    background-color: #fafafa;
+    border: 1px solid #e6e6e6;
     height: 100px;
     margin: 10px;
 }
@@ -32,17 +33,21 @@ header {
 }
 
 .bar {
-    background-color: #0762d862;
+    background-color: #fafafa;
+    border: 1px solid #e6e6e6;
     height: 55vh;
     width: 60%;
 }
 
 .major-content {
     background-color: #fafafa;
+    border-top: 1px solid #e6e6e6;
+    border: 1px solid #e6e6e6;
     height: 55vh;
     width: 100%;
     display: flex;
     flex-direction: column;
+    margin: 0 10px;
 }
 
 .signup-wpapper, .login-wpapper {
@@ -65,7 +70,8 @@ header {
 }
 
 footer {
-    background-color: #058cffa8;
+    background-color: #fafafa;
+    border: 1px solid #e6e6e6;
     position: absolute;
     bottom: 0;
     height: 100px;
