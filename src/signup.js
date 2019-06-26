@@ -97,6 +97,9 @@
             toggleModal();
 
             loginBtnHeader.remove(); 
+
+
+            //TODO: perform the same code from onInit/else
         }
     };
 
