@@ -20,8 +20,18 @@ body {
 header {
     background-color: #fafafa;
     border: 1px solid #e6e6e6;
-    height: 100px;
     margin: 10px;
+}
+
+.login-btn-wrapper {
+    margin: 0 20px 20px;
+    display: flex;
+    flex-direction: row-reverse;
+}
+
+.login-btn-header {
+    display: block;
+    width: 100px;
 }
 
 .right-bar {
@@ -56,7 +66,9 @@ header {
     align-items: center;
 }
 
-.modal-section, .signup-question, .login-question {
+.modal-section,
+.signup-question-wrapper,
+.login-question-wrapper {
     background-color: white;
     border: 1px solid #e6e6e6;;
     border-radius: 3px;
@@ -64,9 +76,17 @@ header {
     margin: 0 auto;
 }
 
-.signup-question, .login-question {
+.signup-question-wrapper, .login-question-wrapper {
     margin-top: 20px;
     height: 60px;
+}
+
+.signup-question p, .login-question p {
+    width: 60%;
+}
+
+.signup-question a, .login-question a {
+    width: 40%;
 }
 
 footer {
@@ -74,7 +94,7 @@ footer {
     border: 1px solid #e6e6e6;
     position: absolute;
     bottom: 0;
-    height: 100px;
+    height: 50px;
     width: 100%;
 }
 
@@ -94,12 +114,16 @@ h3, h4, p {
     display: block;
 }
 
-header h3, footer h3 {
+header h3 {
     padding-top: 40px;
 }
 
 main h3 {
     padding-top: 30px;
+}
+
+footer h3 {
+    padding-top: 15px;
 }
 
 .signup-form h4 {
@@ -118,22 +142,25 @@ input {
     height: 26px;
     background-color: #fafafa;
     font-size: small;
-    border: 1px solid #999;
+    border: 1px solid #e6e6e6;
     border-radius: 3px;
     -webkit-appearance: none;
     margin-bottom: 12px;
     padding-left: 10px;
     font-size: 12px;
-    opacity: 0.8;
+    /* opacity: 0.8; */
     width: -webkit-fill-available;
 }
 
-.modal-section a {
+::placeholder {
+    color: grey;
+}
+
+.modal-section a, header a {
     background-color: #3897f0;
     border: 1px solid #3897f0;
     border-radius: 3px;
     color: #fff;
-    position: relative;
     width: -webkit-fill-available;
     height: 22px;
     text-align: center;
@@ -144,10 +171,15 @@ a {
     cursor: pointer;
 }
 
+.signup-question-wrapper, .login-question-wrapper {
+    display: flex;
+    justify-content: center;
+}
+
 .signup-question, .login-question {
     display: flex;
     align-items: center;
-    justify-content: center;
+    width: 80%;
 }
 
 .signup-question-btn, .login-question-btn {
@@ -174,14 +206,6 @@ h1, h2, h3, h4, h5 {
     border: 2px solid red;
 }
 
-/* .error .error-message-min,
-.error .error-message-max,
-.error .error-message-email,
-.error .error-message-password,
-.error .error-message-re-password {
-    display:block;
-} */
-
 .error .display {
     display:block;
 }
@@ -195,4 +219,49 @@ h1, h2, h3, h4, h5 {
 
 .form-group {
     width: -webkit-fill-available;
+}
+
+.modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.modal-content {
+    position: absolute;
+    top: 36%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px 30px;
+    width: 50%;
+    border-radius: 3px;
+    background-color: #fafafa;
+}
+.close-button {
+    float: right;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    color: #fff;
+}
+.close-button:hover {
+    background-color: #f2626f;
+    border: 1px solid #f2626f;
+}
+.show-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }

@@ -12,6 +12,8 @@
     let signupBtn = null;
     let signUpQuestionBtn = null;
     let logInQuestionBtn = null;
+    let loginBtnHeader = null;
+    let modal = null;
     
     getLocalStorageData(localStorage);
     onInit();
@@ -21,55 +23,80 @@
     
     function onInit() {
         console.log("onInit");
-        
-        parentEl = document.getElementById("majorContent");
-        // signUpTemplate = parentEl.getElementsByClassName("signup-block")[0];
-        // signUpTemplate = parentEl.getElementById("signupBlock");
-        // signUpTemplate = document.getElementById("signupBlock");
-        signUpTemplate = parentEl.querySelector("#signupBlock");
 
-        signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
-        signupBtn.addEventListener("click", signUp);
+        parentEl = document.getElementById("bodyWrapper");
 
-        signUpTemplate.remove();
-        logInTemplate = parentEl.getElementsByClassName("login-block")[0];
-        loginBtn = parentEl.getElementsByClassName("login-btn")[0];
-        loginBtn.addEventListener("click", login);
-        
-        homeTemplate = parentEl.getElementsByClassName("home-block")[0];
-        homeTemplate.remove();
+        if (!loggedInUser) {
+            signUpTemplate = parentEl.querySelector("#signupBlock");
 
-        signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
-        signUpQuestionBtn.addEventListener("click", getSignUpTemplate);
-        logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
-        logInQuestionBtn.addEventListener("click", getLogInTemplate);
+            signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
+            signupBtn.addEventListener("click", signUp);
 
-        logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
-        logInQuestionTemplate.remove();
+            signUpTemplate.remove();
+            logInTemplate = parentEl.getElementsByClassName("login-block")[0];
+            loginBtn = parentEl.getElementsByClassName("login-btn")[0];
+            loginBtn.addEventListener("click", login);
+            
+            homeTemplate = parentEl.querySelector(".home-block");
+            homeTemplate.remove();
+
+            signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
+            signUpQuestionBtn.addEventListener("click", getSignUpTemplate);
+            logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
+            logInQuestionBtn.addEventListener("click", getLogInTemplate);
+
+            logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
+            logInQuestionTemplate.remove();
+
+            modal = parentEl.querySelector(".modal");
+            loginBtnHeader = parentEl.querySelector(".login-btn-header");
+            const closeButton = parentEl.querySelector(".close-button");
+            loginBtnHeader.classList.remove("hide");
+            loginBtnHeader.addEventListener("click", toggleModal);
+            closeButton.addEventListener("click", toggleModal);
+            window.addEventListener("click", windowOnClick);
+
+        } else {
+            const homeContent = parentEl.getElementsByClassName("home-content")[0];
+            const childParagraph = document.createElement("p");
+
+            childParagraph.textContent = "Congratulations! " + `${loggedInUser}` + " has successfully logged in."
+            homeContent.appendChild(childParagraph);
+            homeTemplate = parentEl.querySelector(".home-block");
+            homeTemplate.classList.remove("hide");
+        }
+    }
+
+    function toggleModal() {
+        modal.classList.toggle("show-modal");
+    }
+
+    function windowOnClick(event) {
+        if (event.target === modal) {
+            toggleModal();
+        }
     }
 
     function login() {
         const logForm = Array.from(document.getElementsByClassName("login-form")[0]);
         const logEmail = logForm[0].value;
         const logPassword = logForm[1].value;
-        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
+        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question-wrapper")[0];
 
         if (
             !!logEmail.length &&
             !!logPassword.length &&
             findCredentials(loginsObj, logEmail, logPassword)
         ) {
-            homeTemplate.classList.remove("hide");
-            logInTemplate.replaceWith(homeTemplate);
+            logInTemplate.remove();
             signUpQuestionTemplate.remove();
-
-            const homeContent = parentEl.getElementsByClassName("home-content")[0];
-            const childParagraph = document.createElement("p");
-            childParagraph.textContent = "Congratulations! " + `${logEmail}` + " has successfully logged in."
-
-            homeContent.appendChild(childParagraph);
-
+            parentEl.querySelector(".modal-section").classList.add("hide");
+            
             localStorage.setItem("loggedInUser", JSON.stringify(logEmail));
+
+            toggleModal();
+
+            loginBtnHeader.remove(); 
         }
     };
 

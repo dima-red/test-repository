@@ -63,7 +63,7 @@ const inputReqs = {
     ]
 };
 
-const parentEl = document.getElementsByClassName("major-content")[0];
+const parentEl = document.querySelector("#bodyWrapper");
 
 function checkInput(input) {
     for (let i = 0; i < inputReqs[input.className].length; i++) {
