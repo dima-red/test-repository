@@ -16,61 +16,9 @@
                 <header>
                     <div class="header-wrapper">
                         <h3>My Instagram</h3>
-                        <div class="login-btn-wrapper">
+                        <div class="log-in-out-btn-wrapper">
                             <a id="loginBtnHeader" class="login-btn-header trigger hide">Login</a>
-                        </div>
-                        <div class="modal">
-                            <div class="modal-content">
-                                <span class="close-button">x</span>
-                                <div class="modal-section">
-                                    <div id="signupBlock" class="signup-block hide">
-                                        <form class="signup-form" name="RegForm">
-                                            <h4>Sign Up</h4>
-                                            <div class="signup-wpapper">
-                                                <div class="form-group">
-                                                    <input type="email" class="reg-email" placeholder="Enter email address" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
-                                                    <span class="error-message">Error min length</span>
-                                                    <span class="error-message">Error max length</span>
-                                                    <span class="error-message">Error invalid email</span>
-        
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="password" class="reg-password" placeholder="Enter password" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
-                                                    <span class="error-message">Error min length</span>
-                                                    <span class="error-message">Error max length</span>
-                                                </div>
-                                                <div class="form-group">
-                                                    <input type="password" class="reg-re-password" placeholder="Repeat password" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
-                                                    <span class="error-message">Error passwords aren't the same</span>
-                                                </div>
-                                                <a id="signupBtn" class="signup-btn">Sign Up</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                    <div id="loginBlock" class="login-block">
-                                        <form class="login-form">
-                                            <h4>Login</h4>
-                                            <div class="login-wpapper">
-                                                <input type="email" class="log-email" placeholder="Enter email address">
-                                                <input type="password" class="log-password" placeholder="Enter password">
-                                                <a id="loginBtn" class="login-btn">Login</a>
-                                            </div>
-                                        </form>
-                                    </div>
-                                </div>
-                                <div class="signup-question-wrapper">
-                                    <div class="signup-question">
-                                        <p>Haven't an account?</p>
-                                        <a class="signup-question-btn">Sign up</a>
-                                    </div>
-                                </div>
-                                <div class="login-question-wrapper hide">
-                                    <div class="login-question">
-                                        <p>Have an account?</p>
-                                        <a class="login-question-btn">Log in</a>
-                                    </div>
-                                </div>
-                            </div>
+                            <a id="logoutBtnHeader" class="logout-btn-header hide">Logout</a>
                         </div>
                     </div>
                 </header>
@@ -105,6 +53,59 @@
                 <footer>
                     <h3>Footer</h3>
                 </footer>
+                <div class="modal">
+                    <div class="modal-content">
+                        <span class="close-button">x</span>
+                        <div class="modal-section">
+                            <div id="signupBlock" class="signup-block hide">
+                                <form class="signup-form" name="RegForm">
+                                    <h4>Sign Up</h4>
+                                    <div class="signup-wpapper">
+                                        <div class="form-group">
+                                            <input type="email" class="reg-email" placeholder="Enter email address" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
+                                            <span class="error-message">Error min length</span>
+                                            <span class="error-message">Error max length</span>
+                                            <span class="error-message">Error invalid email</span>
+
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="reg-password" placeholder="Enter password" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
+                                            <span class="error-message">Error min length</span>
+                                            <span class="error-message">Error max length</span>
+                                        </div>
+                                        <div class="form-group">
+                                            <input type="password" class="reg-re-password" placeholder="Repeat password" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
+                                            <span class="error-message">Error passwords aren't the same</span>
+                                        </div>
+                                        <a id="signupBtn" class="signup-btn">Sign Up</a>
+                                    </div>
+                                </form>
+                            </div>
+                            <div id="loginBlock" class="login-block">
+                                <form class="login-form">
+                                    <h4>Login</h4>
+                                    <div class="login-wpapper">
+                                        <input type="email" class="log-email" placeholder="Enter email address">
+                                        <input type="password" class="log-password" placeholder="Enter password">
+                                        <a id="loginBtn" class="login-btn">Login</a>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="signup-question-wrapper">
+                            <div class="signup-question">
+                                <p>Haven't an account?</p>
+                                <a class="signup-question-btn">Sign up</a>
+                            </div>
+                        </div>
+                        <div class="login-question-wrapper hide">
+                            <div class="login-question">
+                                <p>Have an account?</p>
+                                <a class="login-question-btn">Log in</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
         </div>
         <script async src="form.handler.js"></script>
         <script async src="signup.js"></script>

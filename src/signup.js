@@ -13,6 +13,7 @@
     let signUpQuestionBtn = null;
     let logInQuestionBtn = null;
     let loginBtnHeader = null;
+    let logoutBtnHeader = null;
     let modal = null;
     
     getLocalStorageData(localStorage);
@@ -30,25 +31,19 @@
 
     function signupHandler() {
         signUpTemplate = parentEl.querySelector("#signupBlock");
-
         signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
         signupBtn.addEventListener("click", signUp);
 
-        signUpTemplate.remove();
         logInTemplate = parentEl.getElementsByClassName("login-block")[0];
         loginBtn = parentEl.getElementsByClassName("login-btn")[0];
         loginBtn.addEventListener("click", login);
-        
-        // homeTemplate = parentEl.querySelector(".home-block");
-        // homeTemplate.remove();
 
         signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
         signUpQuestionBtn.addEventListener("click", getSignUpTemplate);
         logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
         logInQuestionBtn.addEventListener("click", getLogInTemplate);
 
-        logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
-        logInQuestionTemplate.remove();
+        logInQuestionTemplate = parentEl.getElementsByClassName("login-question-wrapper")[0];
 
         modal = parentEl.querySelector(".modal");
         loginBtnHeader = parentEl.querySelector(".login-btn-header");
@@ -67,6 +62,10 @@
         homeContent.appendChild(childParagraph);
         homeTemplate = parentEl.querySelector(".home-block");
         homeTemplate.classList.remove("hide");
+
+        logoutBtnHeader = parentEl.querySelector(".logout-btn-header");
+        logoutBtnHeader.addEventListener("click", logout);
+        logoutBtnHeader.classList.remove("hide");
 
         getSignedUpUsersList();
     }
@@ -104,21 +103,39 @@
             !!logPassword.length &&
             findCredentials(loginsObj, logEmail, logPassword)
         ) {
-            logInTemplate.remove();
-            signUpQuestionTemplate.remove();
             parentEl.querySelector(".modal-section").classList.add("hide");
             localStorage.setItem("loggedInUser", JSON.stringify(logEmail));
 
             toggleModal();
-            loginBtnHeader.remove();
+            loginBtnHeader.classList.add("hide");;
             getLocalStorageData(localStorage);
             homePageHandler();
+            logoutBtnHeader.classList.remove("hide");
         }
     };
 
+    function logout() {
+        localStorage.removeItem("loggedInUser");
+        getLocalStorageData(localStorage);
+
+        logoutBtnHeader.classList.add("hide");;
+        signupHandler();
+        loginBtnHeader.classList.remove("hide");
+
+        homeTemplate.classList.add("hide");
+        parentEl.querySelector(".modal-section").classList.remove("hide");;
+        
+
+
+
+
+
+        onInit();
+    }
+
     function findCredentials(obj, email, password) {
         for (const key in obj) {
-            if (key === email && obj[key] === password) {
+            if (key === email && obj[key].password === password) {
               return true;
             }
         }
@@ -126,7 +143,7 @@
       }
 
     function getSignUpTemplate() {
-        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
+        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question-wrapper")[0];
 
         signUpTemplate.classList.remove("hide");
         logInTemplate.replaceWith(signUpTemplate);
@@ -164,8 +181,7 @@
             logInTemplate.classList.remove("hide");
             signUpTemplate.replaceWith(logInTemplate);
             logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
-            console.log(signUpStore);
-            loginsObj[signUpStore.email] = signUpStore.password;
+            loginsObj[signUpStore.email] = {"password": signUpStore.password}
 
             localStorage.setItem("usersLogins", JSON.stringify(loginsObj));            
         }
@@ -197,6 +213,8 @@
 
         if (storage.loggedInUser) {
             loggedInUser = JSON.parse(storage.getItem("loggedInUser"));
+        } else {
+            loggedInUser = null;
         }
     };
 })()
