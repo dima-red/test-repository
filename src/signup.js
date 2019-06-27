@@ -17,7 +17,6 @@
     
     getLocalStorageData(localStorage);
     onInit();
-    isLoggedInUser();
     
     console.log(loginsObj);
     
@@ -26,44 +25,61 @@
 
         parentEl = document.getElementById("bodyWrapper");
 
-        if (!loggedInUser) {
-            signUpTemplate = parentEl.querySelector("#signupBlock");
+        !loggedInUser ? signupHandler() : homePageHandler();
+    }
 
-            signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
-            signupBtn.addEventListener("click", signUp);
+    function signupHandler() {
+        signUpTemplate = parentEl.querySelector("#signupBlock");
 
-            signUpTemplate.remove();
-            logInTemplate = parentEl.getElementsByClassName("login-block")[0];
-            loginBtn = parentEl.getElementsByClassName("login-btn")[0];
-            loginBtn.addEventListener("click", login);
-            
-            homeTemplate = parentEl.querySelector(".home-block");
-            homeTemplate.remove();
+        signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
+        signupBtn.addEventListener("click", signUp);
 
-            signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
-            signUpQuestionBtn.addEventListener("click", getSignUpTemplate);
-            logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
-            logInQuestionBtn.addEventListener("click", getLogInTemplate);
+        signUpTemplate.remove();
+        logInTemplate = parentEl.getElementsByClassName("login-block")[0];
+        loginBtn = parentEl.getElementsByClassName("login-btn")[0];
+        loginBtn.addEventListener("click", login);
+        
+        // homeTemplate = parentEl.querySelector(".home-block");
+        // homeTemplate.remove();
 
-            logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
-            logInQuestionTemplate.remove();
+        signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
+        signUpQuestionBtn.addEventListener("click", getSignUpTemplate);
+        logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
+        logInQuestionBtn.addEventListener("click", getLogInTemplate);
 
-            modal = parentEl.querySelector(".modal");
-            loginBtnHeader = parentEl.querySelector(".login-btn-header");
-            const closeButton = parentEl.querySelector(".close-button");
-            loginBtnHeader.classList.remove("hide");
-            loginBtnHeader.addEventListener("click", toggleModal);
-            closeButton.addEventListener("click", toggleModal);
-            window.addEventListener("click", windowOnClick);
+        logInQuestionTemplate = parentEl.getElementsByClassName("login-question")[0];
+        logInQuestionTemplate.remove();
 
-        } else {
-            const homeContent = parentEl.getElementsByClassName("home-content")[0];
-            const childParagraph = document.createElement("p");
+        modal = parentEl.querySelector(".modal");
+        loginBtnHeader = parentEl.querySelector(".login-btn-header");
+        const closeButton = parentEl.querySelector(".close-button");
+        loginBtnHeader.classList.remove("hide");
+        loginBtnHeader.addEventListener("click", toggleModal);
+        closeButton.addEventListener("click", toggleModal);
+        window.addEventListener("click", windowOnClick);
+    }
 
-            childParagraph.textContent = "Congratulations! " + `${loggedInUser}` + " has successfully logged in."
-            homeContent.appendChild(childParagraph);
-            homeTemplate = parentEl.querySelector(".home-block");
-            homeTemplate.classList.remove("hide");
+    function homePageHandler() {
+        const homeContent = parentEl.getElementsByClassName("home-content")[0];
+        const childParagraph = document.createElement("p");
+
+        childParagraph.textContent = "Congratulations! " + `${loggedInUser}` + " has successfully logged in."
+        homeContent.appendChild(childParagraph);
+        homeTemplate = parentEl.querySelector(".home-block");
+        homeTemplate.classList.remove("hide");
+
+        getSignedUpUsersList();
+    }
+
+    function getSignedUpUsersList() {
+        const userList = parentEl.querySelector(".user-list");
+        let i = 1;
+
+        for (const key in loginsObj) {
+            const childListItem = document.createElement("li");
+            childListItem.textContent = `${i}.` + ` ${key}`;
+            userList.appendChild(childListItem);
+            i++
         }
     }
 
@@ -91,15 +107,12 @@
             logInTemplate.remove();
             signUpQuestionTemplate.remove();
             parentEl.querySelector(".modal-section").classList.add("hide");
-            
             localStorage.setItem("loggedInUser", JSON.stringify(logEmail));
 
             toggleModal();
-
-            loginBtnHeader.remove(); 
-
-
-            //TODO: perform the same code from onInit/else
+            loginBtnHeader.remove();
+            getLocalStorageData(localStorage);
+            homePageHandler();
         }
     };
 
@@ -127,7 +140,7 @@
         logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
     }
 
-    function signUp() {        
+    function signUp() {
         const regForm = Array.from(document.getElementsByClassName("signup-form")[0]);
         const regEmail = regForm[0].value;
         const regPassword = regForm[1].value;
@@ -175,26 +188,15 @@
     };
 
     function getLocalStorageData(storage) {
-        if (isEmpty(storage)) {
+        if (storage.usersLogins) {
             const mapFromLocalStorage = storage.getItem("usersLogins");
             const objFromLocalStorage = JSON.parse(mapFromLocalStorage);
-            loggedInUser = JSON.parse(storage.getItem("loggedInUser"));
+            
             loginsObj = objFromLocalStorage;
         }
-    };
 
-    function isLoggedInUser() {
-        if (isEmpty(localStorage) && loggedInUser) {
-            signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question")[0];
-            homeTemplate.classList.remove("hide");
-            logInTemplate.replaceWith(homeTemplate);
-            signUpQuestionTemplate.remove();
-            const homeContent = parentEl.getElementsByClassName("home-content")[0];
-            const childParagraph = document.createElement("p");
-            
-            childParagraph.textContent = "Congratulations! " + `${loggedInUser}` + " has successfully logged in.";
-
-            homeContent.appendChild(childParagraph);
+        if (storage.loggedInUser) {
+            loggedInUser = JSON.parse(storage.getItem("loggedInUser"));
         }
-    }
+    };
 })()

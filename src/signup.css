@@ -108,7 +108,7 @@ main {
     margin: 10px;
 }
 
-h3, h4, p {
+h3, h4, h5, p, li {
     text-align: center;
     color: #646464;
     display: block;
@@ -264,4 +264,13 @@ h1, h2, h3, h4, h5 {
     visibility: visible;
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+
+.home-content p, .user-list {
+    background-color: white;
+    border: 1px solid #e6e6e6;
+    margin: 0 auto;
+    width: 70%;
+    padding: 10px;
+    margin-top: 30px;
 }
