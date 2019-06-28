@@ -17,7 +17,7 @@
                     <div class="header-wrapper">
                         <h3>My Instagram</h3>
                         <div class="log-in-out-btn-wrapper">
-                            <a id="loginBtnHeader" class="login-btn-header trigger hide">Login</a>
+                            <a id="loginBtnHeader" class="login-modal trigger hide">Login</a>
                             <a id="logoutBtnHeader" class="logout-btn-header hide">Logout</a>
                         </div>
                     </div>
@@ -39,7 +39,17 @@
                                 </div>
                                 <ul class="user-list">
                                     <h5>Signed up users:</h5>
-                                    
+                                    <li class="list-header">
+                                        <table>
+                                            <tr>
+                                                <th>№</th>
+                                                <th>Email</th>
+                                                <th>Name</th>
+                                                <th>Birth date</th>
+                                                <th>Click to edit</th>
+                                            </tr>
+                                        </table>
+                                    </li>
                                 </ul>
                             </div>
                         </div>
@@ -62,19 +72,19 @@
                                     <h4>Sign Up</h4>
                                     <div class="signup-wpapper">
                                         <div class="form-group">
-                                            <input type="email" class="reg-email" placeholder="Enter email address" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
+                                            <input type="email" class="reg-email" placeholder="Enter email address"/>
                                             <span class="error-message">Error min length</span>
                                             <span class="error-message">Error max length</span>
                                             <span class="error-message">Error invalid email</span>
 
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="reg-password" placeholder="Enter password" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
+                                            <input type="password" class="reg-password" placeholder="Enter password"/>
                                             <span class="error-message">Error min length</span>
                                             <span class="error-message">Error max length</span>
                                         </div>
                                         <div class="form-group">
-                                            <input type="password" class="reg-re-password" placeholder="Repeat password" data-error-min="3" data-error-max="5" data-error-regexp="sdfsddd">
+                                            <input type="password" class="reg-re-password" placeholder="Repeat password"/>
                                             <span class="error-message">Error passwords aren't the same</span>
                                         </div>
                                         <a id="signupBtn" class="signup-btn">Sign Up</a>
@@ -85,8 +95,8 @@
                                 <form class="login-form">
                                     <h4>Login</h4>
                                     <div class="login-wpapper">
-                                        <input type="email" class="log-email" placeholder="Enter email address">
-                                        <input type="password" class="log-password" placeholder="Enter password">
+                                        <input type="email" class="log-email" placeholder="Enter email address"/>
+                                        <input type="password" class="log-password" placeholder="Enter password"/>
                                         <a id="loginBtn" class="login-btn">Login</a>
                                     </div>
                                 </form>
@@ -95,7 +105,7 @@
                         <div class="signup-question-wrapper">
                             <div class="signup-question">
                                 <p>Haven't an account?</p>
-                                <a class="signup-question-btn">Sign up</a>
+                                <a class="signup-question-btn aaa bbb ccc">Sign up</a>
                             </div>
                         </div>
                         <div class="login-question-wrapper hide">
@@ -107,8 +117,9 @@
                     </div>
                 </div>
         </div>
-        <script async src="form.handler.js"></script>
-        <script async src="signup.js"></script>
+        <script src="data.service.js"></script>
+        <script src="form.handler.js"></script>
+        <script src="signup.js"></script>
     </body>
 
 </html>

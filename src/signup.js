@@ -8,15 +8,11 @@
     let homeTemplate = null;
     let signUpQuestionTemplate = null;
     let logInQuestionTemplate = null;
-    let loginBtn = null;
-    let signupBtn = null;
-    let signUpQuestionBtn = null;
-    let logInQuestionBtn = null;
     let loginBtnHeader = null;
     let logoutBtnHeader = null;
     let modal = null;
     
-    getLocalStorageData(localStorage);
+    getLoginsInfo(localStorage);
     onInit();
     
     console.log(loginsObj);
@@ -31,22 +27,18 @@
 
     function signupHandler() {
         signUpTemplate = parentEl.querySelector("#signupBlock");
-        signupBtn = parentEl.getElementsByClassName("signup-btn")[0];
-        signupBtn.addEventListener("click", signUp);
+        document.addEventListener("click", signUp);
 
         logInTemplate = parentEl.getElementsByClassName("login-block")[0];
-        loginBtn = parentEl.getElementsByClassName("login-btn")[0];
-        loginBtn.addEventListener("click", login);
+        document.addEventListener("click", login);
 
-        signUpQuestionBtn = parentEl.getElementsByClassName("signup-question-btn")[0];
-        signUpQuestionBtn.addEventListener("click", getSignUpTemplate);
-        logInQuestionBtn = parentEl.getElementsByClassName("login-question-btn")[0];
-        logInQuestionBtn.addEventListener("click", getLogInTemplate);
+        document.addEventListener("click", getSignUpTemplate);
+        document.addEventListener("click", getLogInTemplate);
 
         logInQuestionTemplate = parentEl.getElementsByClassName("login-question-wrapper")[0];
 
         modal = parentEl.querySelector(".modal");
-        loginBtnHeader = parentEl.querySelector(".login-btn-header");
+        loginBtnHeader = parentEl.querySelector(".login-modal");
         const closeButton = parentEl.querySelector(".close-button");
         loginBtnHeader.classList.remove("hide");
         loginBtnHeader.addEventListener("click", toggleModal);
@@ -71,18 +63,44 @@
     }
 
     function getSignedUpUsersList() {
-        const userList = parentEl.querySelector(".user-list");
+        const userList = document.querySelector(".user-list");
+        const fragment = document.createDocumentFragment();
+        const listItem = document.createElement("li");
+        
         let i = 1;
+      
+        for (const key in loginsObj) {            
+            const table = document.createElement("table");
+            const tr = document.createElement("tr");
+            const tdN = document.createElement("td");
+            const tdEmail = document.createElement("td");
+            const tdName = document.createElement("td");
+            const tdBDate = document.createElement("td");
+            const tdEdit = document.createElement("td");
+            const a = document.createElement("a");
 
-        for (const key in loginsObj) {
-            const childListItem = document.createElement("li");
-            childListItem.textContent = `${i}.` + ` ${key}`;
-            userList.appendChild(childListItem);
-            i++
+            tdN.textContent = `${i}.`;
+            tdEmail.textContent = `${key}`;
+            tdName.textContent = loginsObj[key].name;
+            tdBDate.textContent =loginsObj[key].bdate;
+
+            a.classList.add("edit-btn");
+            a.textContent = "Edit";
+            tdEdit.appendChild(a);
+
+            tr.append(tdN, tdEmail, tdName, tdBDate, tdEdit);
+            table.appendChild(tr);
+
+            listItem.append(table);
+            fragment.appendChild(listItem);
+            i++;
         }
+
+        userList.appendChild(fragment);
     }
 
     function toggleModal() {
+        console.log("login header");
         modal.classList.toggle("show-modal");
     }
 
@@ -92,44 +110,42 @@
         }
     }
 
-    function login() {
-        const logForm = Array.from(document.getElementsByClassName("login-form")[0]);
-        const logEmail = logForm[0].value;
-        const logPassword = logForm[1].value;
-        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question-wrapper")[0];
+    function login(ev) {
+        if (eventTargetChecker(ev, "login-btn")) {
+            console.log("login login");
 
-        if (
-            !!logEmail.length &&
-            !!logPassword.length &&
-            findCredentials(loginsObj, logEmail, logPassword)
-        ) {
-            parentEl.querySelector(".modal-section").classList.add("hide");
-            localStorage.setItem("loggedInUser", JSON.stringify(logEmail));
-
-            toggleModal();
-            loginBtnHeader.classList.add("hide");;
-            getLocalStorageData(localStorage);
-            homePageHandler();
-            logoutBtnHeader.classList.remove("hide");
+            const logForm = Array.from(document.getElementsByClassName("login-form")[0]);
+            const logEmail = logForm[0].value;
+            const logPassword = logForm[1].value;
+            signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question-wrapper")[0];
+    
+            if (
+                !!logEmail.length &&
+                !!logPassword.length &&
+                findCredentials(loginsObj, logEmail, logPassword)
+            ) {
+                parentEl.querySelector(".modal-section").classList.add("hide");
+                dataServiceObj.set("loggedInUser", logEmail);
+    
+                toggleModal();
+                loginBtnHeader.classList.add("hide");;
+                getLoginsInfo(localStorage);
+                homePageHandler();
+                logoutBtnHeader.classList.remove("hide");
+            }
         }
     };
 
     function logout() {
-        localStorage.removeItem("loggedInUser");
-        getLocalStorageData(localStorage);
+        dataServiceObj.remove("loggedInUser");
+        getLoginsInfo(localStorage);
 
         logoutBtnHeader.classList.add("hide");;
         signupHandler();
         loginBtnHeader.classList.remove("hide");
 
         homeTemplate.classList.add("hide");
-        parentEl.querySelector(".modal-section").classList.remove("hide");;
-        
-
-
-
-
-
+        parentEl.querySelector(".modal-section").classList.remove("hide");
         onInit();
     }
 
@@ -140,53 +156,72 @@
             }
         }
         return false;
-      }
-
-    function getSignUpTemplate() {
-        signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question-wrapper")[0];
-
-        signUpTemplate.classList.remove("hide");
-        logInTemplate.replaceWith(signUpTemplate);
-        logInQuestionTemplate.classList.remove("hide");
-        signUpQuestionTemplate.replaceWith(logInQuestionTemplate);
     }
 
-    function getLogInTemplate() {
-        getLocalStorageData(localStorage);
-        signUpTemplate.replaceWith(logInTemplate);
-        logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
+    function eventTargetChecker (ev, selector) {
+        return ev.target.classList.value.includes(selector);
     }
 
-    function signUp() {
-        const regForm = Array.from(document.getElementsByClassName("signup-form")[0]);
-        const regEmail = regForm[0].value;
-        const regPassword = regForm[1].value;
-        const regRePassword = regForm[2].value;
+    function getSignUpTemplate(ev) {
+        
+        if (eventTargetChecker(ev, "signup-question-btn")) {
+            signUpQuestionTemplate = parentEl.getElementsByClassName("signup-question-wrapper")[0];
 
-        signUpStore.email = regEmail;
-        signUpStore.password = regPassword;
-        signUpStore.repeatedPassword = regRePassword;
+            signUpTemplate.classList.remove("hide");
+            logInTemplate.replaceWith(signUpTemplate);
+            logInQuestionTemplate.classList.remove("hide");
+            signUpQuestionTemplate.replaceWith(logInQuestionTemplate);
+        }
+    }
 
-        inputReqs["reg-re-password"][0].param = regPassword;
-        for (let i = 0; i < regForm.length; i++) {
-            checkInput(regForm[i]);
-        };
-
-        if (
-            isEmpty(signUpStore) &&
-            !!signUpStore.password.length &&
-            !!signUpStore.repeatedPassword.length &&
-            signUpStore.password === signUpStore.repeatedPassword
-        ) {
-            logInTemplate.classList.remove("hide");
+    function getLogInTemplate(ev) {
+        if (eventTargetChecker(ev, "login-question-btn")) {
+            getLoginsInfo(localStorage);
             signUpTemplate.replaceWith(logInTemplate);
             logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
-            loginsObj[signUpStore.email] = {"password": signUpStore.password}
-
-            localStorage.setItem("usersLogins", JSON.stringify(loginsObj));            
         }
+    }
 
-        console.log(signUpStore);
+    function signUp(ev) {
+        
+        if (eventTargetChecker(ev, "signup-btn")) {
+
+            console.log("signup signup")
+
+            const regForm = Array.from(document.getElementsByClassName("signup-form")[0]);
+            const regEmail = regForm[0].value;
+            const regPassword = regForm[1].value;
+            const regRePassword = regForm[2].value;
+
+            signUpStore.email = regEmail;
+            signUpStore.password = regPassword;
+            signUpStore.repeatedPassword = regRePassword;
+
+            inputReqs["reg-re-password"][0].param = regPassword;
+            for (let i = 0; i < regForm.length; i++) {
+                checkInput(regForm[i]);
+            };
+
+            if (
+                isEmpty(signUpStore) &&
+                !!signUpStore.password.length &&
+                !!signUpStore.repeatedPassword.length &&
+                signUpStore.password === signUpStore.repeatedPassword
+            ) {
+                logInTemplate.classList.remove("hide");
+                signUpTemplate.replaceWith(logInTemplate);
+                logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
+                loginsObj[signUpStore.email] = {
+                    "password": signUpStore.password,
+                    "name": "Name 1",
+                    "bdate": "11.11.1111"
+                }
+
+                dataServiceObj.set("usersLogins", loginsObj);
+            }
+
+            console.log(signUpStore);
+        }
     };
 
     function isEmpty(obj) {
@@ -203,18 +238,8 @@
         return !!valuesLength;
     };
 
-    function getLocalStorageData(storage) {
-        if (storage.usersLogins) {
-            const mapFromLocalStorage = storage.getItem("usersLogins");
-            const objFromLocalStorage = JSON.parse(mapFromLocalStorage);
-            
-            loginsObj = objFromLocalStorage;
-        }
-
-        if (storage.loggedInUser) {
-            loggedInUser = JSON.parse(storage.getItem("loggedInUser"));
-        } else {
-            loggedInUser = null;
-        }
-    };
+    function getLoginsInfo(storage) {
+        loginsObj = dataServiceObj.getSignedUpUsers(storage);
+        loggedInUser = dataServiceObj.getLoggedInUser(storage);
+    }
 })()
