@@ -22,6 +22,8 @@ const dataServiceObj = {
             const objFromLocalStorage = JSON.parse(mapFromLocalStorage);
             
             return objFromLocalStorage;
+        } else {
+            return {};
         }
     }, 
 

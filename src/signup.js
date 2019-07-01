@@ -173,8 +173,8 @@
                 logInQuestionTemplate.replaceWith(signUpQuestionTemplate);
                 dataServiceObj.loginsObj[signUpStore.email] = {
                     "password": signUpStore.password,
-                    "name": "Name 1",
-                    "bdate": "11.11.1111"
+                    "name": "",
+                    "bdate": ""
                 }
 
                 dataServiceObj.set("usersLogins", dataServiceObj.loginsObj);
