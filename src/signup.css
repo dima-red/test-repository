@@ -67,7 +67,8 @@ header {
 
 .modal-section,
 .signup-question-wrapper,
-.login-question-wrapper {
+.login-question-wrapper,
+.edit-modal-section {
     background-color: white;
     border: 1px solid #e6e6e6;;
     border-radius: 3px;
@@ -98,7 +99,7 @@ footer {
     height: 50px;
 }
 
-.signup-block, .login-block {
+.signup-block, .login-block, .edit-block {
     background-color: white;
     padding: 10%;
 }
@@ -126,7 +127,7 @@ footer h3 {
     padding-top: 15px;
 }
 
-.signup-form h4 {
+.signup-form h4, .login-form h4 {
     padding: 0 10% 10%;
 }
 
@@ -156,7 +157,8 @@ input {
     color: grey;
 }
 
-.modal-section a, header a {
+.modal-section a,
+header a {
     background-color: #3897f0;
     border: 1px solid #3897f0;
     border-radius: 3px;
@@ -195,7 +197,6 @@ h1, h2, h3, h4, h5 {
     font-weight: 600;
     line-height: 20px;
     font-size: 17px;
-    /* margin: 0 40px 10px; */
 }
 
 .error-message {
@@ -221,6 +222,7 @@ h1, h2, h3, h4, h5 {
     width: -webkit-fill-available;
 }
 
+/* Signup modal */
 .modal {
     position: fixed;
     left: 0;
@@ -265,6 +267,55 @@ h1, h2, h3, h4, h5 {
     transform: scale(1.0);
     transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
 }
+/* /////////// */
+
+
+/* Edit modal */
+.edit-modal {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+    transform: scale(1.1);
+    transition: visibility 0s linear 0.25s, opacity 0.25s 0s, transform 0.25s;
+}
+.edit-modal-content {
+    position: absolute;
+    top: 36%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 30px 30px;
+    width: 50%;
+    border-radius: 3px;
+    background-color: #fafafa;
+}
+.close-edit-modal {
+    float: right;
+    width: 20px;
+    height: 20px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 3px;
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    color: #fff;
+}
+.close-edit-modal:hover {
+    background-color: #f2626f;
+    border: 1px solid #f2626f;
+}
+.show-edit-modal {
+    opacity: 1;
+    visibility: visible;
+    transform: scale(1.0);
+    transition: visibility 0s linear 0s, opacity 0.25s 0s, transform 0.25s;
+}
+/* /////////// */
 
 .home-content p, .user-list {
     background-color: white;
@@ -276,7 +327,7 @@ h1, h2, h3, h4, h5 {
     margin-bottom: 30px;
 }
 
-.list-header {
+.list-header, .edit-header {
     padding: 10px 0;
 }
 
@@ -297,4 +348,22 @@ table {
     table-layout: fixed;
     width: 100%;
     text-align: -webkit-match-parent;
+}
+
+.save-changes-btn, .cancel-changes-btn {
+    display: block;
+    background-color: #3897f0;
+    border: 1px solid #3897f0;
+    border-radius: 3px;
+    color: #fff;
+    width: 58px;
+    height: 20px;
+    text-align: center;
+    padding-top: 4px;
+    margin: 0 auto;
+    margin-top: 20px
+}
+
+.edit-buttons-wrapper {
+    display: flex;
 }

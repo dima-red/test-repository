@@ -1,4 +1,9 @@
 const dataServiceObj = {
+
+    loginsObj: {},
+
+    parentEl: null,
+
     set: function (param, data) {
         localStorage.setItem(param, JSON.stringify(data));
     },
