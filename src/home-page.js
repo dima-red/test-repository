@@ -1,5 +1,4 @@
 let editModal = null;
-let idNumber = null;
 let userEmail = null;
 
 function getSignedUpUsersList(obj) {
@@ -35,6 +34,7 @@ function getSignedUpUsersList(obj) {
         a.classList.add("edit-btn");
         a.textContent = "Edit";
         a.id = "editBtn" + `${i}`;
+        a.dataset.email = `${key}`;
         document.addEventListener("click", editUserInfo);
         
         tdEdit.appendChild(a);
@@ -55,11 +55,7 @@ function editUserInfo(ev) {
     if (eventTargetChecker(ev, "edit-btn")) {
         toggleModal();
 
-        idNumber = getIdNumber(ev.target.id);
-        userEmail = document.querySelector("#listItem" + `${idNumber}`+ " .email");
-
-        console.log(userEmail.textContent);
-        console.log(dataServiceObj.loginsObj);
+        userEmail = ev.target.dataset.email;
     }
 }
 
@@ -78,10 +74,8 @@ function cancel(ev) {
 function updadeUserInfo() {
     const editForm = Array.from(dataServiceObj.parentEl.querySelector(".edit-form"));
 
-    dataServiceObj.loginsObj[userEmail.textContent] = {
-        "name": editForm[0].value,
-        "bdate": editForm[1].value
-    }
+    dataServiceObj.loginsObj[userEmail].name = editForm[0].value;
+    dataServiceObj.loginsObj[userEmail].bdate = editForm[1].value;
 
     dataServiceObj.set("usersLogins", dataServiceObj.loginsObj);
     document.querySelector(".list-body").remove();
@@ -102,18 +96,4 @@ function windowOnClick(event) {
     if (event.target === editModal) {
         toggleModal();
     }
-}
-
-function getIdNumber(stringWithId) {
-    const theLastSymbol = stringWithId[stringWithId.length - 1];
-    const beforeLastSymbol = stringWithId[stringWithId.length - 2];
-    let id = null;
-    
-    if (theLastSymbol === "0") {
-        id = `${beforeLastSymbol}` + `${theLastSymbol}`;
-    } else {
-        id = theLastSymbol;
-    }
-
-    return id;
 }

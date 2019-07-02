@@ -109,18 +109,21 @@ main {
     margin: 10px;
 }
 
-h3, h4, h5, p, li {
+h2, h3, h4, h5, p, li {
     text-align: center;
     color: #646464;
     display: block;
 }
 
-header h3 {
+header h3, header h2 {
     padding-top: 40px;
+    color: #3897f0;
+    text-decoration: underline;
+    font-stretch: extra-expanded;
 }
 
-main h3 {
-    padding-top: 30px;
+main h3, main h4, main h5 {
+    margin-top: 30px;
 }
 
 footer h3 {
@@ -196,7 +199,6 @@ a {
 h1, h2, h3, h4, h5 {
     font-weight: 600;
     line-height: 20px;
-    font-size: 17px;
 }
 
 .error-message {
@@ -305,7 +307,13 @@ h1, h2, h3, h4, h5 {
     border: 1px solid #3897f0;
     color: #fff;
 }
-.close-edit-modal:hover {
+.close-edit-modal:hover,
+.save-changes-btn:hover,
+.cancel-changes-btn:hover,
+.logout-btn-header:hover,
+.login-btn-header:hover,
+.edit-btn:hover
+{
     background-color: #f2626f;
     border: 1px solid #f2626f;
 }
@@ -317,13 +325,13 @@ h1, h2, h3, h4, h5 {
 }
 /* /////////// */
 
-.home-content p, .user-list {
+.user-list {
     background-color: white;
     border: 1px solid #e6e6e6;
     margin: 0 auto;
     width: 90%;
     padding: 10px;
-    margin-top: 30px;
+    margin-top: 20px;
     margin-bottom: 30px;
 }
 
@@ -366,4 +374,11 @@ table {
 
 .edit-buttons-wrapper {
     display: flex;
+}
+
+.logged-in-user {
+    text-align: -webkit-right;
+    margin: 0 20px 10px;
+    color: #3897f0;
+    font-weight: 800;
 }

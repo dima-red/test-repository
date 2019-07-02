@@ -45,11 +45,11 @@
     }
 
     function homePageHandler() {
-        const homeContent = dataServiceObj.parentEl.getElementsByClassName("home-content")[0];
         const childParagraph = document.createElement("p");
-
-        childParagraph.textContent = "Congratulations! " + `${loggedInUser}` + " has successfully logged in."
-        homeContent.appendChild(childParagraph);
+        childParagraph.textContent = loggedInUser;
+        childParagraph.classList.add("logged-in-user");
+        const loggedInUserBlock = dataServiceObj.parentEl.querySelector(".log-in-out-btn-wrapper");
+        loggedInUserBlock.before(childParagraph);
         homeTemplate = dataServiceObj.parentEl.querySelector(".home-block");
         homeTemplate.classList.remove("hide");
 
@@ -104,6 +104,7 @@
         loginBtnHeader.classList.remove("hide");
 
         homeTemplate.classList.add("hide");
+        dataServiceObj.parentEl.querySelector(".logged-in-user").remove();
         dataServiceObj.parentEl.querySelector(".modal-section").classList.remove("hide");
         onInit();
     }
