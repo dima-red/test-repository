@@ -109,10 +109,15 @@ main {
     margin: 10px;
 }
 
-h2, h3, h4, h5, p, li {
+h2, h3, h4, h5, p {
     text-align: center;
     color: #646464;
     display: block;
+}
+
+h2, h3, h4, h5, p, tr {
+    text-align: center;
+    color: #646464;
 }
 
 header h3, header h2 {
