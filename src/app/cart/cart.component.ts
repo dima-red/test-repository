@@ -8,8 +8,9 @@ import { CartService } from '../cart/cart.service';
     styleUrls: ['./cart.component.css']
 })
 export class CartComponent implements OnInit {
-    items: any;
+    items: any[];
     checkoutForm: any;
+
     constructor(
         private cartService: CartService,
         private formBuilder: FormBuilder
