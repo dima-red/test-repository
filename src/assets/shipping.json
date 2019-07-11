@@ -1,14 +1,26 @@
 [
-    {
-      "type": "Overnight",
-      "price": 25.99
-    },
-    {
-      "type": "2-Day",
-      "price": 9.99
-    },
-    {
-      "type": "Postal",
-      "price": 2.99
-    }
-  ]
+  {
+    "type": "Overnight",
+    "price": 25.99
+  },
+  {
+    "type": "2-Days",
+    "price": 94.99
+  },
+  {
+    "type": "Postal",
+    "price": 25.99
+  },
+  {
+    "type": "Super",
+    "price": 205.99
+  },
+  {
+    "type": "5-Days",
+    "price": 19.99
+  },
+  {
+    "type": "Posman",
+    "price": 22.99
+  }
+]

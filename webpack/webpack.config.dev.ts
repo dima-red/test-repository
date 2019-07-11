@@ -1,34 +1,77 @@
 const path = require('path');
+const webpack = require("webpack");
+const HtmlWebpackPlugin = require("html-webpack-plugin");
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 
-module.exports = {
+const devConfig = {
 
-  entry: [
-    './src/main.ts'
-  ],
+    target: "web",
 
-  output: {
-    filename: './bundle.js'
-  },
+    mode: "development",
 
-  module: {
-    rules: [{
-        test: /\.ts/,
-        include: path.resolve(__dirname, 'src/ts'),
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: 'env'
-          }
-        }
-      },
-    ]
-  },
+    entry: [
+        './src/main.ts'
+    ],
 
-  plugins: [
-      
-  ]
+    output: {
+        filename: './bundle.js'
+    }, 
+
+    resolve: {
+        extensions: ['.ts', '.js']
+    },
+
+    module: {
+        rules: [
+            {
+                test: /\.ts$/,
+                exclude: /node_modules/,
+                loaders: [
+                    "babel-loader",
+                    'angular2-template-loader',
+                    "ts-loader",
+                ]
+            },
+            {
+                test: /\.css$/,
+                use: [
+                    "to-string-loader",
+                    MiniCssExtractPlugin.loader,
+                    "css-loader"
+                ]
+                // loaders: [
+                //     "to-string-loader",
+                //     "style-loader",
+                //     "css-loader"
+                // ],
+            },
+            {
+                test: /\.html$/,
+                use: "html-loader"
+            }
+        ]
+    },
+
+    devtool: "source-map",
+
+    plugins: [
+        new MiniCssExtractPlugin({
+            filename: "style.css"
+        }),
+        new HtmlWebpackPlugin({
+            title: "My Template",
+            template: "./src/index.html"
+        }),
+        new webpack.HotModuleReplacementPlugin()
+    ],
+
+    devServer: {
+        contentBase: './dist',
+        port: 4200
+    }
 };
 
+module.exports = devConfig;
 
 
 
@@ -54,6 +97,110 @@ module.exports = {
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// const path = require("path");
+// const webpack = require("webpack");
+// const merge = require("webpack-merge");
+// const HtmlWebpackPlugin = require("html-webpack-plugin");
+// const commonConfig = require("./webpack.config.common");
+
+// const devConfig = {
+//   target: "web",
+
+//   mode: "development",
+//   devtool: "cheap-module-eval-source-map",
+
+//   entry: [
+//     "webpack-dev-server/client?http://localhost:3002",
+//     "webpack/hot/only-dev-server",
+//     path.resolve(__dirname, "../src/core/bootstrap.js")
+//   ],
+
+//   output: {
+//     filename: "[name].bundle.js",
+//     path: path.join(__dirname, "public")
+//   },
+
+//   module: {
+//     rules: [
+//       {
+//         test: /\.js$/,
+//         exclude: /node_modules/,
+//         use: [
+//           // "angular-hot-loader", // TODO: find lib to hot reload the app
+//           {
+//             loader: "babel-loader",
+//             options: {
+//               cacheDirectory: true
+//             }
+//           }
+//         ]
+//       },
+//       {
+//         test: /\.css$/,
+//         use: ["style-loader", "css-loader"]
+//       },
+//       {
+//         test: /\.html$/,
+//         use: "html-loader"
+//       }
+//     ]
+//   },
+
+//   plugins: [
+//     new HtmlWebpackPlugin({
+//       title: "Template ng project",
+//       template: "public/index.html",
+//       inject: true
+//     }),
+//     new webpack.HotModuleReplacementPlugin()
+//   ]
+// };
+
+// module.exports = merge(commonConfig, devConfig);
 
 
 

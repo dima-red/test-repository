@@ -10,6 +10,7 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { CartComponent } from './cart/cart.component';
 import { ShippingComponent } from './shipping/shipping.component';
 import { AppComponent } from './app.component';
+import { APP_BASE_HREF } from '@angular/common';
 
 
 @NgModule({
@@ -33,9 +34,15 @@ import { AppComponent } from './app.component';
     CartComponent,
     ShippingComponent
   ],
-  providers: [],
+  providers: [
+    // {
+    //   provide: APP_BASE_HREF,
+    //   useValue: '/my/app'
+    // }
+  ],
   bootstrap: [
     AppComponent
   ]
 })
+
 export class AppModule { }
