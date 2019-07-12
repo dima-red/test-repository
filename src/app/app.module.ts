@@ -1,4 +1,6 @@
 import { BrowserModule } from '@angular/platform-browser';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MaterialModule } from './material.module';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
@@ -10,12 +12,13 @@ import { ProductDetailsComponent } from './product-details/product-details.compo
 import { CartComponent } from './cart/cart.component';
 import { ShippingComponent } from './shipping/shipping.component';
 import { AppComponent } from './app.component';
-import { APP_BASE_HREF } from '@angular/common';
 
 
 @NgModule({
   imports: [
     BrowserModule,
+    BrowserAnimationsModule,
+    MaterialModule,
     HttpClientModule,
     ReactiveFormsModule,
     RouterModule.forRoot([
@@ -35,10 +38,7 @@ import { APP_BASE_HREF } from '@angular/common';
     ShippingComponent
   ],
   providers: [
-    // {
-    //   provide: APP_BASE_HREF,
-    //   useValue: '/my/app'
-    // }
+
   ],
   bootstrap: [
     AppComponent
