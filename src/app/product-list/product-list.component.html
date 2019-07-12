@@ -1,22 +1,23 @@
 <h2>Products</h2>
 
-<div *ngFor="let product of products; index as productId">
-    <h3>
-        <a
-            [title]="product.name + ' details'"
-            [routerLink]="['/products', productId]">
-            {{ product.name }}
-        </a>
-    </h3>
-    <p *ngIf="product.description">
-        Description: {{ product.description }}
-    </p>
-    <button (click)="share()">
-        Share
-    </button>
+<mat-accordion>
+    <mat-expansion-panel *ngFor="let product of products; index as productId">
+        <mat-expansion-panel-header>
+            <mat-panel-title>
+                <a [title]="product.name + ' details'" [routerLink]="['/products', productId]">
+                    {{ product.name }}
+                </a>
+            </mat-panel-title>
+        </mat-expansion-panel-header>
+        <p *ngIf="product.description">
+            Description: {{ product.description }}
+        </p>
+        <button (click)="share()">
+            Share
+        </button>
 
-    <app-product-alerts 
-        [product]="product"
-        (notify)="onNotify()">
-    </app-product-alerts>
-</div>
+        <app-product-alerts [product]="product" (notify)="onNotify()">
+        
+        </app-product-alerts>
+    </mat-expansion-panel>
+</mat-accordion>

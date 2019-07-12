@@ -56,13 +56,13 @@ const devConfig = {
 
     plugins: [
         new MiniCssExtractPlugin({
-            filename: "style.css"
+            // filename: "style.css"
+            filename: "style-material.css"
         }),
         new HtmlWebpackPlugin({
             title: "My Template",
             template: "./src/index.html"
-        }),
-        new webpack.HotModuleReplacementPlugin()
+        })
     ],
 
     devServer: {

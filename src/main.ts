@@ -1,5 +1,6 @@
 import './polyfills'
 // import './styles.css';
+import './styles-material.css';
 import 'hammerjs';
 
 import { enableProdMode } from '@angular/core';

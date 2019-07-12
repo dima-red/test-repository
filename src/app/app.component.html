@@ -1,10 +1,14 @@
-<div style="text-align:center"> 
-  <h1>
-    Welcome to my app!
-  </h1>
-</div>
+<mat-toolbar>
+  <mat-toolbar-row>
+    <span class="welcome-msg">
+      Welcome to my app!
+    </span>
+  </mat-toolbar-row>
+  <mat-toolbar-row class="toolbar">
+    <app-top-bar></app-top-bar>
+  </mat-toolbar-row>
 
-<app-top-bar></app-top-bar>
+</mat-toolbar>
 
 <div class="container">
   <router-outlet></router-outlet>

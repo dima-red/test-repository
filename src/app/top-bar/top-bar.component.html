@@ -1,8 +1,9 @@
-<a [routerLink]="['/']">
+<button mat-raised-button color="primary" [routerLink]="['/']" class="home-btn">
+    <i class="material-icons">home</i>
     <h1>My Store</h1>
-</a>
-  
-<a [routerLink]="['/cart']" class="button fancy-button">
+</button>
+
+<button mat-raised-button color="primary" [routerLink]="['/cart']" class="cart-btn">
     <i class="material-icons">shopping_cart</i>
     Checkout
-</a>
+</button>

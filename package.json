@@ -2,12 +2,7 @@
   "name": "hero-app",
   "version": "0.0.0",
   "scripts": {
-    "dev": "webpack-dev-server --config ./webpack/webpack.config.dev.ts --content-base ./src/assets/ --mode development",
-    "start": "ng serve",
-    "build": "ng build",
-    "test": "ng test",
-    "lint": "ng lint",
-    "e2e": "ng e2e"
+    "start": "webpack-dev-server --config ./webpack/webpack.config.dev.ts --content-base ./src/assets/ --mode development"
   },
   "private": true,
   "dependencies": {
