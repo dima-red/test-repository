@@ -1,0 +1,13 @@
+<h2 style="text-align: center;">Filter</h2>
+
+<mat-form-field>
+    <mat-select placeholder="Select a product" [formControl]="filter" multiple>
+        <mat-select-trigger>
+            {{filter.value ? filter.value[0] : ''}}
+            <span *ngIf="filter.value?.length > 1" class="example-additional-selection">
+                (+{{filter.value.length - 1}} {{filter.value?.length === 2 ? 'other' : 'others'}})
+            </span>
+        </mat-select-trigger>
+        <mat-option *ngFor="let item of filteredList" [value]="item" (click)="clickHandler(item)" data-name="item" >{{item}}</mat-option>
+    </mat-select>
+</mat-form-field>

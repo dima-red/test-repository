@@ -182,6 +182,27 @@ label {
 .border {
     border: 2px solid #616161;
     border-radius: 3px;
-    max-width: 700px;
+    max-width: 900px;
+    min-height: 900px;
     margin: 0 auto;
+}
+
+.products-header {
+    text-align: center;
+  }
+  
+.products-wrapper {
+    display: grid;
+    padding: 15px;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+}
+
+.main-wrapper {
+    display: grid;
+    padding: 15px;
+    grid-template-columns: 3fr 2fr;
+}
+
+.mat-form-field {
+    width: 90%;
 }

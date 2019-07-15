@@ -1,0 +1,92 @@
+[
+    {
+        "type": "phone",
+        "name": "iPhone XL",
+        "price": 799,
+        "screenSize": "7",
+        "OS": "iOS"
+    },
+    {
+        "type": "phone",
+        "name": "iPhone Mini",
+        "price": 699,
+        "description": "A great phone with one of the best cameras",
+        "screenSize": "8",
+        "OS": "iOS"
+    },
+    {
+        "type": "phone",
+        "name": "iPhone Standard",
+        "price": 299,
+        "description": "Just iPhone",
+        "screenSize": "6",
+        "OS": "iOS"
+    },
+    {
+        "type": "phone",
+        "name": "iPhone XL",
+        "price": 799,
+        "description": "A large phone with one of the best screens",
+        "screenSize": "9",
+        "OS": "iOS"
+    },
+    {
+        "type": "phone",
+        "name": "Huawei",
+        "price": 799,
+        "screenSize": "7",
+        "OS": "Android"
+    },
+    {
+        "type": "phone",
+        "name": "HTC",
+        "price": 699,
+        "description": "A great phone with one of the best cameras",
+        "screenSize": "8",
+        "OS": "Android"
+    },
+    {
+        "type": "phone",
+        "name": "Samsung",
+        "price": 299,
+        "description": "Just iPhone",
+        "screenSize": "6",
+        "OS": "Android"
+    },
+    {
+        "type": "phone",
+        "name": "ZTE",
+        "price": 799,
+        "description": "A large phone with one of the best screens",
+        "screenSize": "9",
+        "OS": "Android"
+    },
+    {
+        "type": "TV",
+        "name": "Samsung TV",
+        "price": 1299,
+        "description": "Just TV",
+        "resolution": "4K"
+    },
+    {
+        "type": "TV",
+        "name": "Apple TV",
+        "price": 3299,
+        "description": "Apple TV",
+        "resolution": "8K"
+    },
+    {
+        "type": "tablet",
+        "name": "Samsung Galaxy GT",
+        "price": 599,
+        "description": "Samsung Tablet",
+        "battery": 8000
+    },
+    {
+        "type": "tablet",
+        "name": "iPad Pro",
+        "price": 1799,
+        "description": "A large tablet with one of the best screens",
+        "battery": 10000
+    }
+]

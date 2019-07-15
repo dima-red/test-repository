@@ -7,9 +7,124 @@
   <mat-toolbar-row class="toolbar">
     <app-top-bar></app-top-bar>
   </mat-toolbar-row>
-
 </mat-toolbar>
 
-<div class="container">
-  <router-outlet></router-outlet>
+<div class="main-wrapper">
+  <div class="container">
+    <router-outlet></router-outlet>
+  </div>
+  <product-filter></product-filter>
+</div>
+
+<h3 class="products-header">All Products</h3>
+<div class="products-wrapper">
+  <mat-accordion>
+    <h4 class="products-header">All Phones</h4>
+    <mat-expansion-panel *ngFor="let phone of allPhones">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <a>
+            {{ phone.name }}
+          </a>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p *ngIf="phone.description">
+        Description: {{ phone.description }}
+      </p>
+      <p *ngIf="phone.screenSize">
+        Screen Size: {{ phone.screenSize }} "
+      </p>
+      <p *ngIf="phone.price">
+        Price: {{ phone.price }} $
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <h4 class="products-header">IPhones</h4>
+    <mat-expansion-panel *ngFor="let phone of iPhones">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <a>
+            {{ phone.name }}
+          </a>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p *ngIf="phone.description">
+        Description: {{ phone.description }}
+      </p>
+      <p *ngIf="phone.screenSize">
+        Screen Size: {{ phone.screenSize }} "
+      </p>
+      <p *ngIf="phone.price">
+        Price: {{ phone.price }} $
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <h4 class="products-header">Android phones</h4>
+    <mat-expansion-panel *ngFor="let phone of androids">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <a>
+            {{ phone.name }}
+          </a>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p *ngIf="phone.description">
+        Description: {{ phone.description }}
+      </p>
+      <p *ngIf="phone.screenSize">
+        Screen Size: {{ phone.screenSize }} "
+      </p>
+      <p *ngIf="phone.price">
+        Price: {{ phone.price }} $
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <h4 class="products-header">Tablets</h4>
+    <mat-expansion-panel *ngFor="let tablet of tablets">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <a>
+            {{ tablet.name }}
+          </a>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p *ngIf="tablet.description">
+        Description: {{ tablet.description }}
+      </p>
+      <p *ngIf="tablet.battery">
+        Battery: {{ tablet.battery }} MaH
+      </p>
+      <p *ngIf="tablet.price">
+        Price: {{ tablet.price }} $
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
+
+  <mat-accordion>
+    <h4 class="products-header">TVs</h4>
+    <mat-expansion-panel *ngFor="let tv of tvs">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <a>
+            {{ tv.name }}
+          </a>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <p *ngIf="tv.description">
+        Description: {{ tv.description }}
+      </p>
+      <p *ngIf="tv.resolution">
+        Resolution: {{ tv.resolution }}
+      </p>
+      <p *ngIf="tv.price">
+        Price: {{ tv.price }}
+      </p>
+    </mat-expansion-panel>
+  </mat-accordion>
 </div>
