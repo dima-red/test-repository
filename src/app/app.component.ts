@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
+import { Product, Phone } from './classes';
 import { HttpClient } from '@angular/common/http';
-import { Phone } from './classes';
 import { IPhone } from './classes';
 import { Android } from './classes';
 import { Tablet } from './classes';
@@ -19,6 +19,8 @@ export class AppComponent implements OnInit {
   androids: Android[] = [];
   tablets: Tablet[] = [];
   tvs: TV[] = [];
+
+
 
   filteredProducts: string[] = [];
 
@@ -58,5 +60,19 @@ export class AppComponent implements OnInit {
 
     const androidsArr = phonesArr.filter(el => el["OS"] === "Android");
     this.androids = androidsArr.map(el => new Android(el));
+  }
+
+  beautifulPrint(): void {
+    this.runPrint(this.allPhones);
+    this.runPrint(this.tablets);
+    this.runPrint(this.tvs);
+    this.runPrint(this.iPhones);
+    this.runPrint(this.androids);
+  }
+
+  runPrint(arr: Product[]): void {
+    for (const item of arr) {
+      item.print();
+    }
   }
 }

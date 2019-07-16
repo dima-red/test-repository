@@ -206,3 +206,8 @@ label {
 .mat-form-field {
     width: 90%;
 }
+
+.print-btn button {
+    display: block;
+    margin: 0 auto;
+}
