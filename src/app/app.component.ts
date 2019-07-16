@@ -6,6 +6,7 @@ import { Android } from './classes';
 import { Tablet } from './classes';
 import { TV } from './classes';
 import { FilterService } from './product-filter/filter.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,8 @@ export class AppComponent implements OnInit {
   androids: Android[] = [];
   tablets: Tablet[] = [];
   tvs: TV[] = [];
+
+  filteredProducts: string[] = [];
 
   constructor(
     private http: HttpClient,
@@ -33,11 +36,17 @@ export class AppComponent implements OnInit {
     );
   }
 
-  getProducts() {
+
+  getFilteredProducts(event: string[]) {
+    this.filteredProducts = event;
+  }
+
+
+  getProducts(): Observable<object> {
     return this.http.get('products.json');
   }
 
-  getProductTypes(prodArray: any[]) {
+  getProductTypes(prodArray: any[]): void {
     const phonesArr = prodArray.filter(el => el["type"] === "phone");
     const tabletsArr = prodArray.filter(el => el["type"] === "tablet");
     const tvsArr = prodArray.filter(el => el["type"] === "TV");

@@ -8,6 +8,6 @@
                 (+{{filter.value.length - 1}} {{filter.value?.length === 2 ? 'other' : 'others'}})
             </span>
         </mat-select-trigger>
-        <mat-option *ngFor="let item of filteredList" [value]="item" (click)="clickHandler(item)" data-name="item" >{{item}}</mat-option>
+        <mat-option *ngFor="let item of filteredList" [value]="item" (click)="clickHandler(item)">{{item}}</mat-option>
     </mat-select>
 </mat-form-field>

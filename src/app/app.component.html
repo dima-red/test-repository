@@ -13,12 +13,13 @@
   <div class="container">
     <router-outlet></router-outlet>
   </div>
-  <product-filter></product-filter>
+  <product-filter (filteredProducts)="getFilteredProducts($event)"></product-filter>
 </div>
 
-<h3 class="products-header">All Products</h3>
+<h3 class="products-header" *ngIf="filteredProducts.length">All Products</h3>
+<h3 class="products-header" *ngIf="!filteredProducts.length">Please, select a product</h3>
 <div class="products-wrapper">
-  <mat-accordion>
+  <mat-accordion *ngIf="filteredProducts.includes('All Phones')">
     <h4 class="products-header">All Phones</h4>
     <mat-expansion-panel *ngFor="let phone of allPhones">
       <mat-expansion-panel-header>
@@ -40,7 +41,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-accordion>
+  <mat-accordion *ngIf="filteredProducts.includes('iPhones')">
     <h4 class="products-header">IPhones</h4>
     <mat-expansion-panel *ngFor="let phone of iPhones">
       <mat-expansion-panel-header>
@@ -62,7 +63,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-accordion>
+  <mat-accordion *ngIf="filteredProducts.includes('Android phones')">
     <h4 class="products-header">Android phones</h4>
     <mat-expansion-panel *ngFor="let phone of androids">
       <mat-expansion-panel-header>
@@ -84,7 +85,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-accordion>
+  <mat-accordion *ngIf="filteredProducts.includes('Tablets')">
     <h4 class="products-header">Tablets</h4>
     <mat-expansion-panel *ngFor="let tablet of tablets">
       <mat-expansion-panel-header>
@@ -106,7 +107,7 @@
     </mat-expansion-panel>
   </mat-accordion>
 
-  <mat-accordion>
+  <mat-accordion *ngIf="filteredProducts.includes('TVs')">
     <h4 class="products-header">TVs</h4>
     <mat-expansion-panel *ngFor="let tv of tvs">
       <mat-expansion-panel-header>
