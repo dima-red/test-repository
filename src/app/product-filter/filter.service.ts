@@ -1,23 +1,20 @@
-import { Injectable } from '@angular/core';
+import { Injectable, EventEmitter } from '@angular/core';
 
 @Injectable({
     providedIn: 'root'
 })
-
 export class FilterService {
-    valuesObj = {};
+    private valuesArr: string[] = [];
 
-    constructor() {
+    public filteredProducts: EventEmitter<string[]> = new EventEmitter<string[]>();
 
-    }
+    public getFilteredItems(item) {
+        if (this.valuesArr.includes(item)) {
+            this.valuesArr.splice(this.valuesArr.indexOf(item), 1)
+        } else {
+            this.valuesArr.push(item);
+        }
 
-    getFilteredItems(item) {
-        // if (this.valuesObj[item]) {
-        //     this.valuesObj[item] = !this.valuesObj[item];
-            
-        // } else {
-        //     this.valuesObj[item] = true;
-        // }
-        // return this.valuesObj;
+        this.filteredProducts.emit(this.valuesArr);
     }
 }

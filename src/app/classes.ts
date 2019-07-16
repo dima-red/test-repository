@@ -23,6 +23,7 @@ class Product {
 
 export class Phone extends Product {
     screenSize: number;
+
     constructor(el: any) {
         super("phone", el.name, el.price, el.description);
         this.screenSize = el.screenSize;
@@ -36,12 +37,10 @@ export class IPhone extends Phone {
 
     constructor(el) {
         super(el);
+
         this.OS = el.OS;
-        if(el.port) {
-            this.port = el.port;
-        } else {
-            this.port = "lightning";
-        }
+
+            this.port = el.port || 'lightning';
     }
 }
 
@@ -62,6 +61,7 @@ export class Android extends Phone {
 
 export class TV extends Product {
     resolution: string;
+
     constructor(el: any) {
         super("TV", el.name, el.price, el.description);
         this.resolution = el.resolution;
@@ -70,6 +70,7 @@ export class TV extends Product {
 
 export class Tablet extends Product {
     battery: number;
+    
     constructor(el: any) {
         super("tablet", el.name, el.price, el.description);
         this.battery = el.battery;

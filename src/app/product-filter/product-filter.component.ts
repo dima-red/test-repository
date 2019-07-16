@@ -1,5 +1,4 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { products } from '../products';
 import { FormControl } from '@angular/forms';
 import { FilterService } from './filter.service';
 
@@ -11,9 +10,9 @@ import { FilterService } from './filter.service';
 
 export class ProductFilterComponent implements OnInit {
 
-  @Output() filteredProducts: EventEmitter<string[]> = new EventEmitter<string[]>();
+  // @Output() filteredProducts: EventEmitter<string[]> = new EventEmitter<string[]>();
 
-  valuesArr: string[] = [];
+  // valuesArr: string[] = [];
   filter = new FormControl();
   filteredList: string[] = ["All Phones", "iPhones", "Android phones", "Tablets", "TVs"];
 
@@ -28,13 +27,17 @@ export class ProductFilterComponent implements OnInit {
   }
 
   clickHandler(item: string) {
-    if (this.valuesArr.includes(item)) {
-      this.valuesArr.splice(this.valuesArr.indexOf(item), 1)
-    } else {
-      this.valuesArr.push(item);
-    }
 
-    this.filteredProducts.emit(this.valuesArr);
+    this.filterService.getFilteredItems(item);
+    
+    
+    // if (this.valuesArr.includes(item)) {
+    //   this.valuesArr.splice(this.valuesArr.indexOf(item), 1)
+    // } else {
+    //   this.valuesArr.push(item);
+    // }
+
+    // this.filteredProducts.emit(this.valuesArr);
 
     // if (this.valuesObj[item]) {
     //   this.valuesObj[item] = !this.valuesObj[item];

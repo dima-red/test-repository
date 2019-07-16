@@ -6,7 +6,7 @@ import { Android } from './classes';
 import { Tablet } from './classes';
 import { TV } from './classes';
 import { FilterService } from './product-filter/filter.service';
-import { Observable } from 'rxjs';
+import { Observable, Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -22,6 +22,8 @@ export class AppComponent implements OnInit {
 
   filteredProducts: string[] = [];
 
+  subscription: Subscription;
+
   constructor(
     private http: HttpClient,
     private filterService: FilterService
@@ -32,15 +34,11 @@ export class AppComponent implements OnInit {
   ngOnInit() {
     this.getProducts().subscribe((products: Object[]) => {
       this.getProductTypes(products);
-    }
-    );
+    });
+
+    this.subscription = this.filterService.filteredProducts
+      .subscribe(item => this.filteredProducts = item);
   }
-
-
-  getFilteredProducts(event: string[]) {
-    this.filteredProducts = event;
-  }
-
 
   getProducts(): Observable<object> {
     return this.http.get('products.json');
