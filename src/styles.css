@@ -1,0 +1,43 @@
+body {
+    font-family: sans-serif;
+  }
+  
+  .calc-wrapper {
+    border: 3px solid grey;
+    width: 500px;
+    height: 400px;
+  }
+  
+  .display {
+    width: 90%;
+    height: 30px;
+    margin: 20px;
+    border: 4px solid grey;
+  }
+  
+  .keyboard {
+    width: 90%;
+    margin: 20px;
+    border: 2px solid grey;
+  
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+  }
+  
+  .key-btn {
+    border: 2px solid grey;
+    height: 50px;
+  }
+  
+  .key-btn span {
+    padding: 15px 0;
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+    font-weight: bold;
+  }
+  
+  .key-btn:hover {
+    background-color: greenyellow;
+  }
+  
