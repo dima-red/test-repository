@@ -3,33 +3,39 @@ body {
   }
   
   .calc-wrapper {
+    margin: 0 auto;
     border: 3px solid grey;
     width: 500px;
     height: 400px;
   }
+
+  .display-wrapper {
+    text-align: end;
+    font-weight: bold;
+    font-size: 25px;
+    width: 89.3%;
+    margin: 20px auto;
+    border: 4px solid grey;
+  }
   
   .display {
-    width: 90%;
-    height: 30px;
-    margin: 20px;
-    border: 4px solid grey;
+    padding: 0 5px;
   }
   
   .keyboard {
     width: 90%;
-    margin: 20px;
+    margin: 20px auto;
     border: 2px solid grey;
-  
     display: grid;
     grid-template-columns: 1fr 1fr 1fr;
   }
   
-  .key-btn {
+  .key-btn-wrapper {
     border: 2px solid grey;
     height: 50px;
   }
   
-  .key-btn span {
+  .key-btn {
     padding: 15px 0;
     display: inline-block;
     text-align: center;
