@@ -6,7 +6,6 @@ body {
     margin: 0 auto;
     border: 3px solid grey;
     width: 500px;
-    height: 400px;
   }
 
   .display-wrapper {
@@ -35,15 +34,25 @@ body {
     height: 50px;
   }
   
-  .key-btn {
+  .key-btn, .action-btn, .result-btn, .clean-btn, .bracket-btn {
     padding: 15px 0;
     display: inline-block;
     text-align: center;
     width: 100%;
     font-weight: bold;
+    height: 20px;
+    cursor: pointer;
   }
   
-  .key-btn:hover {
-    background-color: greenyellow;
+  .key-btn:hover, .action-btn:hover, .bracket-btn:hover {
+    background-color: #FFB300;
+  }
+
+  .result-btn:hover {
+    background-color: #6edf74;
+  }
+
+  .clean-btn:hover {
+    background-color: #f74044;
   }
   
