@@ -1,17 +1,18 @@
 class MyCalculator {
     typeOfOperation = null;
     calcWrapper = document.querySelector(".calc-wrapper");
-    displayValueEl = this.calcWrapper.querySelector('.display');
-    displayValue = '0';
-    firstNumber = '';
-    secondNumber = '';
-    mathActionValue = '';
+    displayValueEl = this.calcWrapper.querySelector(".display");
+    displayValue = "0";
+    firstNumber = "";
+    secondNumber = "";
+    mathActionValue = "";
     mathActionValueFlag = false;
     bufferNumber = null;
     bufferAction = null;
     bufferResult = null;
     inputNumbersflag = true;
     useBracketsFlag = false;
+    canContinueFlag = false;
 
     constructor() {
         Array
@@ -65,6 +66,14 @@ class MyCalculator {
 
     inputNumbers(ev) {
         const inputData = ev.target.dataset.btn;
+        
+        if(this.canContinueFlag && inputData && !this.mathActionValue) {
+            this.firstNumber = "";
+            this.displayValue = "";
+            this.displayValueEl.innerHTML = "";
+            this.canContinueFlag = false;
+        }
+
         this.inputNumbersflag ? this.firstNumber += inputData : this.secondNumber += inputData;
         this.display(ev);
     }
@@ -80,11 +89,13 @@ class MyCalculator {
 
     result(ev) {
         if(ev && ev.target.dataset.result && !this.useBracketsFlag && this.secondNumber) {
-            console.log(this.firstNumber);
-            console.log(this.secondNumber);
-            console.log(this.mathActionValue);
             this.displayValue = this.calc(this.firstNumber, this.secondNumber, this.mathActionValue);
             this.displayValueEl.innerHTML = this.displayValue;
+            this.reset(this.displayValue);
+
+            // console.log(this.firstNumber);
+            // console.log(this.secondNumber);
+            // console.log(this.mathActionValue);
 
         } else if(this.useBracketsFlag) {
             this.bufferResult = this.calc(this.firstNumber, this.secondNumber, this.mathActionValue);
@@ -94,7 +105,7 @@ class MyCalculator {
             this.useBracketsFlag = false;
             
         } else if (!this.secondNumber) {
-            alert("Please enter the second number!");
+            alert('Please enter the second number!');
         }
     }
 
@@ -110,12 +121,12 @@ class MyCalculator {
         } else if(bracketsData.bracket === "(" && !this.useBracketsFlag) {
             this.bufferNumber = this.firstNumber;
             this.bufferAction = this.mathActionValue;
-            this.firstNumber = '';
-            this.mathActionValue = '';
+            this.firstNumber = "";
+            this.mathActionValue = "";
             this.inputNumbersflag = true;
             this.useBracketsFlag = true;
 
-            console.info("transfer rights");
+            console.info('transfer rights');
         }
 
         if(bracketsData.bracket === ")" && this.useBracketsFlag) {
@@ -129,19 +140,15 @@ class MyCalculator {
         switch (operator) {
             case "+":
                 result = (parseInt(n1) + parseInt(n2)).toString();
-                this.reset(result);
                 return result;
             case "-":
                 result = (parseInt(n1) - parseInt(n2)).toString();
-                this.reset(result);
                 return result;
             case "x":
                 result = (parseInt(n1) * parseInt(n2)).toString();
-                this.reset(result);
                 return result;
             case "/":
                 result = (parseInt(n1) / parseInt(n2)).toString();
-                this.reset(result);
                 return result;
         }
     }
@@ -149,15 +156,17 @@ class MyCalculator {
     reset(result) {
         this.firstNumber = result;
         this.inputNumbersflag = true;
-        this.secondNumber = '';
+        this.secondNumber = "";
+        this.mathActionValue = "";
+        this.canContinueFlag = true;
     }
 
     clean() {
-        this.firstNumber = '';
+        this.firstNumber = "";
         this.inputNumbersflag = true;
-        this.secondNumber = '';
-        this.displayValue = '0';
-        this.displayValueEl.innerHTML = '0';
+        this.secondNumber = "";
+        this.displayValue = "0";
+        this.displayValueEl.innerHTML = "0";
     }
 }
 

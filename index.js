@@ -1,172 +1,115 @@
 class MyCalculator {
-    typeOfOperation = null;
     calcWrapper = document.querySelector(".calc-wrapper");
     displayValueEl = this.calcWrapper.querySelector(".display");
-    displayValue = "0";
-    firstNumber = "";
-    secondNumber = "";
-    mathActionValue = "";
-    mathActionValueFlag = false;
-    bufferNumber = null;
-    bufferAction = null;
-    bufferResult = null;
-    inputNumbersflag = true;
-    useBracketsFlag = false;
-    canContinueFlag = false;
-
+    displayValue = 0;
+    currentNumber = 0;
+    mathExpression = [];
+    mathAction = null;
+    
     constructor() {
         Array
             .from(this.calcWrapper.querySelectorAll(".key-btn"))
-            .forEach(item => {
-                item.addEventListener("click", this.inputNumbers.bind(this));
-            });
+            .forEach(el => el.addEventListener("click", this.onNumberBtnClicked.bind(this)));
 
         Array
             .from(this.calcWrapper.querySelectorAll(".action-btn"))
-            .forEach(item => {
-                item.addEventListener("click", this.mathAction.bind(this));
-            });
+            .forEach(el => el.addEventListener("click", this.onMathActionBtnClicked.bind(this)));
 
-        Array
-            .from(this.calcWrapper.querySelectorAll(".bracket-btn"))
-            .forEach(item =>{
-                item.addEventListener("click", this.useBrackets.bind(this));
-            });
-            
-        this.calcWrapper.querySelector(".result-btn").addEventListener("click", this.result.bind(this));
-        this.calcWrapper.querySelector(".clean-btn").addEventListener("click", this.clean.bind(this));
+        this.calcWrapper.querySelector(".result-btn").addEventListener("click", this.onResultBtnClicked.bind(this));
+        this.calcWrapper.querySelector(".clean-btn").addEventListener("click", this.onCleanBtnClicked.bind(this));
+       
     }
 
-    display(ev) {
-        const displayedData = ev.target.dataset;
+    onDisplay(value) {
+        this.displayValueEl.innerHTML = value;
+    }
 
-        if(this.displayValue === "0") {
-            if(displayedData.bracket) {
-                alert('Please, enter a number!');
-            } else if(displayedData.action) {
-                this.displayValue += displayedData.action || displayedData.bracket;
-                this.displayValueEl.innerHTML = this.displayValue;
-            } else {
-                this.displayValue = displayedData.btn;
-                this.displayValueEl.innerHTML = this.displayValue;
-            }
-        } else if(displayedData.bracket && !this.bufferAction) {
-            return;
-        } else {
-            if(this.mathActionValueFlag) {
-                this.displayValue = this.firstNumber + this.mathActionValue;
-                this.displayValueEl.innerHTML = this.displayValue;
-                this.mathActionValueFlag = false;
-            } else {
-                this.displayValue += displayedData.btn || displayedData.action || displayedData.bracket;
-                this.displayValueEl.innerHTML = this.displayValue;
-            }
+    onNumberBtnClicked(ev) {
+        const inputNumber = ev.target.dataset.btn;
+
+        if(!parseInt(this.displayValue) && !this.mathAction) {
+            this.displayValue = this.currentNumber = inputNumber;
+            this.onDisplay(this.displayValue);
+        } else if(parseInt(inputNumber) || parseInt(this.currentNumber)) {
+            this.currentNumber += inputNumber;
+            this.displayValue += inputNumber;
+            this.onDisplay(this.displayValue);
         }
     }
 
-    inputNumbers(ev) {
-        const inputData = ev.target.dataset.btn;
+    onMathActionBtnClicked(ev) {
+        const mathActionSign = ev.target.dataset.action;
         
-        if(this.canContinueFlag && inputData && !this.mathActionValue) {
-            this.firstNumber = "";
-            this.displayValue = "";
-            this.displayValueEl.innerHTML = "";
-            this.canContinueFlag = false;
-        }
+        if(!this.mathAction || this.currentNumber) {
+            this.mathAction = mathActionSign;
+            this.displayValue += mathActionSign;
+            this.mathExpression.push(...[parseInt(this.currentNumber), this.mathAction]);
+            this.currentNumber = "";
+            this.onDisplay(this.displayValue);
 
-        this.inputNumbersflag ? this.firstNumber += inputData : this.secondNumber += inputData;
-        this.display(ev);
-    }
+        } else if(this.mathAction && this.mathAction !== mathActionSign && !this.currentNumber) {
 
-    mathAction(ev) {
-        if (this.mathActionValue) {
-            this.mathActionValueFlag = true;
-        }
-        this.inputNumbersflag = false;
-        this.mathActionValue = ev.target.dataset.action;
-        this.display(ev);
-    }
-
-    result(ev) {
-        if(ev && ev.target.dataset.result && !this.useBracketsFlag && this.secondNumber) {
-            this.displayValue = this.calc(this.firstNumber, this.secondNumber, this.mathActionValue);
-            this.displayValueEl.innerHTML = this.displayValue;
-            this.reset(this.displayValue);
-
-            // console.log(this.firstNumber);
-            // console.log(this.secondNumber);
-            // console.log(this.mathActionValue);
-
-        } else if(this.useBracketsFlag) {
-            this.bufferResult = this.calc(this.firstNumber, this.secondNumber, this.mathActionValue);
-            this.firstNumber = this.bufferNumber;
-            this.mathActionValue = this.bufferAction;
-            this.secondNumber = this.bufferResult;
-            this.useBracketsFlag = false;
-            
-        } else if (!this.secondNumber) {
-            alert('Please enter the second number!');
+            this.mathExpression.splice(this.mathExpression.lastIndexOf(this.mathAction), 1, mathActionSign);
+            this.displayValue = this.mathExpression.join("");
+            this.mathAction = mathActionSign;
+            this.onDisplay(this.displayValue);
         }
     }
 
-    useBrackets(ev) {
-        const bracketsData = ev.target.dataset;
-
-        if(bracketsData.bracket === ")" &&  !this.useBracketsFlag) {
-            alert("You cannot use ')' without '('!");
-        } else if(bracketsData && this.displayValue === "0") {
-            return;
-        } else if(bracketsData && !this.mathActionValue) {
-            alert('Please, select a Math action!');
-        } else if(bracketsData.bracket === "(" && !this.useBracketsFlag) {
-            this.bufferNumber = this.firstNumber;
-            this.bufferAction = this.mathActionValue;
-            this.firstNumber = "";
-            this.mathActionValue = "";
-            this.inputNumbersflag = true;
-            this.useBracketsFlag = true;
-
-            console.info('transfer rights');
-        }
-
-        if(bracketsData.bracket === ")" && this.useBracketsFlag) {
-            this.result();
-        }
-        this.display(ev);
-    }
-
-    calc(n1, n2, operator) {
-        let result = null;
-        switch (operator) {
-            case "+":
-                result = (parseInt(n1) + parseInt(n2)).toString();
-                return result;
-            case "-":
-                result = (parseInt(n1) - parseInt(n2)).toString();
-                return result;
-            case "x":
-                result = (parseInt(n1) * parseInt(n2)).toString();
-                return result;
-            case "/":
-                result = (parseInt(n1) / parseInt(n2)).toString();
-                return result;
+    onResultBtnClicked() {
+        if(this.currentNumber) {
+            this.mathExpression.push(parseInt(this.currentNumber));
+            this.calc(this.mathExpression);
+        } else {
+            alert("Please, enter a number!");
         }
     }
 
-    reset(result) {
-        this.firstNumber = result;
-        this.inputNumbersflag = true;
-        this.secondNumber = "";
-        this.mathActionValue = "";
-        this.canContinueFlag = true;
+    calc(arr) {
+        const indexByMultiplication = arr.indexOf("x");
+        const indexByDivision = arr.indexOf("/");
+        const indexByAddition = arr.indexOf("+");
+        const indexBySubstraction = arr.indexOf("-");
+
+        if(indexByMultiplication < 0 && indexByDivision < 0 && indexByAddition < 0 && indexBySubstraction < 0) {
+            this.onDisplay(arr[0]);
+            this.currentNumber = this.displayValue = arr[0];
+            this.mathExpression = [];
+            this.mathAction = null;
+        }
+
+        if (indexByMultiplication > 0 && (indexByDivision < 0 || indexByMultiplication < indexByDivision)) {
+            const multiplicationArr = arr.splice(indexByMultiplication - 1, 3);
+            const resultItem = multiplicationArr[0] * multiplicationArr[2];
+            arr.splice(indexByMultiplication -1, 0, resultItem);
+            this.calc(arr);
+
+        } else if(indexByDivision > 0 && (indexByMultiplication < 0 || indexByDivision < indexByMultiplication)) {
+            const divisionArr = arr.splice(indexByDivision - 1, 3);
+            const resultItem = divisionArr[0] / divisionArr[2];
+            arr.splice(indexByDivision -1, 0, resultItem);
+            this.calc(arr);
+
+        } else if(indexByAddition > 0 && indexByMultiplication < 0 && indexByDivision < 0 && (indexBySubstraction < 0 || indexByAddition < indexBySubstraction)) {
+            const additionArr = arr.splice(indexByAddition - 1, 3);
+            const resultItem = additionArr[0] + additionArr[2];
+            arr.splice(indexByAddition -1, 0, resultItem);
+            this.calc(arr);
+
+        } else if(indexBySubstraction > 0 && indexByMultiplication < 0 && indexByDivision < 0 && (indexByAddition < 0 || indexByAddition > indexBySubstraction)) {
+            const substructionArr = arr.splice(indexBySubstraction - 1, 3);
+            const resultItem = substructionArr[0] - substructionArr[2];
+            arr.splice(indexBySubstraction -1, 0, resultItem);
+            this.calc(arr);
+        }
     }
 
-    clean() {
-        this.firstNumber = "";
-        this.inputNumbersflag = true;
-        this.secondNumber = "";
-        this.displayValue = "0";
-        this.displayValueEl.innerHTML = "0";
+    onCleanBtnClicked() {
+        this.currentNumber = 0;
+        this.displayValue = 0;
+        this.mathExpression = [];
+        this.mathAction = null;
+        this.displayValueEl.innerHTML = 0;
     }
 }
 
