@@ -4,70 +4,35 @@
 	<title>Parcel Sandbox</title>
     <meta charset="UTF-8" />
 	<link rel="stylesheet" href="./styles.css">
+	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 	<script src="./index.js"></script>	
 </head>
 
 <body>
 	<div id="app">
-		<div class="calc-wrapper">
+		<div class="calc-wrapper container">
 			<div class="display-wrapper">
                 <span class="display">0</span>
             </div>
-			<div class="keyboard">
-				<div class="key-btn-wrapper">
-					<span data-btn="1" class="key-btn">1</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="2" class="key-btn">2</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="3" class="key-btn">3</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="4" class="key-btn">4</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="5" class="key-btn">5</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="6" class="key-btn">6</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="7" class="key-btn">7</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="8" class="key-btn">8</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="9" class="key-btn">9</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-btn="0" class="key-btn">0</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-action="+" class="action-btn">+</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-action="-" class="action-btn">-</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-action="x" class="action-btn">x</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-action="/" class="action-btn">/</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-result="=" class="result-btn">=</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-clean="clean" class="clean-btn">Clean</span>
-				</div>
-				<!-- <div class="key-btn-wrapper">
-					<span data-bracket="(" class="bracket-btn">(</span>
-				</div>
-				<div class="key-btn-wrapper">
-					<span data-bracket=")" class="bracket-btn">)</span>
-				</div> -->
+			<div class="keyboard row">
+				<button data-btn="1" class="col-sm-4 key-btn btn">1</button>
+				<button data-btn="2" class="col-sm-4 key-btn btn">2</button>
+				<button data-btn="3" class="col-sm-4 key-btn btn">3</button>
+				<button data-btn="4" class="col-sm-4 key-btn btn">4</button>
+				<button data-btn="5" class="col-sm-4 key-btn btn">5</button>
+				<button data-btn="6" class="col-sm-4 key-btn btn">6</button>
+				<button data-btn="7" class="col-sm-4 key-btn btn">7</button>
+				<button data-btn="8" class="col-sm-4 key-btn btn">8</button>
+				<button data-btn="9" class="col-sm-4 key-btn btn">9</button>
+				<button data-btn="0" class="col-sm-4 key-btn btn">0</button>
+
+				<button data-action="+" class="col-sm-4 action-btn btn">+</button>
+				<button data-action="-" class="col-sm-4 action-btn btn">-</button>
+				<button data-action="*" class="col-sm-4 action-btn btn">x</button>
+				<button data-action="/" class="col-sm-4 action-btn btn">/</button>
+
+				<button data-result="=" class="col-sm-4 result-btn btn">=</button>
+				<button data-clean="clean" class="col-sm-4 clean-btn btn">Clean</button>
 			</div>
 		</div>
 	</div>
