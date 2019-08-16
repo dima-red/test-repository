@@ -72,6 +72,7 @@ class MyCalculator {
     }
 
     calc(arr) {
+        console.log(arr);
         const indexByMultiplication = arr.indexOf("*");
         const indexByDivision = arr.indexOf("/");
         const indexByAddition = arr.indexOf("+");
@@ -82,6 +83,7 @@ class MyCalculator {
             this.currentNumber = this.displayValue = arr[0];
             this.mathExpression = [];
             this.mathAction = null;
+            console.log(arr);
         }
 
         if (indexByMultiplication > 0 && (indexByDivision < 0 || indexByMultiplication < indexByDivision)) {
