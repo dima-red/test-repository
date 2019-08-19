@@ -3,39 +3,37 @@
   margin-top: 20px;
   max-width: 500px !important;
   border-radius: 4px;
-}
-
-.display-wrapper {
-  text-align: end;
-  font-weight: bold;
-  font-size: 25px;
-  margin: 20px auto;
-  border: 1px solid grey;
-  border-radius: 4px;
-}
-
-.display {
-  padding: 0 5px;
-}
-
-.key-btn:hover, .action-btn:hover, .bracket-btn:hover {
-  background-color: #FFB300;
-}
-
-.result-btn:hover {
-  background-color: #6edf74;
-}
-
-.clean-btn:hover {
-  background-color: #f74044;
-}
-
-.row {
-  margin-right: 0 !important;
-  margin-left: 0 !important;
-}
-
-.container {
-  margin: 15px;
   padding: 15px;
+
+  .display-wrapper {
+    text-align: end;
+    font-weight: bold;
+    font-size: 25px;
+    margin: 20px auto;
+    border: 1px solid grey;
+    border-radius: 4px;
+
+    .display {
+      padding: 0 5px;
+    }
+
+  }
+
+  .key-btn:hover, .action-btn:hover, .bracket-btn:hover {
+    background-color: #FFB300;
+  }
+  
+  .result-btn:hover {
+    background-color: #6edf74;
+  }
+  
+  .clean-btn:hover {
+    background-color: #f74044;
+  }
+  
+  .row {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+  }
+
 }

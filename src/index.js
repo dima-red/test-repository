@@ -1,3 +1,5 @@
+import "./styles.scss";
+
 class MyCalculator {
     calcWrapper = document.querySelector(".calc-wrapper");
     displayValueEl = this.calcWrapper.querySelector(".display");
@@ -112,7 +114,7 @@ class MyCalculator {
         }
     }
 
-    onCleanBtnClicked() {
+    onCleanBtnClicked() { 
         this.currentNumber = 0;
         this.displayValue = 0;
         this.mathExpression = [];
