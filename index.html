@@ -1,42 +1,75 @@
 <html>
 
 <head>
-	<title>Parcel Sandbox</title>
+	<title>My Snake</title>
 	<meta charset="UTF-8" />
 	<base href="/">
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 </head>
 
 <body>
-	<div id="app">
-		<div class="calc-wrapper container">
-			<div class="display-wrapper">
-                <span class="display">0</span>
-            </div>
-			<div class="keyboard row">
-				<button data-btn="1" class="col-sm-4 key-btn btn">1</button>
-				<button data-btn="2" class="col-sm-4 key-btn btn">2</button>
-				<button data-btn="3" class="col-sm-4 key-btn btn">3</button>
-				<button data-btn="4" class="col-sm-4 key-btn btn">4</button>
-				<button data-btn="5" class="col-sm-4 key-btn btn">5</button>
-				<button data-btn="6" class="col-sm-4 key-btn btn">6</button>
-				<button data-btn="7" class="col-sm-4 key-btn btn">7</button>
-				<button data-btn="8" class="col-sm-4 key-btn btn">8</button>
-				<button data-btn="9" class="col-sm-4 key-btn btn">9</button>
-				<button data-btn="0" class="col-sm-4 key-btn btn">0</button>
+	<div class="app-wrapper">
+		<div class="app">
+			<canvas id="field" ></canvas>
+			<div class="game-settings-wrapper">
+				<!-- <div class="">
+					<h2>Snake</h2>
+					<h3>Select a type of the game:</h3>
+					<div class="initial-btn-wrapper">
+						<button class="single-player">Single player Game</button>
+						<button class="multiplayer">Multiplayer Game</button>
+					</div>
+				</div> -->
+				
 
-				<button data-action="+" class="col-sm-4 action-btn btn">+</button>
-				<button data-action="-" class="col-sm-4 action-btn btn">-</button>
-				<button data-action="*" class="col-sm-4 action-btn btn">x</button>
-				<button data-action="/" class="col-sm-4 action-btn btn">/</button>
+			</div>
+		</div>
+		
+	</div>
+</body>
 
-				<button data-result="=" class="col-sm-4 result-btn btn">=</button>
-				<button data-clean="clean" class="col-sm-4 clean-btn btn">Clean</button>
+<footer></footer>
+
+<div class="modals-wrapper">
+	<!-- <div class="show-modal initial-state modal"> -->
+	<div class="initial-state modal">
+		<div class="modal-content">
+			<div class="logo-block"></div>
+			<div class="text-wrapper">
+				<h2>Select a type of the game:</h2>
+				<div class="btn-wrapper">
+					<button class="single-player">Single player Game</button>
+					<button class="multiplayer">Multiplayer Game</button>
+				</div>
 			</div>
 		</div>
 	</div>
+	<div class="single-settings modal">
+		<div class="modal-content">
+			<div class="text-wrapper">
+				<h2>Select an amount of bots:</h2>
+				<div class="bot-settings btn-wrapper">
+					<button class="without-bots">Without bots</button>
+					<button class="with-one">With one bot</button>
+					<button class="with-two">With two bots</button>
+					<button class="with-three">With three bots</button>
+				</div>
+				<span class="back-btn">Back</span>
+			</div>
+		</div>
+	</div>
+	<div class="multi-settings modal">
+		<div class="modal-content">
+			<div class="text-wrapper">
+				<h2>Select an amount of users:</h2>
+				<div class="user-settings btn-wrapper">
+					<button class="with-one-user">With one user</button>
+					<button class="with-two-users">With two users</button>
+				</div>
+				<span class="back-btn">Back</span>
+			</div>
+		</div>
+	</div>
+</div>
 
-	<!-- <script src="./index.js"></script> -->
-</body>
 
 </html>

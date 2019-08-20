@@ -27,6 +27,13 @@ const devConfig = {
                 ],
             },
             {
+                test: /\.webp$/i,
+                loaders: [
+                    'file-loader',
+                    'webp-loader'
+                ],
+            },
+            {
                 test: /\.html$/,
                 use: "html-loader"
             }
