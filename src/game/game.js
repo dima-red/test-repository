@@ -1,8 +1,8 @@
 import { UIHandler } from "./ui-handler";
-import { Player } from "./player";
 import { Food } from "./food";
+import { Snake } from "./snake";
 
-class Game {    
+class Game{
     GAME_SPEED = 100;
     CANVAS_BORDER_COLOUR = 'black';
     CANVAS_BACKGROUND_COLOUR = "#92BE05";
@@ -10,14 +10,15 @@ class Game {
     canvas = null;
     ctx = null;
     score = 0;
-    snake1 = [
+
+    snakeBody1 = [
         {x: 50, y: 580},
         {x: 40, y: 580},
         {x: 30, y: 580},
         {x: 20, y: 580},
         {x: 10, y: 580}
     ];
-    snake2 = [
+    snakeBody2 = [
         {x: 50, y: 280},
         {x: 40, y: 280},
         {x: 30, y: 280},
@@ -34,30 +35,33 @@ class Game {
         this.canvas = this.appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
 
-        this.food = new Food(this.canvas, this.ctx, this.snake1, this.snake2),
-
-        this.player1 = new Player(this.snake1, this.ctx, this.dx, this.dy);
-        this.player2 = new Player(this.snake2, this.ctx, this.dx, this.dy);
-        
+        this.food = new Food(this.canvas, this.ctx, this.snakeBody1, this.snakeBody2),
+        this.foodObj = this.food.createFood();
+        this.snake1 = new Snake(this.canvas, this.snakeBody1, this.snakeBody2, this.ctx, this.dx, this.dy, this.foodObj, this.appWrapper);
+        this.snake2 = new Snake(this.canvas, this.snakeBody2, this.snakeBody1, this.ctx, this.dx, this.dy, this.foodObj, this.appWrapper);        
 
         this.main();
-        this.food.createFood();
+        
     }
 
     main() {
+        
+        console.log(this.foodObj);
+
+
         if(this.didGameEnd()) {
             return;
         }
 
         setTimeout(() => {
-            this.player1.changingDirection = false;
-            this.player2.changingDirection = false;
+            this.snake1.changingDirection = false;
+            this.snake2.changingDirection = false;
             this.clearCanvas();
             this.food.drawFood();
-            this.player1.snakeInstance.advanceSnake();
-            this.player1.snakeInstance.drawSnake();
-            this.player2.snakeInstance.advanceSnake();
-            this.player2.snakeInstance.drawSnake();
+            this.snake1.advanceSnake();
+            this.snake1.drawSnake();
+            this.snake2.advanceSnake();
+            this.snake2.drawSnake();
 
             this.main();
 
@@ -72,22 +76,22 @@ class Game {
     }
 
     didGameEnd() {
-        for (let i = 4; i < this.snake1.length; i++) {
-            if (this.snake1[i].x === this.snake1[0].x && this.snake1[i].y === this.snake1[0].y) {
+        for (let i = 4; i < this.snakeBody1.length; i++) {
+            if (this.snakeBody1[i].x === this.snakeBody1[0].x && this.snakeBody1[i].y === this.snakeBody1[0].y) {
                 return true;
             }
         }
 
-        for (let i = 4; i < this.snake2.length; i++) {
-            if (this.snake2[i].x === this.snake2[0].x && this.snake2[i].y === this.snake2[0].y) {
+        for (let i = 4; i < this.snakeBody2.length; i++) {
+            if (this.snakeBody2[i].x === this.snakeBody2[0].x && this.snakeBody2[i].y === this.snakeBody2[0].y) {
                 return true;
             }
         }
 
-        const hitLeftWall = this.snake1[0].x < 0 || this.snake2[0].x < 0;
-        const hitRightWall = this.snake1[0].x > this.canvas.width - 10 || this.snake2[0].x > this.canvas.width - 10;
-        const hitToptWall = this.snake1[0].y < 0 || this.snake2[0].y < 0;
-        const hitBottomWall = this.snake1[0].y > this.canvas.height - 10 || this.snake1[0].y > this.canvas.height - 10;
+        const hitLeftWall = this.snakeBody1[0].x < 0 || this.snakeBody2[0].x < 0;
+        const hitRightWall = this.snakeBody1[0].x > this.canvas.width - 10 || this.snakeBody2[0].x > this.canvas.width - 10;
+        const hitToptWall = this.snakeBody1[0].y < 0 || this.snakeBody2[0].y < 0;
+        const hitBottomWall = this.snakeBody1[0].y > this.canvas.height - 10 || this.snakeBody1[0].y > this.canvas.height - 10;
         
         return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall;
     }

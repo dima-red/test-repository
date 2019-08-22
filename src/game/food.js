@@ -2,8 +2,8 @@ export class Food {
     FOOD_COLOUR = 'yellow';
     FOOD_BORDER_COLOUR = 'darkred';
 
-    foodX = null;
-    foodY = null;
+    // foodX = null;
+    // foodY = null;
 
     constructor(canvas, ctx, snake1, snake2) {
         this.canvas = canvas;
@@ -42,5 +42,10 @@ export class Food {
                 this.createFood();
             }
         });
+
+        return {
+            foodX: this.foodX,
+            foodY: this.foodY
+        }
     }
 }

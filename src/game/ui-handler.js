@@ -1,5 +1,3 @@
-import { Player } from "./player";
-
 export class UIHandler {
     modalsWrapper = document.querySelector(".modals-wrapper");
     multiFlag = false;
