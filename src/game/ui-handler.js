@@ -16,9 +16,6 @@ export class UIHandler {
         this.modalsWrapper
             .querySelector(".single-settings")
             .classList.remove("show-modal");
-
-        // this.player = new Player();
-        this.player1 = new Player("Dima");
     }
 
     onSinglePlayerBtnClicked() {
