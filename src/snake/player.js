@@ -1,10 +1,10 @@
 export class Player {
     GAME_SPEED = 100;
     CANVAS_BORDER_COLOUR = 'black';
-    CANVAS_BACKGROUND_COLOUR = "white";
+    CANVAS_BACKGROUND_COLOUR = "#92BE05";
     SNAKE_COLOUR = 'lightgreen';
     SNAKE_BORDER_COLOUR = 'darkgreen';
-    FOOD_COLOUR = 'red';
+    FOOD_COLOUR = 'yellow';
     FOOD_BORDER_COLOUR = 'darkred';
 
     appWrapper = document.querySelector(".app-wrapper");
