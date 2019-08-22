@@ -89,6 +89,7 @@ export class Player {
         this.ctx.strokestyle = this.SNAKE_BORDER_COLOUR;
         this.ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
         this.ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
+        this.ctx.lineJoin = "round";
     }
 
     didGameEnd() {
