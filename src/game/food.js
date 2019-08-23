@@ -1,15 +1,16 @@
-export class Food {
+import { Snake } from "./snake";
+
+export class Food extends Snake {
     FOOD_COLOUR = 'yellow';
     FOOD_BORDER_COLOUR = 'darkred';
 
     foodX = null;
     foodY = null;
 
-    constructor(canvas, ctx, snake1, snake2) {
+    constructor(canvas, ctx) {
+        super();
         this.canvas = canvas;
         this.ctx = ctx;
-        this.snake1 = snake1;
-        this.snake2 = snake2;
     }
 
 
@@ -28,21 +29,7 @@ export class Food {
     createFood() {
         this.foodX = this.randomTen(0, this.canvas.width - 10);
         this.foodY = this.randomTen(0, this.canvas.height - 10);
-        this.snake1.forEach(part => {
-            const foodIsoNsnake = part.x === this.foodX && part.y === this.foodY;
-            
-            if (foodIsoNsnake) {
-                this.createFood();
-            }
-        });
-        this.snake2.forEach(part => {
-            const foodIsoNsnake = part.x === this.foodX && part.y === this.foodY;
-            
-            if (foodIsoNsnake) {
-                this.createFood();
-            }
-        });
-
+        
         return {
             foodX: this.foodX,
             foodY: this.foodY

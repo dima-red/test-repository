@@ -1,6 +1,6 @@
 import { UIHandler } from "./ui-handler";
 import { Food } from "./food";
-import { Player } from "./player";
+import { Snake } from "./snake";
 
 export class Game{
     GAME_SPEED = 100;
@@ -10,40 +10,59 @@ export class Game{
     canvas = null;
     ctx = null;
 
-    snakeBody1 = [
+    amountOfUsers = null;
+
+    snakeBodyTemplate = [
         {x: 50, y: 580},
         {x: 40, y: 580},
         {x: 30, y: 580},
         {x: 20, y: 580},
         {x: 10, y: 580}
     ];
-    snakeBody2 = [
-        {x: 50, y: 280}, 
-        {x: 40, y: 280},
-        {x: 30, y: 280},
-        {x: 20, y: 280},
-        {x: 10, y: 280}
-    ];
 
     dx = 10;
     dy = 0;
-    createFoodFlag = false;
+    wasFoodEatenFlag = false;
 
-    constructor(
-        uiHandler = new UIHandler(),
-    ) {
+    constructor(amountOfUsers) {
+        this.amountOfUsers = amountOfUsers;
         this.canvas = this.appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
-        this.food = new Food(this.canvas, this.ctx, this.snakeBody1, this.snakeBody2),
-        this.player1 = new Player(this.snakeBody1, this.ctx, this.dx, this.dy, this.appWrapper);
-        this.player2 = new Player(this.snakeBody2, this.ctx, this.dx, this.dy, this.appWrapper);
+
+        this.snakes = this.generateSnakes(this.snakeBodyTemplate, this.amountOfUsers);
+
+        this.food = new Food(this.canvas, this.ctx),
+
+        this.createSnakeInstances(this.snakes);
+
+        this.snake1 = new Snake(this.snakeBody1, this.ctx, this.dx, this.dy, this.appWrapper);
+        this.snake2 = new Snake(this.snakeBody2, this.ctx, this.dx, this.dy, this.appWrapper);
         document.addEventListener("keydown", this.onChangeDirectionBtnClicked.bind(this));
 
-        
         this.main();
         this.foodDelta = this.food.createFood();
+        this.isFoodOnSnake();
         
         
+    }
+
+    generateSnakes(snakeTemplate, amountUsers) {
+        const snakesArr = [];
+        
+        for (let i=0; i < amountUsers; i++) {
+            snakesArr.push(snakeTemplate.map(part =>{
+                return {
+                    x: part.x,
+                    y: part.y - 50 * i
+                }
+            }));
+        }
+
+        return snakesArr;
+    }
+
+    createSnakeInstances(snakes) {
+        this.snakeInstances = snakes.map(snake => new Snake(snake, this.ctx, this.dx, this.dy, this.appWrapper));
     }
 
     main() {
@@ -52,25 +71,25 @@ export class Game{
         }
 
         setTimeout(() => {
-            this.player1.changingDirection = false;
-            this.player2.changingDirection = false;
+            this.snake1.changingDirection = false;
+            this.snake2.changingDirection = false;
             this.clearCanvas();
             this.food.drawFood();
-            this.createFoodFlag = this.player1.snake.advanceSnake(this.delta, this.foodDelta, this.snakeBody1);
+            this.wasFoodEatenFlag = this.snake1.advanceSnake(this.deltaSnake1, this.foodDelta, this.snakeBody1);
 
-            if(this.createFoodFlag) {
+            if(this.wasFoodEatenFlag) {
                 this.foodDelta = this.food.createFood();
-                this.createFoodFlag = false;
+                this.wasFoodEatenFlag = false;
             }
            
-            this.createFoodFlag = this.player2.snake.advanceSnake(this.delta, this.foodDelta, this.snakeBody2);
+            this.wasFoodEatenFlag = this.snake2.advanceSnake(this.deltaSnake2, this.foodDelta, this.snakeBody2);
             
-            if(this.createFoodFlag) {
+            if(this.wasFoodEatenFlag) {
                 this.foodDelta = this.food.createFood();
-                this.createFoodFlag = false;
+                this.wasFoodEatenFlag = false;
             }
-            this.player1.snake.drawSnake();
-            this.player2.snake.drawSnake();
+            this.snake1.drawSnake();
+            this.snake2.drawSnake();
 
             this.main();
 
@@ -106,6 +125,25 @@ export class Game{
     }
 
     onChangeDirectionBtnClicked(ev) {
-        this.delta = this.player1.changeDirection(ev);
+        this.deltaSnake1 = this.snake1.changeDirection(ev);
+        this.deltaSnake1 = this.snake2.changeDirection(ev);
+    }
+
+    isFoodOnSnake() {
+        this.snakeBody1.forEach(part => {
+            const foodIsOnsnake = part.x === this.foodDelta.foodX && part.y === this.foodDelta.foodX;
+            
+            if (foodIsOnsnake) {
+                this.food.createFood();
+            }
+        });
+
+        this.snakeBody2.forEach(part => {
+            const foodIsOnsnake = part.x === this.foodDelta.foodX && part.y === this.foodDelta.foodX;
+            
+            if (foodIsOnsnake) {
+                this.food.createFood();
+            }
+        });
     }
 }

@@ -1,11 +1,16 @@
+import { Game } from "./game";
+
 export class UIHandler {
+    WITH_ONE_USER = 1;
+    WITH_TWO_USERS = 2;
+    WITHOUT_BOTS = 0;
     modalsWrapper = document.querySelector(".modals-wrapper");
     multiFlag = false;
 
     constructor() {
         this.modalsWrapper.querySelector(".single-player").addEventListener("click", this.onSinglePlayerBtnClicked.bind(this));
         this.modalsWrapper.querySelector(".multiplayer").addEventListener("click", this.onMultiplayerBtnClicked.bind(this));
-        Array.from(this.modalsWrapper.querySelectorAll(".back-btn")).forEach(node => node.addEventListener("click", this.onBachBtnClicked.bind(this)));
+        Array.from(this.modalsWrapper.querySelectorAll(".back-btn")).forEach(node => node.addEventListener("click", this.onBackBtnClicked.bind(this)));
         this.modalsWrapper.querySelector(".without-bots").addEventListener("click", this.onWithoutBotsBtnClicked.bind(this));
 
     }
@@ -14,6 +19,8 @@ export class UIHandler {
         this.modalsWrapper
             .querySelector(".single-settings")
             .classList.remove("show-modal");
+        
+        new Game(this.WITHOUT_BOTS);
     }
 
     onSinglePlayerBtnClicked() {
@@ -38,7 +45,7 @@ export class UIHandler {
             .classList.add("show-modal");
     }
 
-    onBachBtnClicked() {
+    onBackBtnClicked() {
         if(this.multiFlag) {
             this.modalsWrapper
                 .querySelector(".multi-settings")

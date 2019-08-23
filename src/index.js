@@ -1,4 +1,4 @@
 import "./styles.scss";
-import { Game } from "./game/game";
+import { UIHandler } from "./game/ui-handler";
 
-document.addEventListener('DOMContentLoaded', () => new Game());
+document.addEventListener('DOMContentLoaded', () => new UIHandler());
