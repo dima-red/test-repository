@@ -1,15 +1,14 @@
 import { UIHandler } from "./ui-handler";
 import { Food } from "./food";
-import { Snake } from "./snake";
+import { Player } from "./player";
 
-class Game{
+export class Game{
     GAME_SPEED = 100;
     CANVAS_BORDER_COLOUR = 'black';
     CANVAS_BACKGROUND_COLOUR = "#92BE05";
     appWrapper = document.querySelector(".app-wrapper");
     canvas = null;
     ctx = null;
-    score = 0;
 
     snakeBody1 = [
         {x: 50, y: 580},
@@ -19,7 +18,7 @@ class Game{
         {x: 10, y: 580}
     ];
     snakeBody2 = [
-        {x: 50, y: 280},
+        {x: 50, y: 280}, 
         {x: 40, y: 280},
         {x: 30, y: 280},
         {x: 20, y: 280},
@@ -28,40 +27,50 @@ class Game{
 
     dx = 10;
     dy = 0;
+    createFoodFlag = false;
 
     constructor(
         uiHandler = new UIHandler(),
     ) {
         this.canvas = this.appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
-
         this.food = new Food(this.canvas, this.ctx, this.snakeBody1, this.snakeBody2),
-        this.foodObj = this.food.createFood();
-        this.snake1 = new Snake(this.canvas, this.snakeBody1, this.snakeBody2, this.ctx, this.dx, this.dy, this.foodObj, this.appWrapper);
-        this.snake2 = new Snake(this.canvas, this.snakeBody2, this.snakeBody1, this.ctx, this.dx, this.dy, this.foodObj, this.appWrapper);        
+        this.player1 = new Player(this.snakeBody1, this.ctx, this.dx, this.dy, this.appWrapper);
+        this.player2 = new Player(this.snakeBody2, this.ctx, this.dx, this.dy, this.appWrapper);
+        document.addEventListener("keydown", this.onChangeDirectionBtnClicked.bind(this));
 
+        
         this.main();
+        this.foodDelta = this.food.createFood();
+        
         
     }
 
     main() {
-        
-        console.log(this.foodObj);
-
-
         if(this.didGameEnd()) {
             return;
         }
 
         setTimeout(() => {
-            this.snake1.changingDirection = false;
-            this.snake2.changingDirection = false;
+            this.player1.changingDirection = false;
+            this.player2.changingDirection = false;
             this.clearCanvas();
             this.food.drawFood();
-            this.snake1.advanceSnake();
-            this.snake1.drawSnake();
-            this.snake2.advanceSnake();
-            this.snake2.drawSnake();
+            this.createFoodFlag = this.player1.snake.advanceSnake(this.delta, this.foodDelta, this.snakeBody1);
+
+            if(this.createFoodFlag) {
+                this.foodDelta = this.food.createFood();
+                this.createFoodFlag = false;
+            }
+           
+            this.createFoodFlag = this.player2.snake.advanceSnake(this.delta, this.foodDelta, this.snakeBody2);
+            
+            if(this.createFoodFlag) {
+                this.foodDelta = this.food.createFood();
+                this.createFoodFlag = false;
+            }
+            this.player1.snake.drawSnake();
+            this.player2.snake.drawSnake();
 
             this.main();
 
@@ -95,6 +104,8 @@ class Game{
         
         return hitLeftWall || hitRightWall || hitToptWall || hitBottomWall;
     }
-}
 
-document.addEventListener('DOMContentLoaded', () => new Game());
+    onChangeDirectionBtnClicked(ev) {
+        this.delta = this.player1.changeDirection(ev);
+    }
+}
