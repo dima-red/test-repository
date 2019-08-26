@@ -6,13 +6,35 @@ export class Snake {
     dx = null;
     dy = null;
 
+    controlButtons = [
+        {
+            LEFT_KEY: 37,
+            RIGHT_KEY: 39,
+            UP_KEY: 38,
+            DOWN_KEY: 40,
+        },
+        {
+            LEFT_KEY: 65,
+            RIGHT_KEY: 68,
+            UP_KEY: 87,
+            DOWN_KEY: 83,
+        },
+        {
+            LEFT_KEY: 74,
+            RIGHT_KEY: 76,
+            UP_KEY: 73,
+            DOWN_KEY: 75,
+        },
+    ];
+
         
-    constructor(snake, ctx, dx, dy, appWrapper) {
+    constructor(snake, ctx, dx, dy, appWrapper, numberOfplayer) {
         this.snake = snake;
         this.ctx = ctx;
         this.dx = dx;
         this.dy = dy;
         this.appWrapper = appWrapper;
+        this.numberOfplayer = numberOfplayer;
     }
 
     advanceSnake(delta, foodDelta, snakeBody) {
@@ -36,7 +58,7 @@ export class Snake {
 
         if (didEatFood) {
             this.score += 10;
-            this.appWrapper.querySelector('.score').innerHTML = this.score;
+            this.appWrapper.querySelector(`.player-${this.numberOfplayer + 1} .score`).innerHTML = this.score;
             return true;
         } else {
             this.snake.pop();
@@ -58,40 +80,37 @@ export class Snake {
 
     changeDirection(ev) {
         const { keyCode } = ev;
-        const LEFT_KEY = 37;
-        const RIGHT_KEY = 39;
-        const UP_KEY = 38;
-        const DOWN_KEY = 40;
 
         if (this.changingDirection) {
             return;
         }
 
         this.changingDirection = true;
+
         const goingUp = this.dy === -10;
         const goingDown = this.dy === 10;
         const goingRight = this.dx === 10;
         const goingLeft = this.dx === -10;
 
-        if (keyCode === LEFT_KEY && !goingRight) {
+        if (keyCode === this.controlButtons[this.numberOfplayer].LEFT_KEY && !goingRight) {
             this.dx = -10;
             this.dy = 0;
 
             return {x: this.dx, y: this.dy};
         }
-        if (keyCode === UP_KEY && !goingDown) {
+        if (keyCode === this.controlButtons[this.numberOfplayer].UP_KEY && !goingDown) {
             this.dx = 0;
             this.dy = -10;
 
             return {x: this.dx, y: this.dy};
         }
-        if (keyCode === RIGHT_KEY && !goingLeft) {
+        if (keyCode === this.controlButtons[this.numberOfplayer].RIGHT_KEY && !goingLeft) {
             this.dx = 10;
             this.dy = 0;
 
             return {x: this.dx, y: this.dy};
         }
-        if (keyCode === DOWN_KEY && !goingUp) {
+        if (keyCode === this.controlButtons[this.numberOfplayer].DOWN_KEY && !goingUp) {
             this.dx = 0;
             this.dy = 10;
 

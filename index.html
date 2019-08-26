@@ -7,21 +7,28 @@
 </head>
 
 <body>
-	<div class="app-wrapper">
+	<div class="hide app-wrapper">
 		<div class="app">
 			<canvas id="field" width="600" height="600"></canvas>
-			<div class="game-settings-wrapper">
-				<div class="score">0</div>
-				<!-- <div class="">
-					<h2>Snake</h2>
-					<h3>Select a type of the game:</h3>
-					<div class="initial-btn-wrapper">
-						<button class="single-player">Single player Game</button>
-						<button class="multiplayer">Multiplayer Game</button>
-					</div>
-				</div> -->
-				
-
+			<div style="display: none" class="game-settings-wrapper"> <!-- ask about inline styles -->
+				<div class="hide player-1">
+					<h4>Player 1</h4>
+					<span>Score:</span>
+					<span class="score">0</span>
+					<div class="hide end-game">Game Over!</div>
+				</div>
+				<div class="hide player-2">
+					<h4>Player 2</h4>
+					<span>Score:</span>
+					<span class="score">0</span>
+					<div class="hide end-game">Game Over!</div>
+				</div>
+				<div class="hide player-3">
+					<h4>Player 3</h4>
+					<span>Score:</span>
+					<span class="score">0</span>
+					<div class="hide end-game">Game Over!</div>
+				</div>
 			</div>
 		</div>
 		
