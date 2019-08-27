@@ -22,7 +22,6 @@ export class Game{
     dx = 10;
     dy = 0;
     wasFoodEatenFlag = false;
-    deltaSnake = {};
     gameOverState = [];
     gameOverFlag = false;
 
@@ -30,7 +29,7 @@ export class Game{
         this.amountOfUsers = amountOfUsers;
         this.canvas = this.appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
-        this.snakes = this.generateSnakes(this.snakeBodyTemplate, this.amountOfUsers);
+        this.snakes = this.generateSnakesTemplates(this.snakeBodyTemplate, this.amountOfUsers);
 
         this.food = new Food(this.canvas, this.ctx),
         this.createSnakeInstances(this.snakes);
@@ -44,7 +43,7 @@ export class Game{
         
     }
 
-    generateSnakes(snakeTemplate, amountUsers) {
+    generateSnakesTemplates(snakeTemplate, amountUsers) {
         const snakesArr = [];
         
         for (let i=0; i < amountUsers; i++) {
@@ -77,16 +76,18 @@ export class Game{
             this.food.drawFood();
 
             for(let i = 0; i < this.snakeInstances.length; i++) {
-                this.wasFoodEatenFlag = this.snakeInstances[i].advanceSnake(this.deltaSnake[i], this.foodDelta, this.snakeBody1);
+                this.wasFoodEatenFlag = this.snakeInstances[i].advanceSnake(this.food, this.snakes[i]);
 
                 if(this.wasFoodEatenFlag) {
-                    this.foodDelta = this.food.createFood();
+                    this.food.createFood();
                     this.wasFoodEatenFlag = false;
                 }
             }
 
             this.snakeInstances.forEach(snakeInstance => snakeInstance.drawSnake());
+            // this.drawScore();
             this.main();
+            
 
         }, this.GAME_SPEED);
     }
@@ -137,7 +138,7 @@ export class Game{
 
     onChangeDirectionBtnClicked(ev) {
         for(let i = 0; i < this.snakeInstances.length; i++) {
-            this.deltaSnake[i] = this.snakeInstances[i].changeDirection(ev);
+            this.snakeInstances[i].changeDirection(ev);
         }
     }
 

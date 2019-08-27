@@ -37,24 +37,14 @@ export class Snake {
         this.numberOfplayer = numberOfplayer;
     }
 
-    advanceSnake(delta, foodDelta, snakeBody) {
-        if(delta) {
-            this.dx = delta.x;
-            this.dy = delta.y;
-        }
-
-        if(foodDelta) {
-            this.foodX = foodDelta.foodX;
-            this.foodY = foodDelta.foodY;
-        }
-
+    advanceSnake(food, snakeBody) {
         if(snakeBody) {
             this.snake = snakeBody;
         }
 
         const head = {x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy};
         this.snake.unshift(head);
-        const didEatFood = this.snake[0].x === this.foodX && this.snake[0].y === this.foodY;
+        const didEatFood = this.snake[0].x === food.foodX && this.snake[0].y === food.foodY;
 
         if (didEatFood) {
             this.score += 10;
@@ -96,25 +86,25 @@ export class Snake {
             this.dx = -10;
             this.dy = 0;
 
-            return {x: this.dx, y: this.dy};
+            
         }
         if (keyCode === this.controlButtons[this.numberOfplayer].UP_KEY && !goingDown) {
             this.dx = 0;
             this.dy = -10;
 
-            return {x: this.dx, y: this.dy};
+            
         }
         if (keyCode === this.controlButtons[this.numberOfplayer].RIGHT_KEY && !goingLeft) {
             this.dx = 10;
             this.dy = 0;
 
-            return {x: this.dx, y: this.dy};
+            
         }
         if (keyCode === this.controlButtons[this.numberOfplayer].DOWN_KEY && !goingUp) {
             this.dx = 0;
             this.dy = 10;
 
-            return {x: this.dx, y: this.dy};
+            
         }
     }
 }

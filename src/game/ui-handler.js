@@ -15,8 +15,6 @@ export class UIHandler {
         this.modalsWrapper.querySelector(".without-bots").addEventListener("click", this.onWithoutBotsBtnClicked.bind(this));
         this.modalsWrapper.querySelector(".with-one-user").addEventListener("click", this.onWithOneUserBtnClicked.bind(this));
         this.modalsWrapper.querySelector(".with-two-users").addEventListener("click", this.onWithTwoUsersBtnClicked.bind(this));
-
-        this.appWrapper.querySelector(".game-settings-wrapper").style.removeProperty("display"); // TO ASK: ask about it
     }
 
     removeModalClass(parent, selector) {
