@@ -1,6 +1,4 @@
-import { Snake } from "./snake";
-
-export class Food extends Snake {
+export class Food {
     FOOD_COLOUR = 'yellow';
     FOOD_BORDER_COLOUR = 'darkred';
 
@@ -8,12 +6,9 @@ export class Food extends Snake {
     foodY = null;
 
     constructor(canvas, ctx) {
-        super();
         this.canvas = canvas;
         this.ctx = ctx;
     }
-
-
 
     drawFood() {
         this.ctx.fillStyle = this.FOOD_COLOUR;
@@ -26,13 +21,31 @@ export class Food extends Snake {
         return Math.round((Math.random() * (max-min) + min) / 10) * 10;
     }
 
-    createFood() {
+    createFood(snakeInstances) {
         this.foodX = this.randomTen(0, this.canvas.width - 10);
         this.foodY = this.randomTen(0, this.canvas.height - 10);
         
-        return {
-            foodX: this.foodX,
-            foodY: this.foodY
+        if(this.isFoodOnSnake(snakeInstances)) {
+            this.createFood(snakeInstances);
+        }
+    }
+
+    isFoodOnSnake(snakeInstances) {
+        let foodIsOnsnake = null;
+
+        snakeInstances.forEach(snakeInstance => {
+            snakeInstance.snake.forEach(part => {
+
+                if(part.x === this.foodX && part.y === this.foodY) {
+                    foodIsOnsnake = true;
+                }
+            });
+        });
+
+        if(foodIsOnsnake) {
+            return true;
+        } else {
+            return false;
         }
     }
 }

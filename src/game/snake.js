@@ -1,59 +1,45 @@
 export class Snake {
     SNAKE_COLOUR = 'lightgreen';
     SNAKE_BORDER_COLOUR = 'darkgreen';
-    score = 0;
     changingDirection = false; 
     dx = null;
     dy = null;
+    snake = null;
 
-    controlButtons = [
-        {
-            LEFT_KEY: 37,
-            RIGHT_KEY: 39,
-            UP_KEY: 38,
-            DOWN_KEY: 40,
-        },
-        {
-            LEFT_KEY: 65,
-            RIGHT_KEY: 68,
-            UP_KEY: 87,
-            DOWN_KEY: 83,
-        },
-        {
-            LEFT_KEY: 74,
-            RIGHT_KEY: 76,
-            UP_KEY: 73,
-            DOWN_KEY: 75,
-        },
-    ];
-
-        
-    constructor(snake, ctx, dx, dy, appWrapper, numberOfplayer) {
-        this.snake = snake;
+    constructor(ctx, dx, dy, controls, snakeBodyTemplate, numberOfUser, canvas) {
         this.ctx = ctx;
         this.dx = dx;
         this.dy = dy;
-        this.appWrapper = appWrapper;
-        this.numberOfplayer = numberOfplayer;
+        this.controls = controls;
+        this.numberOfUser = numberOfUser;
+        this.canvas = canvas;
+        this.snake = this.generateSnake(snakeBodyTemplate, numberOfUser);
     }
 
-    advanceSnake(food, snakeBody) {
-        if(snakeBody) {
-            this.snake = snakeBody;
-        }
+    generateSnake(snakeTemplate, numberOfUser) {
+        const snake = snakeTemplate.map(part => {
+            return {
+                x: part.x,
+                y: part.y - 50 * numberOfUser
+            }
+        });
 
+        return snake;
+    }
+
+    advanceSnake(food) {
         const head = {x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy};
         this.snake.unshift(head);
         const didEatFood = this.snake[0].x === food.foodX && this.snake[0].y === food.foodY;
 
         if (didEatFood) {
-            this.score += 10;
-            this.appWrapper.querySelector(`.player-${this.numberOfplayer + 1} .score`).innerHTML = this.score;
+            
             return true;
         } else {
             this.snake.pop();
+
             return false;
-      }
+        }
     }
 
     drawSnake() {
@@ -82,29 +68,45 @@ export class Snake {
         const goingRight = this.dx === 10;
         const goingLeft = this.dx === -10;
 
-        if (keyCode === this.controlButtons[this.numberOfplayer].LEFT_KEY && !goingRight) {
+        if (keyCode === this.controls.LEFT_KEY && !goingRight) {
             this.dx = -10;
             this.dy = 0;
-
-            
         }
-        if (keyCode === this.controlButtons[this.numberOfplayer].UP_KEY && !goingDown) {
+
+        if (keyCode === this.controls.UP_KEY && !goingDown) {
             this.dx = 0;
             this.dy = -10;
-
-            
         }
-        if (keyCode === this.controlButtons[this.numberOfplayer].RIGHT_KEY && !goingLeft) {
+
+        if (keyCode === this.controls.RIGHT_KEY && !goingLeft) {
             this.dx = 10;
-            this.dy = 0;
-
-            
+            this.dy = 0;  
         }
-        if (keyCode === this.controlButtons[this.numberOfplayer].DOWN_KEY && !goingUp) {
-            this.dx = 0;
-            this.dy = 10;
 
-            
+        if (keyCode === this.controls.DOWN_KEY && !goingUp) {
+            this.dx = 0;
+            this.dy = 10;  
+        }
+    }
+
+    getSnakeState() {
+        for(let i = 4; i < this.snake.length; i++) {
+            if(this.snake[i].x === this.snake[0].x && this.snake[i].y === this.snake[0].y) {
+                return {
+                    user: this.numberOfUser,
+                    isGameOver: true
+                };
+            }
+        }
+
+        const hitLeftWall = this.snake[0].x < 0;
+        const hitRightWall = this.snake[0].x > this.canvas.width - 10;
+        const hitToptWall = this.snake[0].y < 0;
+        const hitBottomWall = this.snake[0].y > this.canvas.height - 10;
+
+        return {
+            user: this.numberOfUser,
+            isGameOver: hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
         }
     }
 }
