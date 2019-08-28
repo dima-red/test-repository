@@ -36,7 +36,6 @@
       }
   
       .player-1, .player-2, .player-3 {
-        background-color: yellow;
         border-radius: 6px;
         border: 2px solid grey;
         text-align: center;
@@ -53,6 +52,18 @@
           margin: 20px 0;
           font-weight: bold;
         }
+      }
+
+      .player-1 {
+        background-color: #3fff00;
+      }
+
+      .player-2 {
+        background-color: yellow;
+      }
+
+      .player-3 {
+        background-color: #df92ff;
       }
     }
   }  

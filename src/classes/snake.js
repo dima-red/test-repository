@@ -1,7 +1,7 @@
+import { CELL_SIZE, SNAKE_OFFSET, SNAKE_COLOURS, SNAKE_BORDER_COLOUR } from "../constants/general-constants";
+
 export class Snake {
-    SNAKE_COLOUR = 'lightgreen';
-    SNAKE_BORDER_COLOUR = 'darkgreen';
-    changingDirection = false; 
+    changingDirectionFlag = false; 
     dx = null;
     dy = null;
     snake = null;
@@ -20,7 +20,7 @@ export class Snake {
         const snake = snakeTemplate.map(part => {
             return {
                 x: part.x,
-                y: part.y - 50 * numberOfUser
+                y: part.y - SNAKE_OFFSET * numberOfUser
             }
         });
 
@@ -29,7 +29,9 @@ export class Snake {
 
     advanceSnake(food) {
         const head = {x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy};
+        
         this.snake.unshift(head);
+
         const didEatFood = this.snake[0].x === food.foodX && this.snake[0].y === food.foodY;
 
         if (didEatFood) {
@@ -47,66 +49,76 @@ export class Snake {
     }
 
     drawSnakePart(snakePart) {
-        this.ctx.fillStyle = this.SNAKE_COLOUR;
-        this.ctx.strokestyle = this.SNAKE_BORDER_COLOUR;
-        this.ctx.fillRect(snakePart.x, snakePart.y, 10, 10);
-        this.ctx.strokeRect(snakePart.x, snakePart.y, 10, 10);
+        this.ctx.fillStyle = SNAKE_COLOURS[this.numberOfUser].COLOUR;
+        this.ctx.strokestyle = SNAKE_BORDER_COLOUR;
+        this.ctx.fillRect(snakePart.x, snakePart.y, CELL_SIZE, CELL_SIZE);
+        this.ctx.strokeRect(snakePart.x, snakePart.y, CELL_SIZE, CELL_SIZE);
         this.ctx.lineJoin = "round";
     }
 
     changeDirection(ev) {
         const { keyCode } = ev;
 
-        if (this.changingDirection) {
+        if (this.changingDirectionFlag) {
             return;
         }
 
-        this.changingDirection = true;
+        this.changingDirectionFlag = true;
 
-        const goingUp = this.dy === -10;
-        const goingDown = this.dy === 10;
-        const goingRight = this.dx === 10;
-        const goingLeft = this.dx === -10;
+        const goingUp = this.dy === -CELL_SIZE;
+        const goingDown = this.dy === CELL_SIZE;
+        const goingRight = this.dx === CELL_SIZE;
+        const goingLeft = this.dx === -CELL_SIZE;
 
         if (keyCode === this.controls.LEFT_KEY && !goingRight) {
-            this.dx = -10;
+            this.dx = -CELL_SIZE;
             this.dy = 0;
         }
 
         if (keyCode === this.controls.UP_KEY && !goingDown) {
             this.dx = 0;
-            this.dy = -10;
+            this.dy = -CELL_SIZE;
         }
 
         if (keyCode === this.controls.RIGHT_KEY && !goingLeft) {
-            this.dx = 10;
+            this.dx = CELL_SIZE;
             this.dy = 0;  
         }
 
         if (keyCode === this.controls.DOWN_KEY && !goingUp) {
             this.dx = 0;
-            this.dy = 10;  
+            this.dy = CELL_SIZE;  
         }
     }
 
-    getSnakeState() {
+    checkCollisionWithYourself() {
+        const collisionWithYourself = {
+            user: this.numberOfUser,
+            isGameOver: false
+        };
+
         for(let i = 4; i < this.snake.length; i++) {
             if(this.snake[i].x === this.snake[0].x && this.snake[i].y === this.snake[0].y) {
-                return {
-                    user: this.numberOfUser,
-                    isGameOver: true
-                };
+                collisionWithYourself.isGameOver = true;
             }
         }
 
+        return collisionWithYourself;
+    }
+
+    checkCollisionWithWall() {
         const hitLeftWall = this.snake[0].x < 0;
-        const hitRightWall = this.snake[0].x > this.canvas.width - 10;
+        const hitRightWall = this.snake[0].x > this.canvas.width - CELL_SIZE;
         const hitToptWall = this.snake[0].y < 0;
-        const hitBottomWall = this.snake[0].y > this.canvas.height - 10;
+        const hitBottomWall = this.snake[0].y > this.canvas.height - CELL_SIZE;
 
         return {
             user: this.numberOfUser,
             isGameOver: hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
         }
+    }
+
+    resetChangingDirectionFlag() {
+        this.changingDirectionFlag = false;
     }
 }

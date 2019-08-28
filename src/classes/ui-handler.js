@@ -1,9 +1,7 @@
 import { Game } from "./game";
+import { WITH_ONE_USER, WITH_TWO_USERS, WITHOUT_BOTS  } from "../constants/general-constants";
 
 export class UIHandler {
-    WITH_ONE_USER = 2;
-    WITH_TWO_USERS = 3;
-    WITHOUT_BOTS = 1;
     modalsWrapper = document.querySelector(".modals-wrapper");
     appWrapper = document.querySelector(".app-wrapper");
     multiFlag = false;
@@ -48,7 +46,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         
         
-        new Game(this.WITH_ONE_USER);
+        new Game(WITH_ONE_USER);
     }
 
     onWithTwoUsersBtnClicked() {
@@ -58,7 +56,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         this.removeAppClass(".game-settings-wrapper .player-3", "hide");
         
-        new Game(this.WITH_TWO_USERS);
+        new Game(WITH_TWO_USERS);
     }
 
     onWithoutBotsBtnClicked() {
@@ -66,7 +64,7 @@ export class UIHandler {
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         
-        new Game(this.WITHOUT_BOTS);
+        new Game(WITHOUT_BOTS);
     }
 
     onSinglePlayerBtnClicked() {

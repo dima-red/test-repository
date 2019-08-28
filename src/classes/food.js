@@ -1,3 +1,5 @@
+import { CELL_SIZE } from "../constants/general-constants";
+
 export class Food {
     FOOD_COLOUR = 'yellow';
     FOOD_BORDER_COLOUR = 'darkred';
@@ -13,17 +15,17 @@ export class Food {
     drawFood() {
         this.ctx.fillStyle = this.FOOD_COLOUR;
         this.ctx.strokestyle = this.FOOD_BORDER_COLOUR;
-        this.ctx.fillRect(this.foodX, this.foodY, 10, 10);
-        this.ctx.strokeRect(this.foodX, this.foodY, 10, 10);
+        this.ctx.fillRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);
+        this.ctx.strokeRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);
     }
 
     randomTen(min, max) {
-        return Math.round((Math.random() * (max-min) + min) / 10) * 10;
+        return Math.round((Math.random() * (max-min) + min) / CELL_SIZE) * CELL_SIZE;
     }
 
     createFood(snakeInstances) {
-        this.foodX = this.randomTen(0, this.canvas.width - 10);
-        this.foodY = this.randomTen(0, this.canvas.height - 10);
+        this.foodX = this.randomTen(0, this.canvas.width - CELL_SIZE);
+        this.foodY = this.randomTen(0, this.canvas.height - CELL_SIZE);
         
         if(this.isFoodOnSnake(snakeInstances)) {
             this.createFood(snakeInstances);
@@ -34,7 +36,7 @@ export class Food {
         let foodIsOnsnake = null;
 
         snakeInstances.forEach(snakeInstance => {
-            snakeInstance.snake.forEach(part => {
+            snakeInstance && snakeInstance.snake.forEach(part => {
 
                 if(part.x === this.foodX && part.y === this.foodY) {
                     foodIsOnsnake = true;

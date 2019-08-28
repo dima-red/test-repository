@@ -1,7 +1,6 @@
 import "./styles.scss";
-import { UIHandler } from "./game/ui-handler";
+import { UIHandler } from "./classes/ui-handler";
 
 document.addEventListener('DOMContentLoaded', () => {
-    // document.getEleme
     new UIHandler();
 });
