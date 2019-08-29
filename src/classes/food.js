@@ -1,20 +1,19 @@
-import { CELL_SIZE } from "../constants/general-constants";
+import { CELL_SIZE, FOOD_COLOURS, FOOD_BORDER_COLOUR } from "../constants/general-constants";
 
 export class Food {
-    FOOD_COLOUR = 'yellow';
-    FOOD_BORDER_COLOUR = 'darkred';
-
     foodX = null;
     foodY = null;
+    foodNumber = null;
 
-    constructor(canvas, ctx) {
+    constructor(canvas, ctx, foodNumber) {
         this.canvas = canvas;
         this.ctx = ctx;
+        this.foodNumber = foodNumber;
     }
 
     drawFood() {
-        this.ctx.fillStyle = this.FOOD_COLOUR;
-        this.ctx.strokestyle = this.FOOD_BORDER_COLOUR;
+        this.ctx.fillStyle = FOOD_COLOURS[this.foodNumber].FOOD_COLOUR;
+        this.ctx.strokestyle = FOOD_BORDER_COLOUR;
         this.ctx.fillRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);
         this.ctx.strokeRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);
     }
@@ -44,10 +43,6 @@ export class Food {
             });
         });
 
-        if(foodIsOnsnake) {
-            return true;
-        } else {
-            return false;
-        }
+        return foodIsOnsnake;
     }
 }

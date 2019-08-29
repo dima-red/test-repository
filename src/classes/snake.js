@@ -27,20 +27,20 @@ export class Snake {
         return snake;
     }
 
-    advanceSnake(food) {
+    advanceSnake(foods) {
         const head = {x: this.snake[0].x + this.dx, y: this.snake[0].y + this.dy};
-        
         this.snake.unshift(head);
 
-        const didEatFood = this.snake[0].x === food.foodX && this.snake[0].y === food.foodY;
+        const didEatFoodArr = foods.filter(food => (this.snake[0].x === food.foodX && this.snake[0].y === food.foodY));
 
-        if (didEatFood) {
-            
-            return true;
+        if (didEatFoodArr.length) {
+
+            return didEatFoodArr[0].foodNumber;
+
         } else {
             this.snake.pop();
 
-            return false;
+            return -1;
         }
     }
 
@@ -97,8 +97,8 @@ export class Snake {
             isGameOver: false
         };
 
-        for(let i = 4; i < this.snake.length; i++) {
-            if(this.snake[i].x === this.snake[0].x && this.snake[i].y === this.snake[0].y) {
+        for (let i = 4; i < this.snake.length; i++) {
+            if (this.snake[i].x === this.snake[0].x && this.snake[i].y === this.snake[0].y) {
                 collisionWithYourself.isGameOver = true;
             }
         }
@@ -116,6 +116,40 @@ export class Snake {
             user: this.numberOfUser,
             isGameOver: hitLeftWall || hitRightWall || hitToptWall || hitBottomWall
         }
+    }
+
+    checkCollisionWithOtherSnakes(allSnakes) {
+        // const anotherSnakes = allSnakes.filter((snake, index) => snake[index] !== this.numberOfUser);
+        // let isCurrentSnakeWasCrashed = null;
+
+        // console.log(anotherSnakes);
+        // console.log(this.numberOfUser);
+
+        // for (const anotherSnake of anotherSnakes) {
+        //     for (const anotherSnakePart of anotherSnake) {
+        //         if (anotherSnakePart.x === this.snake[0].x && anotherSnakePart.y === this.snake[0].y) {
+        //             isCurrentSnakeWasCrashed = this.numberOfUser;
+        //         }
+        //     }
+        // };
+
+        // if (isCurrentSnakeWasCrashed !== null) {
+        //     return isCurrentSnakeWasCrashed;
+        // } else {
+        //     return false;
+        // }
+        
+
+
+        // allSnakes.forEach((snake1, allSnakesIndex1) => {
+        //     allSnakes.forEach((snake2, allSnakesIndex2) => {
+        //         snake1.forEach(snake1Part => {
+        //             if(snake1Part.x === snake2[0].x && snake1Part.y === snake2[0].y && allSnakesIndex1 !== allSnakesIndex2) {
+        //                 this.gameOverSnakesSet.add(allSnakes.indexOf(snake2));
+        //             }
+        //         });
+        //     });
+        // });
     }
 
     resetChangingDirectionFlag() {

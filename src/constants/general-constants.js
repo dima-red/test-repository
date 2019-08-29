@@ -1,12 +1,28 @@
 export const CELL_SIZE = 10;
 export const SNAKE_OFFSET = 50;
-export const SNAKE_BORDER_COLOUR = 'darkgreen';
+export const SNAKE_BORDER_COLOUR = "darkgreen";
 export const GAME_SPEED = 300;
-export const CANVAS_BORDER_COLOUR = 'black';
+export const CANVAS_BORDER_COLOUR = "black";
 export const CANVAS_BACKGROUND_COLOUR = "#92BE05";
 export const WITH_ONE_USER = 2;
 export const WITH_TWO_USERS = 3;
 export const WITHOUT_BOTS = 1;
+export const FOOD_NUMBER = 4;
+export const FOOD_COLOURS = [
+    {
+        FOOD_COLOUR: "yellow"
+    },
+    {
+        FOOD_COLOUR: "yellow"
+    },
+    {
+        FOOD_COLOUR: "green"
+    },
+    {
+        FOOD_COLOUR: "red"
+    },
+];
+export const FOOD_BORDER_COLOUR = "darkred";
 
 export const CONTROL_BUTTONS = [
     {
@@ -38,7 +54,13 @@ export const SNAKE_BODY_TEMPLATE = [
 ];
 
 export const SNAKE_COLOURS = [
-    {COLOUR: '#3fff00'},
-    {COLOUR: 'yellow'},
-    {COLOUR: '#df92ff'},
+    {
+        COLOUR: "#3fff00"
+    },
+    {
+        COLOUR: "yellow"
+    },
+    {
+        COLOUR: "#df92ff"
+    },
 ];
