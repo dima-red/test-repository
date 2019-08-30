@@ -108,7 +108,7 @@ export class Game {
     }
 
     didGameEnd() {
-        this.checkCollisionWithOtherSnakes();
+        this.isCollisionWithOtherSnakes();
         
         this.snakeInstances.forEach(snakeInstance => {
             const collisionWithYourself = snakeInstance && snakeInstance.checkCollisionWithYourself();
@@ -135,16 +135,13 @@ export class Game {
                 this.gameOverFlag = true;
             }
         }
+        console.log(this.snakeInstances);
         console.log(this.gameOverSnakesSet);
     }
 
-    checkCollisionWithOtherSnakes() {
-        const allSnakes = [];
-
-        this.snakeInstances.forEach(snakeInstance => snakeInstance && allSnakes.push(snakeInstance.snake));
-
+    isCollisionWithOtherSnakes() {
         for(const snakeInstance of this.snakeInstances) {
-            const crashedSnake = snakeInstance && snakeInstance.checkCollisionWithOtherSnakes(allSnakes);
+            const crashedSnake = snakeInstance && snakeInstance.checkCollisionWithOtherSnakes(this.snakeInstances);
 
             if (crashedSnake) {
                 console.log(crashedSnake);

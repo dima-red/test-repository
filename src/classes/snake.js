@@ -118,26 +118,37 @@ export class Snake {
         }
     }
 
-    checkCollisionWithOtherSnakes(allSnakes) {
-        // const anotherSnakes = allSnakes.filter((snake, index) => snake[index] !== this.numberOfUser);
-        // let isCurrentSnakeWasCrashed = null;
+    checkCollisionWithOtherSnakes(allSnakesInstances) {
+        console.log(allSnakesInstances);
+        
+        const anotherSnakeInstances = allSnakesInstances.filter(snakeInstance => snakeInstance && snakeInstance.numberOfUser !== this.numberOfUser);
+        let isCurrentSnakeWasCrashed = null;
 
-        // console.log(anotherSnakes);
-        // console.log(this.numberOfUser);
+        console.log(anotherSnakeInstances);
+        console.log(this.numberOfUser);
 
-        // for (const anotherSnake of anotherSnakes) {
-        //     for (const anotherSnakePart of anotherSnake) {
-        //         if (anotherSnakePart.x === this.snake[0].x && anotherSnakePart.y === this.snake[0].y) {
-        //             isCurrentSnakeWasCrashed = this.numberOfUser;
-        //         }
-        //     }
-        // };
+        for (const anotherSnakeInstance of anotherSnakeInstances) {
+            for (const anotherSnake of anotherSnakeInstance.snake) {
+                if (anotherSnake.x === this.snake[0].x && anotherSnake.y === this.snake[0].y) {
 
-        // if (isCurrentSnakeWasCrashed !== null) {
-        //     return isCurrentSnakeWasCrashed;
-        // } else {
-        //     return false;
-        // }
+                    console.log(anotherSnake.x);
+                    console.log(this.snake[0].x);
+                    console.log(anotherSnake.y);
+                    console.log(this.snake[0].y);
+
+                    isCurrentSnakeWasCrashed = this.numberOfUser;
+                }
+            }
+        };
+
+        if (isCurrentSnakeWasCrashed !== null) {
+
+            console.log(isCurrentSnakeWasCrashed);
+            return isCurrentSnakeWasCrashed;
+        } else {
+
+            return false;
+        }
         
 
 
@@ -149,6 +160,12 @@ export class Snake {
         //             }
         //         });
         //     });
+        // });
+
+        // snake1.forEach(snake1Part => {
+        //     if (snake1Part.x === snake2[0].x && snake1Part.y === snake2[0].y && allSnakesIndex1 !== allSnakesIndex2) {
+        //         this.gameOverSnakesSet.add(allSnakes.indexOf(snake2));
+        //     }
         // });
     }
 
