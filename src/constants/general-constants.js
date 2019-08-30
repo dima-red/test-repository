@@ -7,19 +7,22 @@ export const CANVAS_BACKGROUND_COLOUR = "#92BE05";
 export const WITH_ONE_USER = 2;
 export const WITH_TWO_USERS = 3;
 export const WITHOUT_BOTS = 1;
-export const FOOD_NUMBER = 4;
-export const FOOD_COLOURS = [
+export const FOODS = [
     {
-        FOOD_COLOUR: "yellow"
+        FOOD_COLOUR: "yellow",
+        FOOD_COST: 10
     },
     {
-        FOOD_COLOUR: "yellow"
+        FOOD_COLOUR: "yellow",
+        FOOD_COST: 10
     },
     {
-        FOOD_COLOUR: "green"
+        FOOD_COLOUR: "green",
+        FOOD_COST: 20
     },
     {
-        FOOD_COLOUR: "red"
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
     },
 ];
 export const FOOD_BORDER_COLOUR = "darkred";

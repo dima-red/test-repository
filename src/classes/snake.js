@@ -2,14 +2,12 @@ import { CELL_SIZE, SNAKE_OFFSET, SNAKE_COLOURS, SNAKE_BORDER_COLOUR } from "../
 
 export class Snake {
     changingDirectionFlag = false; 
-    dx = null;
-    dy = null;
+    dx = 10;
+    dy = 0;
     snake = null;
 
-    constructor(ctx, dx, dy, controls, snakeBodyTemplate, numberOfUser, canvas) {
+    constructor(ctx, controls, snakeBodyTemplate, numberOfUser, canvas) {
         this.ctx = ctx;
-        this.dx = dx;
-        this.dy = dy;
         this.controls = controls;
         this.numberOfUser = numberOfUser;
         this.canvas = canvas;
@@ -118,55 +116,24 @@ export class Snake {
         }
     }
 
-    checkCollisionWithOtherSnakes(allSnakesInstances) {
-        console.log(allSnakesInstances);
-        
+    checkCollisionWithOtherSnakes(allSnakesInstances) {        
         const anotherSnakeInstances = allSnakesInstances.filter(snakeInstance => snakeInstance && snakeInstance.numberOfUser !== this.numberOfUser);
         let isCurrentSnakeWasCrashed = null;
-
-        console.log(anotherSnakeInstances);
-        console.log(this.numberOfUser);
 
         for (const anotherSnakeInstance of anotherSnakeInstances) {
             for (const anotherSnake of anotherSnakeInstance.snake) {
                 if (anotherSnake.x === this.snake[0].x && anotherSnake.y === this.snake[0].y) {
-
-                    console.log(anotherSnake.x);
-                    console.log(this.snake[0].x);
-                    console.log(anotherSnake.y);
-                    console.log(this.snake[0].y);
-
                     isCurrentSnakeWasCrashed = this.numberOfUser;
                 }
             }
         };
 
         if (isCurrentSnakeWasCrashed !== null) {
-
-            console.log(isCurrentSnakeWasCrashed);
             return isCurrentSnakeWasCrashed;
         } else {
 
-            return false;
+            return -1;
         }
-        
-
-
-        // allSnakes.forEach((snake1, allSnakesIndex1) => {
-        //     allSnakes.forEach((snake2, allSnakesIndex2) => {
-        //         snake1.forEach(snake1Part => {
-        //             if(snake1Part.x === snake2[0].x && snake1Part.y === snake2[0].y && allSnakesIndex1 !== allSnakesIndex2) {
-        //                 this.gameOverSnakesSet.add(allSnakes.indexOf(snake2));
-        //             }
-        //         });
-        //     });
-        // });
-
-        // snake1.forEach(snake1Part => {
-        //     if (snake1Part.x === snake2[0].x && snake1Part.y === snake2[0].y && allSnakesIndex1 !== allSnakesIndex2) {
-        //         this.gameOverSnakesSet.add(allSnakes.indexOf(snake2));
-        //     }
-        // });
     }
 
     resetChangingDirectionFlag() {

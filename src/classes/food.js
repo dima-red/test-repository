@@ -1,4 +1,4 @@
-import { CELL_SIZE, FOOD_COLOURS, FOOD_BORDER_COLOUR } from "../constants/general-constants";
+import { CELL_SIZE, FOODS, FOOD_BORDER_COLOUR } from "../constants/general-constants";
 
 export class Food {
     foodX = null;
@@ -12,7 +12,7 @@ export class Food {
     }
 
     drawFood() {
-        this.ctx.fillStyle = FOOD_COLOURS[this.foodNumber].FOOD_COLOUR;
+        this.ctx.fillStyle = FOODS[this.foodNumber].FOOD_COLOUR;
         this.ctx.strokestyle = FOOD_BORDER_COLOUR;
         this.ctx.fillRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);
         this.ctx.strokeRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);

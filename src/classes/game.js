@@ -1,6 +1,6 @@
 import { Food } from "./food";
 import { Snake } from "./snake";
-import { CONTROL_BUTTONS, GAME_SPEED, SNAKE_BODY_TEMPLATE, CANVAS_BORDER_COLOUR, CANVAS_BACKGROUND_COLOUR, FOOD_NUMBER } from "../constants/general-constants";
+import { CONTROL_BUTTONS, GAME_SPEED, SNAKE_BODY_TEMPLATE, CANVAS_BORDER_COLOUR, CANVAS_BACKGROUND_COLOUR, FOODS } from "../constants/general-constants";
 
 export class Game {
     appWrapper = document.querySelector(".app-wrapper");
@@ -10,8 +10,6 @@ export class Game {
     snakeInstances = [];
     gameOverSnakesSet = new Set();
     amountOfUsers = null;
-    dx = 10;
-    dy = 0;
     wasFoodEatenFlag = -1;
     gameOverFlag = false;
     userScores = [
@@ -40,7 +38,7 @@ export class Game {
     }
 
     createFoodInstances() {
-        for (let i = 0; i < FOOD_NUMBER; i++) {
+        for (let i = 0; i < FOODS.length; i++) {
             const foodNumber = i;
             this.foodInstances.push(new Food(this.canvas, this.ctx, foodNumber));
         }
@@ -49,7 +47,7 @@ export class Game {
     createSnakeInstances() {
         for (let i = 0; i < this.amountOfUsers; i++) {
             const numberOfUser = i;
-            this.snakeInstances.push(new Snake(this.ctx, this.dx, this.dy, CONTROL_BUTTONS[i], SNAKE_BODY_TEMPLATE, numberOfUser, this.canvas));
+            this.snakeInstances.push(new Snake(this.ctx, CONTROL_BUTTONS[i], SNAKE_BODY_TEMPLATE, numberOfUser, this.canvas));
         }
     }
 
@@ -107,12 +105,17 @@ export class Game {
             .innerHTML = this.userScores[numberOfplayer-1].score;
     }
 
-    didGameEnd() {
-        this.isCollisionWithOtherSnakes();
-        
+    didGameEnd() {        
         this.snakeInstances.forEach(snakeInstance => {
             const collisionWithYourself = snakeInstance && snakeInstance.checkCollisionWithYourself();
             const collisionWithWall = snakeInstance && snakeInstance.checkCollisionWithWall();
+            const collisionWithOtherSnake = snakeInstance && snakeInstance.checkCollisionWithOtherSnakes(this.snakeInstances);
+
+            if (collisionWithOtherSnake >= 0 && collisionWithOtherSnake !== null) {
+
+                console.log(collisionWithOtherSnake);
+                this.gameOverSnakesSet.add(collisionWithOtherSnake);
+            }
 
             if (collisionWithYourself && collisionWithYourself.isGameOver) {
                 this.gameOverSnakesSet.add(collisionWithYourself.user);
@@ -121,56 +124,30 @@ export class Game {
             if (collisionWithWall && collisionWithWall.isGameOver) {
                 this.gameOverSnakesSet.add(collisionWithWall.user);
             }
+
+            console.log(this.gameOverSnakesSet);
         });
 
         if (this.gameOverSnakesSet.size) {
             this.gameOverSnakesSet.forEach(player => {
-                this.snakeInstances.splice(player, 1, null);
+                this.snakeInstances.splice(player, 1, null); /// TODO: remove null
                 this.appWrapper
                     .querySelectorAll(".game-settings-wrapper .end-game")[player]
                     .classList.remove("hide");
             });
 
-            if (this.gameOverSnakesSet.size === this.amountOfUsers){
+            this.gameOverSnakesSet.clear(); /////////
+
+            if (!this.snakeInstances.length){
                 this.gameOverFlag = true;
             }
+
+            // if (this.gameOverSnakesSet.size === this.amountOfUsers){
+            //     this.gameOverFlag = true;
+            // }
         }
+
         console.log(this.snakeInstances);
         console.log(this.gameOverSnakesSet);
-    }
-
-    isCollisionWithOtherSnakes() {
-        for(const snakeInstance of this.snakeInstances) {
-            const crashedSnake = snakeInstance && snakeInstance.checkCollisionWithOtherSnakes(this.snakeInstances);
-
-            if (crashedSnake) {
-                console.log(crashedSnake);
-                this.gameOverSnakesSet.add(crashedSnake);
-            }
-        }
-
-        // this.snakeInstances.forEach(snakeInstance => {
-        //     const crashedSnake = snakeInstance && snakeInstance.checkCollisionWithOtherSnakes(allSnakes);
-            
-        //     if (crashedSnake) {
-        //         this.gameOverSnakesSet.add(crashedSnake);
-        //     }
-        // });
-
-
-
-        // const allSnakes = [];
-
-        // this.snakeInstances.forEach(snakeInstance => snakeInstance && allSnakes.push(snakeInstance.snake));
-
-        // allSnakes.forEach((snake1, allSnakesIndex1) => {
-        //     allSnakes.forEach((snake2, allSnakesIndex2) => {
-        //         snake1.forEach(snake1Part => {
-        //             if (snake1Part.x === snake2[0].x && snake1Part.y === snake2[0].y && allSnakesIndex1 !== allSnakesIndex2) {
-        //                 this.gameOverSnakesSet.add(allSnakes.indexOf(snake2));
-        //             }
-        //         });
-        //     });
-        // });
     }
 }
