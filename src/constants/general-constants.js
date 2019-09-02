@@ -25,7 +25,7 @@ export const FOODS = [
 ];
 export const FOOD_BORDER_COLOUR = "darkred";
 
-export const CONTROL_BUTTONS = [
+export const USER_CONTROL_BUTTONS = [
     {
         LEFT_KEY: 37,
         RIGHT_KEY: 39,
@@ -43,6 +43,30 @@ export const CONTROL_BUTTONS = [
         RIGHT_KEY: 76,
         UP_KEY: 73,
         DOWN_KEY: 75,
+    },
+];
+
+export const BOT_MIN_CONTROL_KEY = 301;
+export const BOT_MAX_CONTROL_KEY = 312;
+
+export const BOT_CONTROL_BUTTONS = [
+    {
+        LEFT_KEY: 301,
+        RIGHT_KEY: 302,
+        UP_KEY: 303,
+        DOWN_KEY: 304,
+    },
+    {
+        LEFT_KEY: 305,
+        RIGHT_KEY: 306,
+        UP_KEY: 307,
+        DOWN_KEY: 308,
+    },
+    {
+        LEFT_KEY: 309,
+        RIGHT_KEY: 310,
+        UP_KEY: 311,
+        DOWN_KEY: 312,
     },
 ];
 

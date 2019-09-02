@@ -90,6 +90,7 @@ export class Game {
 
             this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.drawSnake());
             this.botInstances.forEach(botInstance => botInstance && botInstance.drawSnake()); ///////
+            this.onBotChangeDirection();
             this.main();
             
 
@@ -105,6 +106,19 @@ export class Game {
 
     onChangeDirectionBtnClicked(ev) {
         this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.changeDirection(ev));
+    }
+
+    onBotChangeDirection() {
+        this.botInstances.forEach(botInstance => {
+            const isDirectionChanged = botInstance && botInstance.isDirectionChanged();
+            if(isDirectionChanged !== null && isDirectionChanged) {
+                const keyCode = botInstance && botInstance.getBotKeyCode();
+                
+                botInstance && botInstance.changeDirection({
+                    keyCode
+                });
+            }
+        });
     }
 
     didGameEnd() {

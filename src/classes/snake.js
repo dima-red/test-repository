@@ -1,4 +1,4 @@
-import { CONTROL_BUTTONS, SNAKE_BODY_TEMPLATE, CELL_SIZE, SNAKE_OFFSET, SNAKE_COLOURS, SNAKE_BORDER_COLOUR } from "../constants/general-constants";
+import { USER_CONTROL_BUTTONS, SNAKE_BODY_TEMPLATE, CELL_SIZE, SNAKE_OFFSET, SNAKE_COLOURS, SNAKE_BORDER_COLOUR } from "../constants/general-constants";
 
 export class Snake {
     changingDirectionFlag = false; 
@@ -10,7 +10,7 @@ export class Snake {
 
     constructor(numberOfUser, appWrapper) {
         this.numberOfUser = numberOfUser;
-        this.controls = CONTROL_BUTTONS[this.numberOfUser];
+        this.controls = USER_CONTROL_BUTTONS[this.numberOfUser];
         this.canvas = appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
         this.snake = this.generateSnake(SNAKE_BODY_TEMPLATE, this.numberOfUser);
@@ -58,6 +58,8 @@ export class Snake {
 
     changeDirection(ev) {
         const { keyCode } = ev;
+
+        console.log(keyCode);
 
         if (this.changingDirectionFlag) {
             return;
