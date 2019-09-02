@@ -1,18 +1,21 @@
 import { CELL_SIZE, FOODS, FOOD_BORDER_COLOUR } from "../constants/general-constants";
 
 export class Food {
+    food = null;
     foodX = null;
     foodY = null;
     foodNumber = null;
 
-    constructor(canvas, ctx, foodNumber) {
-        this.canvas = canvas;
-        this.ctx = ctx;
+    constructor(appWrapper, foodNumber) {
+        this.appWrapper = appWrapper;
+        this.canvas = this.appWrapper.querySelector("#field");
+        this.ctx = this.canvas.getContext("2d");
         this.foodNumber = foodNumber;
+        this.food = FOODS[this.foodNumber];
     }
 
     drawFood() {
-        this.ctx.fillStyle = FOODS[this.foodNumber].FOOD_COLOUR;
+        this.ctx.fillStyle = this.food.FOOD_COLOUR;
         this.ctx.strokestyle = FOOD_BORDER_COLOUR;
         this.ctx.fillRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);
         this.ctx.strokeRect(this.foodX, this.foodY, CELL_SIZE, CELL_SIZE);

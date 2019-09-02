@@ -1,6 +1,6 @@
 import { Food } from "./food";
 import { Snake } from "./snake";
-import { CONTROL_BUTTONS, GAME_SPEED, SNAKE_BODY_TEMPLATE, CANVAS_BORDER_COLOUR, CANVAS_BACKGROUND_COLOUR, FOODS } from "../constants/general-constants";
+import { GAME_SPEED, CANVAS_BORDER_COLOUR, CANVAS_BACKGROUND_COLOUR, FOODS } from "../constants/general-constants";
 
 export class Game {
     appWrapper = document.querySelector(".app-wrapper");
@@ -10,19 +10,9 @@ export class Game {
     snakeInstances = [];
     gameOverSnakesSet = new Set();
     amountOfUsers = null;
+    numberOfUser = 0;
     wasFoodEatenFlag = -1;
     gameOverFlag = false;
-    userScores = [
-        {
-            score: 0
-        },
-        {
-            score: 0
-        },
-        {
-            score: 0
-        }
-    ];
 
     constructor(amountOfUsers) {
         this.amountOfUsers = amountOfUsers;
@@ -40,14 +30,14 @@ export class Game {
     createFoodInstances() {
         for (let i = 0; i < FOODS.length; i++) {
             const foodNumber = i;
-            this.foodInstances.push(new Food(this.canvas, this.ctx, foodNumber));
+            this.foodInstances.push(new Food(this.appWrapper, foodNumber));
         }
     }
 
     createSnakeInstances() {
         for (let i = 0; i < this.amountOfUsers; i++) {
-            const numberOfUser = i;
-            this.snakeInstances.push(new Snake(this.ctx, CONTROL_BUTTONS[i], SNAKE_BODY_TEMPLATE, numberOfUser, this.canvas));
+            this.snakeInstances.push(new Snake(this.numberOfUser, this.appWrapper));
+            this.numberOfUser ++;
         }
     }
 
@@ -66,8 +56,7 @@ export class Game {
                 this.wasFoodEatenFlag = this.snakeInstances[i] && this.snakeInstances[i].advanceSnake(this.foodInstances);
 
                 if (this.wasFoodEatenFlag !== null && this.wasFoodEatenFlag !== -1) {
-                    const numberOfplayer = i + 1;
-                    this.drawScore(numberOfplayer, this.wasFoodEatenFlag);
+                    this.drawScore(this.snakeInstances[i].snakeScore, this.snakeInstances[i].numberOfUser);
                     this.foodInstances[this.wasFoodEatenFlag].createFood(this.snakeInstances);
                     this.wasFoodEatenFlag = -1;
                 }
@@ -91,29 +80,13 @@ export class Game {
         this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.changeDirection(ev));
     }
 
-    drawScore(numberOfplayer, typeOfFood) {
-        if (typeOfFood <= 1) {
-            this.userScores[numberOfplayer - 1].score += 10;
-        } else if (typeOfFood === 2) {
-            this.userScores[numberOfplayer - 1].score +=20;
-        } else if (typeOfFood === 3) {
-            this.userScores[numberOfplayer - 1].score -=20;
-        }
-
-        this.appWrapper
-            .querySelector(`.player-${numberOfplayer} .score`)
-            .innerHTML = this.userScores[numberOfplayer-1].score;
-    }
-
-    didGameEnd() {        
+    didGameEnd() {
         this.snakeInstances.forEach(snakeInstance => {
             const collisionWithYourself = snakeInstance && snakeInstance.checkCollisionWithYourself();
             const collisionWithWall = snakeInstance && snakeInstance.checkCollisionWithWall();
             const collisionWithOtherSnake = snakeInstance && snakeInstance.checkCollisionWithOtherSnakes(this.snakeInstances);
 
             if (collisionWithOtherSnake >= 0 && collisionWithOtherSnake !== null) {
-
-                console.log(collisionWithOtherSnake);
                 this.gameOverSnakesSet.add(collisionWithOtherSnake);
             }
 
@@ -124,30 +97,29 @@ export class Game {
             if (collisionWithWall && collisionWithWall.isGameOver) {
                 this.gameOverSnakesSet.add(collisionWithWall.user);
             }
-
-            console.log(this.gameOverSnakesSet);
         });
-
+        
         if (this.gameOverSnakesSet.size) {
             this.gameOverSnakesSet.forEach(player => {
-                this.snakeInstances.splice(player, 1, null); /// TODO: remove null
+                const gameOverSnake = this.snakeInstances.filter(snake => snake.numberOfUser === player);
+                
+                this.snakeInstances.splice(this.snakeInstances.indexOf(...gameOverSnake), 1);
                 this.appWrapper
                     .querySelectorAll(".game-settings-wrapper .end-game")[player]
                     .classList.remove("hide");
             });
 
-            this.gameOverSnakesSet.clear(); /////////
+            this.gameOverSnakesSet.clear();
 
             if (!this.snakeInstances.length){
                 this.gameOverFlag = true;
             }
-
-            // if (this.gameOverSnakesSet.size === this.amountOfUsers){
-            //     this.gameOverFlag = true;
-            // }
         }
+    }
 
-        console.log(this.snakeInstances);
-        console.log(this.gameOverSnakesSet);
+    drawScore(score, numberOfUser) {
+        this.appWrapper
+            .querySelector(`.player-${numberOfUser + 1} .score`)
+            .innerHTML = score;
     }
 }

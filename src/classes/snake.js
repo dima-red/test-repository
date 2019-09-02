@@ -1,24 +1,26 @@
-import { CELL_SIZE, SNAKE_OFFSET, SNAKE_COLOURS, SNAKE_BORDER_COLOUR } from "../constants/general-constants";
+import { CONTROL_BUTTONS, SNAKE_BODY_TEMPLATE, CELL_SIZE, SNAKE_OFFSET, SNAKE_COLOURS, SNAKE_BORDER_COLOUR } from "../constants/general-constants";
 
 export class Snake {
     changingDirectionFlag = false; 
     dx = 10;
     dy = 0;
     snake = null;
+    numberOfUser = null;
+    snakeScore = null;
 
-    constructor(ctx, controls, snakeBodyTemplate, numberOfUser, canvas) {
-        this.ctx = ctx;
-        this.controls = controls;
+    constructor(numberOfUser, appWrapper) {
         this.numberOfUser = numberOfUser;
-        this.canvas = canvas;
-        this.snake = this.generateSnake(snakeBodyTemplate, numberOfUser);
+        this.controls = CONTROL_BUTTONS[this.numberOfUser];
+        this.canvas = appWrapper.querySelector("#field");
+        this.ctx = this.canvas.getContext("2d");
+        this.snake = this.generateSnake(SNAKE_BODY_TEMPLATE, this.numberOfUser);
     }
 
-    generateSnake(snakeTemplate, numberOfUser) {
+    generateSnake(snakeTemplate, userNumber) {
         const snake = snakeTemplate.map(part => {
             return {
                 x: part.x,
-                y: part.y - SNAKE_OFFSET * numberOfUser
+                y: part.y - SNAKE_OFFSET * userNumber
             }
         });
 
@@ -32,9 +34,9 @@ export class Snake {
         const didEatFoodArr = foods.filter(food => (this.snake[0].x === food.foodX && this.snake[0].y === food.foodY));
 
         if (didEatFoodArr.length) {
+            this.snakeScore += didEatFoodArr[0].food.FOOD_COST;
 
             return didEatFoodArr[0].foodNumber;
-
         } else {
             this.snake.pop();
 
