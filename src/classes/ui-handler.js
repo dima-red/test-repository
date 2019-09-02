@@ -1,5 +1,4 @@
 import { Game } from "./game";
-import { WITH_ONE_USER, WITH_TWO_USERS, WITHOUT_BOTS  } from "../constants/general-constants";
 
 export class UIHandler {
     modalsWrapper = document.querySelector(".modals-wrapper");
@@ -11,6 +10,9 @@ export class UIHandler {
         this.modalsWrapper.querySelector(".multiplayer").addEventListener("click", this.onMultiplayerBtnClicked.bind(this));
         Array.from(this.modalsWrapper.querySelectorAll(".back-btn")).forEach(node => node.addEventListener("click", this.onBackBtnClicked.bind(this)));
         this.modalsWrapper.querySelector(".without-bots").addEventListener("click", this.onWithoutBotsBtnClicked.bind(this));
+        this.modalsWrapper.querySelector(".with-one").addEventListener("click", this.onWithOneBotBtnClicked.bind(this));
+        this.modalsWrapper.querySelector(".with-two").addEventListener("click", this.onWithTwoBotsBtnClicked.bind(this));
+        this.modalsWrapper.querySelector(".with-three").addEventListener("click", this.onWithThreeBotsBtnClicked.bind(this));
         this.modalsWrapper.querySelector(".with-one-user").addEventListener("click", this.onWithOneUserBtnClicked.bind(this));
         this.modalsWrapper.querySelector(".with-two-users").addEventListener("click", this.onWithTwoUsersBtnClicked.bind(this));
     }
@@ -39,32 +41,74 @@ export class UIHandler {
         
     }
 
-    onWithOneUserBtnClicked() {        
+    onWithOneUserBtnClicked() {
+        const amountOfUsers = 2;
+        const amountOfBots = 0;
+
         this.removeModalClass(".multi-settings", "show-modal");
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         
         
-        new Game(WITH_ONE_USER);
+        new Game(amountOfUsers, amountOfBots);
     }
 
     onWithTwoUsersBtnClicked() {
+        const amountOfUsers = 3;
+        const amountOfBots = 0;
+
         this.removeModalClass(".multi-settings", "show-modal");
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         this.removeAppClass(".game-settings-wrapper .player-3", "hide");
         
-        new Game(WITH_TWO_USERS);
+        new Game(amountOfUsers, amountOfBots);
     }
 
     onWithoutBotsBtnClicked() {
+        const amountOfUsers = 1;
+        const amountOfBots = 0;
+
         this.removeModalClass(".single-settings", "show-modal");
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         
-        new Game(WITHOUT_BOTS);
+        new Game(amountOfUsers, amountOfBots);
+    }
+
+    onWithOneBotBtnClicked() {
+        const amountOfUsers = 1;
+        const amountOfBots = 1;
+
+        this.removeModalClass(".single-settings", "show-modal");
+        this.removeAppClass("", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-1", "hide");
+        
+        new Game(amountOfUsers, amountOfBots);
+    }
+
+    onWithTwoBotsBtnClicked() {
+        const amountOfUsers = 1;
+        const amountOfBots = 2;
+
+        this.removeModalClass(".single-settings", "show-modal");
+        this.removeAppClass("", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-1", "hide");
+        
+        new Game(amountOfUsers, amountOfBots);
+    }
+
+    onWithThreeBotsBtnClicked() {
+        const amountOfUsers = 1;
+        const amountOfBots = 3;
+
+        this.removeModalClass(".single-settings", "show-modal");
+        this.removeAppClass("", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-1", "hide");
+        
+        new Game(amountOfUsers, amountOfBots);
     }
 
     onSinglePlayerBtnClicked() {

@@ -1,5 +1,6 @@
 import { Food } from "./food";
 import { Snake } from "./snake";
+import { Bot } from "./bot";
 import { GAME_SPEED, CANVAS_BORDER_COLOUR, CANVAS_BACKGROUND_COLOUR, FOODS } from "../constants/general-constants";
 
 export class Game {
@@ -8,14 +9,17 @@ export class Game {
     ctx = null;
     foodInstances = [];
     snakeInstances = [];
+    botInstances = [];
     gameOverSnakesSet = new Set();
     amountOfUsers = null;
     numberOfUser = 0;
+    numberOfBot = 0;
     wasFoodEatenFlag = -1;
     gameOverFlag = false;
 
-    constructor(amountOfUsers) {
+    constructor(amountOfUsers, amountOfBots) {
         this.amountOfUsers = amountOfUsers;
+        this.amountOfBots = amountOfBots;
         this.canvas = this.appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
         this.createFoodInstances();
@@ -38,7 +42,17 @@ export class Game {
         for (let i = 0; i < this.amountOfUsers; i++) {
             this.snakeInstances.push(new Snake(this.numberOfUser, this.appWrapper));
             this.numberOfUser ++;
+
+            if(this.amountOfBots) {
+                for (let i = 0; i < this.amountOfBots; i++) {
+                    this.botInstances.push(new Bot(this.numberOfBot, this.appWrapper));
+                    this.numberOfBot ++;
+                }
+            }
         }
+
+        console.log(this.botInstances);
+        console.log(this.snakeInstances);
     }
 
     main() {
@@ -49,6 +63,7 @@ export class Game {
 
         setTimeout(() => {
             this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.resetChangingDirectionFlag());
+            this.botInstances.forEach(botInstance => botInstance && botInstance.resetChangingDirectionFlag()); /////
             this.clearCanvas();
             this.foodInstances.forEach(foodInstance => foodInstance.drawFood());
 
@@ -61,8 +76,20 @@ export class Game {
                     this.wasFoodEatenFlag = -1;
                 }
             }
+            //////////
+            for (let i = 0; i < this.botInstances.length; i++) {
+                this.wasFoodEatenFlag = this.botInstances[i] && this.botInstances[i].advanceSnake(this.foodInstances);
+
+                if (this.wasFoodEatenFlag !== null && this.wasFoodEatenFlag !== -1) {
+                    // this.drawScore(this.snakeInstances[i].snakeScore, this.snakeInstances[i].numberOfUser);
+                    this.foodInstances[this.wasFoodEatenFlag].createFood(this.botInstances);
+                    this.wasFoodEatenFlag = -1;
+                }
+            }
+            //////
 
             this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.drawSnake());
+            this.botInstances.forEach(botInstance => botInstance && botInstance.drawSnake()); ///////
             this.main();
             
 

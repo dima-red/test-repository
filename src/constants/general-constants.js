@@ -4,9 +4,7 @@ export const SNAKE_BORDER_COLOUR = "darkgreen";
 export const GAME_SPEED = 300;
 export const CANVAS_BORDER_COLOUR = "black";
 export const CANVAS_BACKGROUND_COLOUR = "#92BE05";
-export const WITH_ONE_USER = 2;
-export const WITH_TWO_USERS = 3;
-export const WITHOUT_BOTS = 1;
+
 export const FOODS = [
     {
         FOOD_COLOUR: "yellow",
