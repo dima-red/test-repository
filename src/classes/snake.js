@@ -7,6 +7,7 @@ export class Snake {
     snake = null;
     numberOfUser = null;
     snakeScore = null;
+    isItRealUser = true;
 
     constructor(numberOfUser, appWrapper) {
         this.numberOfUser = numberOfUser;
