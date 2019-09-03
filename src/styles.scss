@@ -35,7 +35,7 @@
         text-align: center;
       }
   
-      .player-1, .player-2, .player-3 {
+      .player-1, .player-2, .player-3, .player-4 {
         border-radius: 6px;
         border: 2px solid grey;
         text-align: center;
@@ -64,6 +64,10 @@
 
       .player-3 {
         background-color: #df92ff;
+      }
+
+      .player-4 {
+        background-color: aqua;
       }
     }
   }  

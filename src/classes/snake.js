@@ -59,8 +59,6 @@ export class Snake {
     changeDirection(ev) {
         const { keyCode } = ev;
 
-        console.log(keyCode);
-
         if (this.changingDirectionFlag) {
             return;
         }

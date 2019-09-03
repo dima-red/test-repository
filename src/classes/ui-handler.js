@@ -85,6 +85,7 @@ export class UIHandler {
         this.removeModalClass(".single-settings", "show-modal");
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         
         new Game(amountOfUsers, amountOfBots);
     }
@@ -96,6 +97,8 @@ export class UIHandler {
         this.removeModalClass(".single-settings", "show-modal");
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-2", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-3", "hide");
         
         new Game(amountOfUsers, amountOfBots);
     }
@@ -107,6 +110,9 @@ export class UIHandler {
         this.removeModalClass(".single-settings", "show-modal");
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-2", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-3", "hide");
+        this.removeAppClass(".game-settings-wrapper .player-4", "hide");
         
         new Game(amountOfUsers, amountOfBots);
     }

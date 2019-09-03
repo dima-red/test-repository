@@ -88,4 +88,7 @@ export const SNAKE_COLOURS = [
     {
         COLOUR: "#df92ff"
     },
+    {
+        COLOUR: "aqua"
+    },
 ];
