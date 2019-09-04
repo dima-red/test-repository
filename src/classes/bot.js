@@ -12,6 +12,8 @@ export class Bot extends Snake {
         this.numberOfUser = numberOfUser;
         this.appWrapper = appWrapper;
         this.controls = BOT_CONTROL_BUTTONS[this.numberOfUser - 1];
+
+        
     }
 
     getBotKeyCode() {
@@ -19,9 +21,23 @@ export class Bot extends Snake {
         return Math.round((Math.random() * (BOT_MAX_CONTROL_KEY - BOT_MIN_CONTROL_KEY) + BOT_MIN_CONTROL_KEY));
     }
 
-    botChangeDirection() {
+    generateChangingDirection() {
+        const changeDirectionValue = Math.round((Math.random() * (10 - 0) + 0));
 
-        return Math.round((Math.random() * (10 - 0) + 0));
+        return changeDirectionValue >= 5;
     }
 
+    botChangeDirection() {
+        const isDirectionChanged = this.generateChangingDirection();
+
+        if (isDirectionChanged) {
+            const keyCode = this.getBotKeyCode();
+        
+            this.changeDirection({
+                keyCode
+            });
+        }
+
+
+    }
 }

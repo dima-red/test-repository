@@ -50,7 +50,7 @@ export class Game {
             }
         }
 
-        console.log(this.snakeInstances);
+        console.info(this.snakeInstances);
     }
 
     main() {
@@ -99,16 +99,8 @@ export class Game {
 
     onBotChangeDirection() {
         this.snakeInstances.forEach(botInstance => {
-            if(botInstance && !botInstance.isItRealUser) {
-                const isDirectionChanged = botInstance && botInstance.botChangeDirection();
-
-                if(isDirectionChanged !== null && isDirectionChanged) {
-                    const keyCode = botInstance && botInstance.getBotKeyCode();
-                
-                    botInstance && botInstance.changeDirection({
-                        keyCode
-                    });
-                }
+            if(!botInstance.isItRealUser) {
+                botInstance.botChangeDirection();
             }
         });
     }
