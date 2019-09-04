@@ -14,7 +14,8 @@ export class Game {
     numberOfUser = 0;
     gameOverFlag = false;
 
-    constructor(amountOfUsers, amountOfBots) {
+    constructor(amountOfUsers, amountOfBots, onGameOver) {
+        this.onGameOver = onGameOver;
         this.amountOfUsers = amountOfUsers;
         this.amountOfBots = amountOfBots;
         this.canvas = this.appWrapper.querySelector("#field");
@@ -53,6 +54,7 @@ export class Game {
 
     main() {
         if (this.gameOverFlag) {
+            this.onGameOver();
             return;
         }
         this.didGameEnd();
@@ -61,13 +63,15 @@ export class Game {
             this.clearCanvas();
             this.foodInstances.forEach(foodInstance => foodInstance.drawFood());
             this.snakeInstances.forEach(snakeInstance => {
-                if (snakeInstance) {
+                if (snakeInstance) {///////
                     snakeInstance.resetChangingDirectionFlag();
                     snakeInstance.advanceSnake(this.foodInstances);
+                    if (snakeInstance.botChangeDirection) {
+                        snakeInstance.botChangeDirection();
+                    }
                     snakeInstance.drawSnake();
                 }
             });
-            this.onBotChangeDirection();
             this.main();
             
 
@@ -85,14 +89,6 @@ export class Game {
         this.snakeInstances.forEach(snakeInstance => {
             if (snakeInstance && snakeInstance.isItRealUser) {
                 snakeInstance.changeDirection(ev);
-            }
-        });
-    }
-
-    onBotChangeDirection() {
-        this.snakeInstances.forEach(botInstance => {
-            if (botInstance && !botInstance.isItRealUser) {
-                botInstance.botChangeDirection();
             }
         });
     }

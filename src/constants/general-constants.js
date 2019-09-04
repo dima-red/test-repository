@@ -22,6 +22,54 @@ export const FOODS = [
         FOOD_COLOUR: "red",
         FOOD_COST: -20
     },
+    {
+        FOOD_COLOUR: "yellow",
+        FOOD_COST: 10
+    },
+    {
+        FOOD_COLOUR: "yellow",
+        FOOD_COST: 10
+    },
+    {
+        FOOD_COLOUR: "green",
+        FOOD_COST: 20
+    },
+    {
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
+    },
+    {
+        FOOD_COLOUR: "yellow",
+        FOOD_COST: 10
+    },
+    {
+        FOOD_COLOUR: "yellow",
+        FOOD_COST: 10
+    },
+    {
+        FOOD_COLOUR: "green",
+        FOOD_COST: 20
+    },
+    {
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
+    },
+    {
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
+    },
+    {
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
+    },
+    {
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
+    },
+    {
+        FOOD_COLOUR: "red",
+        FOOD_COST: -20
+    },
 ];
 export const FOOD_BORDER_COLOUR = "darkred";
 

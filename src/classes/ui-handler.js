@@ -51,7 +51,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         
         
-        new Game(amountOfUsers, amountOfBots);
+        new Game(amountOfUsers, amountOfBots, this.onGameOver);
     }
 
     onWithTwoUsersBtnClicked() {
@@ -64,7 +64,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         this.removeAppClass(".game-settings-wrapper .player-3", "hide");
         
-        new Game(amountOfUsers, amountOfBots);
+        new Game(amountOfUsers, amountOfBots, this.onGameOver);
     }
 
     onWithoutBotsBtnClicked() {
@@ -75,7 +75,7 @@ export class UIHandler {
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         
-        new Game(amountOfUsers, amountOfBots);
+        new Game(amountOfUsers, amountOfBots, this.onGameOver);
     }
 
     onWithOneBotBtnClicked() {
@@ -87,7 +87,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         
-        new Game(amountOfUsers, amountOfBots);
+        new Game(amountOfUsers, amountOfBots, this.onGameOver);
     }
 
     onWithTwoBotsBtnClicked() {
@@ -100,7 +100,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-2", "hide");
         this.removeAppClass(".game-settings-wrapper .player-3", "hide");
         
-        new Game(amountOfUsers, amountOfBots);
+        new Game(amountOfUsers, amountOfBots, this.onGameOver);
     }
 
     onWithThreeBotsBtnClicked() {
@@ -114,7 +114,7 @@ export class UIHandler {
         this.removeAppClass(".game-settings-wrapper .player-3", "hide");
         this.removeAppClass(".game-settings-wrapper .player-4", "hide");
         
-        new Game(amountOfUsers, amountOfBots);
+        new Game(amountOfUsers, amountOfBots, this.onGameOver);
     }
 
     onSinglePlayerBtnClicked() {
@@ -137,5 +137,9 @@ export class UIHandler {
             this.removeModalClass(".single-settings", "show-modal");
             this.addModalClass(".initial-state", "show-modal");
         }
+    }
+
+    onGameOver() {
+        console.log("GAME OVER");    
     }
 }
