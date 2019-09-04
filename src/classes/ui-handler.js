@@ -30,7 +30,7 @@ export class UIHandler {
     }
 
     removeAppClass(parent, selector) {
-        if(parent) {
+        if (parent) {
             this.appWrapper
                 .querySelector(parent)
                 .classList.remove(selector)
@@ -130,7 +130,7 @@ export class UIHandler {
     }
 
     onBackBtnClicked() {
-        if(this.multiFlag) {
+        if (this.multiFlag) {
             this.removeModalClass(".multi-settings", "show-modal");
             this.addModalClass(".initial-state", "show-modal");
         } else {

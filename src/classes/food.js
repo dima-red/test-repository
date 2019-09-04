@@ -29,7 +29,7 @@ export class Food {
         this.foodX = this.randomTen(0, this.canvas.width - CELL_SIZE);
         this.foodY = this.randomTen(0, this.canvas.height - CELL_SIZE);
         
-        if(this.isFoodOnSnake(snakeInstances)) {
+        if (this.isFoodOnSnake(snakeInstances)) {
             this.createFood(snakeInstances);
         }
     }
@@ -40,7 +40,7 @@ export class Food {
         snakeInstances.forEach(snakeInstance => {
             snakeInstance && snakeInstance.snake.forEach(part => {
 
-                if(part.x === this.foodX && part.y === this.foodY) {
+                if (part.x === this.foodX && part.y === this.foodY) {
                     foodIsOnsnake = true;
                 }
             });

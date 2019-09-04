@@ -12,8 +12,6 @@ export class Game {
     gameOverSnakesSet = new Set();
     amountOfUsers = null;
     numberOfUser = 0;
-    numberOfBot = 0;
-    wasFoodEatenFlag = -1;
     gameOverFlag = false;
 
     constructor(amountOfUsers, amountOfBots) {
@@ -43,7 +41,7 @@ export class Game {
             this.numberOfUser ++;
         }
 
-        if(this.amountOfBots) {
+        if (this.amountOfBots) {
             for (let j = 0; j < this.amountOfBots; j++) {
                 this.snakeInstances.push(new Bot(this.numberOfUser, this.appWrapper));
                 this.numberOfUser ++;
@@ -60,21 +58,15 @@ export class Game {
         this.didGameEnd();
 
         setTimeout(() => {
-            this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.resetChangingDirectionFlag());
             this.clearCanvas();
             this.foodInstances.forEach(foodInstance => foodInstance.drawFood());
-
-            for (let i = 0; i < this.snakeInstances.length; i++) {
-                this.wasFoodEatenFlag = this.snakeInstances[i] && this.snakeInstances[i].advanceSnake(this.foodInstances);
-
-                if (this.wasFoodEatenFlag !== null && this.wasFoodEatenFlag !== -1) {
-                    this.drawScore(this.snakeInstances[i]);
-                    this.foodInstances[this.wasFoodEatenFlag].createFood(this.snakeInstances);
-                    this.wasFoodEatenFlag = -1;
+            this.snakeInstances.forEach(snakeInstance => {
+                if (snakeInstance) {
+                    snakeInstance.resetChangingDirectionFlag();
+                    snakeInstance.advanceSnake(this.foodInstances);
+                    snakeInstance.drawSnake();
                 }
-            }
-
-            this.snakeInstances.forEach(snakeInstance => snakeInstance && snakeInstance.drawSnake());
+            });
             this.onBotChangeDirection();
             this.main();
             
@@ -91,15 +83,15 @@ export class Game {
 
     onChangeDirectionBtnClicked(ev) {
         this.snakeInstances.forEach(snakeInstance => {
-            if(snakeInstance && snakeInstance.isItRealUser) {
-                snakeInstance && snakeInstance.changeDirection(ev)
+            if (snakeInstance && snakeInstance.isItRealUser) {
+                snakeInstance.changeDirection(ev);
             }
         });
     }
 
     onBotChangeDirection() {
         this.snakeInstances.forEach(botInstance => {
-            if(!botInstance.isItRealUser) {
+            if (botInstance && !botInstance.isItRealUser) {
                 botInstance.botChangeDirection();
             }
         });
@@ -129,11 +121,8 @@ export class Game {
                 const gameOverSnake = this.snakeInstances.filter(snake => snake.numberOfUser === player);
                 
                 this.snakeInstances.splice(this.snakeInstances.indexOf(...gameOverSnake), 1);
-                this.appWrapper
-                    .querySelectorAll(".game-settings-wrapper .end-game")[player]
-                    .classList.remove("hide");
+                this.showGameOver(player);
             });
-
             this.gameOverSnakesSet.clear();
 
             if (!this.snakeInstances.length){
@@ -142,9 +131,9 @@ export class Game {
         }
     }
 
-    drawScore(snakeInstance) {
+    showGameOver(player) {
         this.appWrapper
-            .querySelector(`.player-${snakeInstance.numberOfUser + 1} .score`)
-            .innerHTML = snakeInstance.snakeScore;
+            .querySelectorAll(".game-settings-wrapper .end-game")[player]
+            .classList.remove("hide");
     }
 }

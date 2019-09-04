@@ -12,7 +12,8 @@ export class Snake {
     constructor(numberOfUser, appWrapper) {
         this.numberOfUser = numberOfUser;
         this.controls = USER_CONTROL_BUTTONS[this.numberOfUser];
-        this.canvas = appWrapper.querySelector("#field");
+        this.appWrapper = appWrapper;
+        this.canvas = this.appWrapper.querySelector("#field");
         this.ctx = this.canvas.getContext("2d");
         this.snake = this.generateSnake(SNAKE_BODY_TEMPLATE, this.numberOfUser);
     }
@@ -36,8 +37,8 @@ export class Snake {
 
         if (didEatFoodArr.length) {
             this.snakeScore += didEatFoodArr[0].food.FOOD_COST;
-
-            return didEatFoodArr[0].foodNumber;
+            this.drawScore();
+            foods[didEatFoodArr[0].foodNumber].createFood([this]);
         } else {
             this.snake.pop();
 
@@ -141,5 +142,11 @@ export class Snake {
 
     resetChangingDirectionFlag() {
         this.changingDirectionFlag = false;
+    }
+
+    drawScore() {
+        this.appWrapper
+            .querySelector(`.player-${this.numberOfUser + 1} .score`)
+            .innerHTML = this.snakeScore;
     }
 }
