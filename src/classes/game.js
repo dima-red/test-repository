@@ -68,7 +68,7 @@ export class Game {
                 this.wasFoodEatenFlag = this.snakeInstances[i] && this.snakeInstances[i].advanceSnake(this.foodInstances);
 
                 if (this.wasFoodEatenFlag !== null && this.wasFoodEatenFlag !== -1) {
-                    this.drawScore(this.snakeInstances[i].snakeScore, this.snakeInstances[i].numberOfUser);
+                    this.drawScore(this.snakeInstances[i]);
                     this.foodInstances[this.wasFoodEatenFlag].createFood(this.snakeInstances);
                     this.wasFoodEatenFlag = -1;
                 }
@@ -142,9 +142,9 @@ export class Game {
         }
     }
 
-    drawScore(score, numberOfUser) {
+    drawScore(snakeInstance) {
         this.appWrapper
-            .querySelector(`.player-${numberOfUser + 1} .score`)
-            .innerHTML = score;
+            .querySelector(`.player-${snakeInstance.numberOfUser + 1} .score`)
+            .innerHTML = snakeInstance.snakeScore;
     }
 }
