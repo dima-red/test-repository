@@ -75,7 +75,9 @@ export class UIHandler {
         this.removeAppClass("", "hide");
         this.removeAppClass(".game-settings-wrapper .player-1", "hide");
         
-        new Game(amountOfUsers, amountOfBots, this.onGameOver);
+        const gameInstance = new Game(amountOfUsers, amountOfBots, this.onGameOver);
+
+        console.log(gameInstance);
     }
 
     onWithOneBotBtnClicked() {
