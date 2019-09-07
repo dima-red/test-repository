@@ -119,11 +119,11 @@ export const BOT_CONTROL_BUTTONS = [
 ];
 
 export const SNAKE_BODY_TEMPLATE = [
-    {x: 50, y: 380},
-    {x: 40, y: 380},
-    {x: 30, y: 380},
-    {x: 20, y: 380},
-    {x: 10, y: 380}
+    {x: 50, y: 580},
+    {x: 40, y: 580},
+    {x: 30, y: 580},
+    {x: 20, y: 580},
+    {x: 10, y: 580}
 ];
 
 export const SNAKE_COLOURS = [
