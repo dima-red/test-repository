@@ -1,6 +1,6 @@
 import "./styles.scss";
-import { UIHandler } from "./classes/ui-handler";
+import { FormSeating } from "./components/form-seating";
 
 document.addEventListener('DOMContentLoaded', () => {
-    new UIHandler();
+    new FormSeating();
 });

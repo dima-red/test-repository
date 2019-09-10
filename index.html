@@ -1,95 +1,79 @@
 <html>
 
 <head>
-	<title>My Snake</title>
+	<title>Form Seating</title>
 	<meta charset="UTF-8" />
 	<base href="/">
-	<style type="text/css">
-		.hide {
-			display: none;
-		}
-	</style>
 </head>
 
 <body>
-	<div class="hide app-wrapper">
-		<div class="app">
-			<canvas id="field" width="600" height="600"></canvas>
-			<div class="hide game-settings-wrapper"> <!-- ask about inline styles -->
-				<div class="hide player-1">
-					<h4>Player 1</h4>
-					<span>Score:</span>
-					<span class="score">0</span>
-					<div class="hide end-game">Game Over!</div>
+	<div class="app-wrapper">
+		<ul class="menu">
+			<li>Главная</li>
+			<li>Списки</li>
+			<li>Загрузка начальных данных</li>
+		</ul>
+		<div class="form-wrapper">
+			<form class="filter">
+				<div class="search-wrapper wrapper">
+					<label>Поиск</label>
+					<input class="search" placeholder="Введите ФИО">
 				</div>
-				<div class="hide player-2">
-					<h4>Player 2</h4>
-					<span>Score:</span>
-					<span class="score">0</span>
-					<div class="hide end-game">Game Over!</div>
+				<div class="building-wrapper wrapper">
+					<label>Корпус</label>
+					<select class="building">
+						<option value="" disabled selected>Выберите корпус</option>
+					</select>
 				</div>
-				<div class="hide player-3">
-					<h4>Player 3</h4>
-					<span>Score:</span>
-					<span class="score">0</span>
-					<div class="hide end-game">Game Over!</div>
+				<div class="type-wrapper wrapper">
+					<label>Профиль</label>
+					<select class="type">
+						<option value="" disabled selected>Выберите профиль</option>
+					</select>
 				</div>
-				<div class="hide player-4">
-					<h4>Player 4</h4>
-					<span>Score:</span>
-					<span class="score">0</span>
-					<div class="hide end-game">Game Over!</div>
+				<div class="room-wrapper wrapper">
+					<label>Аудитория</label>
+					<select class="room">
+						<option value="" disabled selected>Выберите аудиторию</option>
+					</select>
 				</div>
+			</form>
+		</div>
+		<div class="table-wrapper">
+			<div class="all-students">
+				<table>
+					<thead>
+						<tr>
+							<th>#</th>
+							<th>ФИО</th>
+							<th>Каб.</th>
+							<th>Профиль</th>
+							<th>Бел</th>
+						</tr>
+					</thead>
+					<tbody>
+
+					</tbody>
+				</table>
+			</div>
+			<div class="seated-students">
+				<table>
+					<thead>
+						<th>#</th>
+						<th>Количество</th>
+						<th>Max</th>
+						<th>Бел</th>
+					</thead>
+					<tbody>
+						<tr>
+							<td></td>
+						</tr>
+					</tbody>
+				</table>
 			</div>
 		</div>
-		
 	</div>
 	<script src="./src/index.js"></script>
 </body>
-
-<footer></footer>
-
-<div class="modals-wrapper">
-	<div class="show-modal initial-state modal">
-	<!-- <div class="initial-state modal"> -->
-		<div class="modal-content">
-			<div class="logo-block"></div>
-			<div class="text-wrapper">
-				<h2>Select a type of the game:</h2>
-				<div class="btn-wrapper">
-					<button class="single-player">Single player</button>
-					<button class="multiplayer">Multiplayer</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	<div class="single-settings modal">
-		<div class="modal-content">
-			<div class="text-wrapper">
-				<h2>Select an amount of bots:</h2>
-				<div class="bot-settings btn-wrapper">
-					<button class="without-bots">Without bots</button>
-					<button class="with-one">With one bot</button>
-					<button class="with-two">With two bots</button>
-					<button class="with-three">With three bots</button>
-				</div>
-				<span class="back-btn">Back</span>
-			</div>
-		</div>
-	</div>
-	<div class="multi-settings modal">
-		<div class="modal-content">
-			<div class="text-wrapper">
-				<h2>Select an amount of users:</h2>
-				<div class="user-settings btn-wrapper">
-					<button class="with-one-user">With one user</button>
-					<button class="with-two-users">With two users</button>
-				</div>
-				<span class="back-btn">Back</span>
-			</div>
-		</div>
-	</div>
-</div>
-
 
 </html>
