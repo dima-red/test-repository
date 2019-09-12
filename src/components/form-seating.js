@@ -142,27 +142,19 @@ export class FormSeating {
             const amountOfRows = this.facultyAudiences.length + 1;
             const rowHeight = tableHeight / amountOfRows;
             const tableY = tableHeight + toTheTop;
-
-            console.log(rowHeight);
-            
-            for (let i = 276; i >= 165; i -= 37) {
-                for (let j = 3; j >= 1; j--) {
-                    if (219 <= 276 && 219 > (276 - 37)) {
-                        console.log(i);
-                    }
+            let j = amountOfRows;
+            for (let i = tableY; i >= toTheTop; i -= rowHeight) {
+                if (mouseY <= i && mouseY > (i - rowHeight)) {
+                    console.log(j);
                 }
+                j--;
             }
+
 
             console.log(tableY);
             console.log(mouseY);
 
-            // for (let i = tableY; i >= toTheTop; i -= rowHeight) {
-            //     for (let j = amountOfRows; j >= 1; j--) {
-            //         if (mouseY <= i && mouseY > (i - rowHeight)) {
-            //             console.log(i);
-            //         }
-            //     }
-            // }
+           
 
 
             draggedRow.innerHTML = "";
