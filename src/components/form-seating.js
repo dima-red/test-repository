@@ -20,7 +20,7 @@ export class FormSeating {
             .then(response => response.json())
             .then(buildingsJson => {
                 this.buildings = buildingsJson
-                console.log(this.buildings);
+                console.info(this.buildings);
                 this.renderBuildings();
             });
     }
@@ -51,10 +51,11 @@ export class FormSeating {
     }
 
     renderAllStudents(allStudents) {
-        console.log(allStudents);
-        
+        console.info(allStudents);
         const tBodyEl = this.appWrapper.querySelector(".all-students tbody");
         const allStudentsFragment = new DocumentFragment();
+
+        this.clearTableBody(tBodyEl);
 
         for(const student of allStudents) {
             const tr = document.createElement("tr");
@@ -74,7 +75,8 @@ export class FormSeating {
                 div.classList.add("flag");
                 tdNeedBel.append(div);
             }
-
+            tr.classList.add("row-hower");
+            tr.classList.add("all-students");
             tr.append(tdNumber, tdName, tdRoom, tdType, tdNeedBel);
             allStudentsFragment.append(tr);
         }
@@ -83,44 +85,36 @@ export class FormSeating {
     }
 
     onMouseDown(ev) {
-        if(ev.target.parentNode.tagName === "TR") {
-            // console.log();
+        if(ev.target.parentNode.className === "row-hower all-students") { //TODO: make the if more specific
             const selectedRow = ev.target.parentNode;
             this.fakeRow = document.createElement("div");
-            const fakeRowWrapper = document.createElement("div");
-            const fakeSpanNumber = document.createElement("span");
-            const fakeSpanName = document.createElement("span");
-            const fakeSpanRoom = document.createElement("span");
-            const fakeSpanType = document.createElement("span");
-            const fakeSpanBel = document.createElement("span");
-            // if() {
+            this.fakeRow.className = "draggableRow";
+            const fakeDivNumber = document.createElement("div");
+            const fakeDivName = document.createElement("div");
+            const fakeDivRoom = document.createElement("div");
+            const fakeDivType = document.createElement("div");
+            const fakeDivBel = document.createElement("div");
+            const personInfo = ev.target.parentNode.children;
 
-            // }
+            if(ev.target.parentNode.lastChild.children[0]) {
+                const div = document.createElement("div");
+                div.classList.add("flag");
+                fakeDivBel.append(div);;
+            }
 
-            fakeSpanNumber.append(4);
-            fakeSpanName.append("Иванов Петр Сергеевич");
-            fakeSpanRoom.append(234);
-            fakeSpanType.append("математический");
-            fakeSpanBel.append("флаг");
+            fakeDivNumber.append(personInfo[0].innerText);
+            fakeDivName.append(personInfo[1].innerText);
+            fakeDivRoom.append(personInfo[2].innerText);
+            fakeDivType.append(personInfo[3].innerText);
 
-            this.fakeRow.append(fakeSpanNumber, fakeSpanName, fakeSpanRoom, fakeSpanType, fakeSpanBel);
-            
-
-
-
-            // this.fakeRow.style.position = "absolute";
-            this.fakeRow.style.position = "background-color: white";
-            this.fakeRow.style.position = "border: 1px solid #212529";
-            // this.fakeRow.style.position = "display: inline-table";
-            
-            fakeRowWrapper.append(this.fakeRow);
-
+            this.fakeRow.append(fakeDivNumber, fakeDivName, fakeDivRoom, fakeDivType, fakeDivBel);
+            this.fakeRow.classList.add("fake-row");
+            Array.from(this.fakeRow.children).forEach(child => child.classList.add("fake-row-item"));
+            document.body.append(this.fakeRow);
             this.moveAt(ev);
-            document.body.append(fakeRowWrapper);
-            fakeRowWrapper.style.zIndex = 1000;
 
 
-            console.log(fakeRowWrapper);
+            console.log(this.fakeRow);
         }
     }
 
@@ -130,32 +124,70 @@ export class FormSeating {
         }
     }
 
-    onMouseUp() {
-        if(this.fakeRow) {
-            console.log("=========== End ===============");
-        }
-    }
-
     moveAt(ev) {
-        // console.log(ev);
         this.fakeRow.style.left = ev.pageX - this.fakeRow.offsetWidth / 2 + 'px';
         this.fakeRow.style.top = ev.pageY - this.fakeRow.offsetHeight / 2 + 'px';
+    }
+
+    onMouseUp(ev) {
+        if(this.fakeRow) {
+            console.log(ev);
+            console.log(document.querySelectorAll(".seated-students tbody"));
+            
+            const draggedRowArr = document.getElementsByClassName("draggableRow");
+            const draggedRow = draggedRowArr[draggedRowArr.length - 1];
+            const mouseY = ev.y;
+            const toTheTop = 165;
+            const tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight;
+            const amountOfRows = this.facultyAudiences.length + 1;
+            const rowHeight = tableHeight / amountOfRows;
+            const tableY = tableHeight + toTheTop;
+
+            console.log(rowHeight);
+            
+            for (let i = 276; i >= 165; i -= 37) {
+                for (let j = 3; j >= 1; j--) {
+                    if (219 <= 276 && 219 > (276 - 37)) {
+                        console.log(i);
+                    }
+                }
+            }
+
+            console.log(tableY);
+            console.log(mouseY);
+
+            // for (let i = tableY; i >= toTheTop; i -= rowHeight) {
+            //     for (let j = amountOfRows; j >= 1; j--) {
+            //         if (mouseY <= i && mouseY > (i - rowHeight)) {
+            //             console.log(i);
+            //         }
+            //     }
+            // }
+
+
+            draggedRow.innerHTML = "";
+            draggedRow.classList.remove("fake-row");
+
+
+        }
     }
 
     renderSeatedStudents(facultyName) {
         const tBodyEl = this.appWrapper.querySelector(".seated-students tbody");
         const seatedStudentsFragment = new DocumentFragment();
-        const facultyAudiences = [];
+        this.facultyAudiences = [];
+
+        this.clearTableBody(tBodyEl);
 
         for(const faculty of this.buildings) {
             if (faculty.name === facultyName) {
-                facultyAudiences.push(...faculty.places[0].audience);
+                this.facultyAudiences.push(...faculty.places[0].audience);
             }
         }
 
-        console.log(facultyAudiences);
+        console.log(this.facultyAudiences);
 
-        for (const audience of facultyAudiences) {
+        for (const audience of this.facultyAudiences) {
             const tr = document.createElement("tr");
             const tdNumber = document.createElement("td");
             const tdAmount = document.createElement("td");
@@ -173,10 +205,12 @@ export class FormSeating {
                 tdBel.append(div);
             }
 
+            tr.classList.add("row-hower");
             tr.append(tdNumber, tdAmount, tdMax, tdBel);
 
             if (audience.count > audience.max) {
                 tr.classList.add("table-danger");
+                tr.classList.add("row-hower-danger");
             }
 
             seatedStudentsFragment.append(tr);
@@ -190,22 +224,26 @@ export class FormSeating {
             .then(response => response.json())
             .then(dictionaryJson => {
                 this.dictionary = dictionaryJson
-                console.log(this.dictionary);
+                console.info(this.dictionary);
             });
     }
 
     getGeneratedStatus() {
         fetch(process.env.GENERATE_STATUS_URL)
         .then(response => response.json())
-        .then(statusJson => console.log(statusJson));
+        .then(statusJson => console.info(statusJson));
+    }
+    
+    clearTableBody(body) {
+        if (body.children.length) {
+            body.innerHTML = "";
+        }
     }
 
     // getData(url) { 
         
-    //     return  fetch(url)
+    //     return fetch(url)
     //         .then(response => response.json())
     //         .then(responseJson => this.data = responseJson);
-
-    //     // what should I return?
     // }
 }
