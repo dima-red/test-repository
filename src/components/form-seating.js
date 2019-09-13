@@ -1,32 +1,23 @@
+import { DataService } from "./data-service";
+import "@babel/polyfill";
+
 export class FormSeating {
-    buildings = null;
-    dictionary = null;
+    dataServiceInstance = null;
+    buildingSelectEl = null; 
     appWrapper = null;
-    data = null;
 
     constructor() {
         this.appWrapper = document.querySelector(".app-wrapper");
         this.buildingSelectEl = this.appWrapper.querySelector(".building");
-        this.getDictionary();
-        this.getBuildings();
+        this.dataServiceInstance = new DataService(this.renderBuildings, this.renderAllStudents);
         this.buildingSelectEl.addEventListener("change", this.onBuildingSelected.bind(this));
         document.addEventListener("mousedown", this.onMouseDown.bind(this));
         document.addEventListener("mousemove", this.onMouseMove.bind(this));
         document.addEventListener("mouseup", this.onMouseUp.bind(this));
     }
 
-    getBuildings() {
-        fetch(process.env.BUILDINGS_URL)
-            .then(response => response.json())
-            .then(buildingsJson => {
-                this.buildings = buildingsJson
-                console.info(this.buildings);
-                this.renderBuildings();
-            });
-    }
-
-    renderBuildings() {
-        for(const buildingData of this.buildings) {
+    renderBuildings = (buildings) => {
+        for(const buildingData of buildings) {
             const building = document.createElement("option");
 
             building.label = buildingData.name;
@@ -40,17 +31,11 @@ export class FormSeating {
         const value = ev.target.selectedOptions[0].value;
         const facultyName = ev.target.selectedOptions[0].label;
 
-        this.getStudentsList(value);
+        this.dataServiceInstance.getStudentsList(value);
         this.renderSeatedStudents(facultyName);
     }
 
-    getStudentsList(value) {
-        fetch(`${process.env.STUDENTS_URL + value}`)
-            .then(response => response.json())
-            .then(responseJson => this.renderAllStudents(responseJson));
-    }
-
-    renderAllStudents(allStudents) {
+    renderAllStudents = (allStudents) => {
         console.info(allStudents);
         const tBodyEl = this.appWrapper.querySelector(".all-students tbody");
         const allStudentsFragment = new DocumentFragment();
@@ -67,14 +52,15 @@ export class FormSeating {
 
             tdNumber.append(allStudents.indexOf(student) + 1);
             tdName.append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
-            tdRoom.append(this.dictionary.audiences[student.audience]);
-            tdType.append(this.dictionary.profiles[student.profile]);
+            tdRoom.append(this.dataServiceInstance.dictionary.audiences[student.audience]);
+            tdType.append(this.dataServiceInstance.dictionary.profiles[student.profile]);
 
             if (student.needBel) {
                 const div = document.createElement("div");
                 div.classList.add("flag");
                 tdNeedBel.append(div);
             }
+            
             tr.classList.add("row-hower");
             tr.classList.add("all-students");
             tr.append(tdNumber, tdName, tdRoom, tdType, tdNeedBel);
@@ -129,8 +115,8 @@ export class FormSeating {
 
     onMouseUp(ev) {
         if(this.fakeRow) {            
-            const draggedRowArr = document.getElementsByClassName("draggableRow");
-            const draggedRow = draggedRowArr[draggedRowArr.length - 1];
+            const allDraggedRows = document.getElementsByClassName("draggableRow");
+            const theLastDraggedRow = allDraggedRows[allDraggedRows.length - 1];
             const mouseX = ev.x;
             const mouseY = ev.y;
             const toTheTop = 202;
@@ -146,11 +132,11 @@ export class FormSeating {
                     const newAmountOfStudents = ++ targetAudience.count;
                     const updatedSeatedStudentsRow = document.querySelectorAll(".seated-students tr")[numberOfTheRow];
                     const maxNumberOfStudents = targetAudience.max;
-                    const draggedRow = document.querySelectorAll(".all-students tr")[this.numberOfDraggedRow];
+                    const selectedRow = document.querySelectorAll(".all-students tr")[this.numberOfDraggedRow];
 
-                    if (draggedRow.children[2].innerHTML !== targetAudience.name) {
+                    if (selectedRow.children[2].innerHTML !== targetAudience.name) {
                         updatedSeatedStudentsRow.children[1].innerHTML = newAmountOfStudents;
-                        draggedRow.children[2].innerHTML = targetAudience.name;
+                        selectedRow.children[2].innerHTML = targetAudience.name;
                     }
 
                     if (newAmountOfStudents > maxNumberOfStudents) {
@@ -166,8 +152,8 @@ export class FormSeating {
                 }
             }
 
-            draggedRow.innerHTML = "";
-            draggedRow.classList.remove("fake-row");
+            theLastDraggedRow.innerHTML = "";
+            theLastDraggedRow.classList.remove("fake-row");
         }
     }
 
@@ -178,7 +164,7 @@ export class FormSeating {
 
         this.clearTableBody(tBodyEl);
 
-        for(const faculty of this.buildings) {
+        for(const faculty of this.dataServiceInstance.buildings) {
             if (faculty.name === facultyName) {
                 faculty.places.forEach(place => this.facultyAudiences.push(...place.audience));
             }
@@ -218,15 +204,6 @@ export class FormSeating {
         tBodyEl.append(seatedStudentsFragment);
     }
 
-    getDictionary() {
-        fetch(process.env.DICTIONARY_URL)
-            .then(response => response.json())
-            .then(dictionaryJson => {
-                this.dictionary = dictionaryJson
-                console.info(this.dictionary);
-            });
-    }
-
     getGeneratedStatus() {
         fetch(process.env.GENERATE_STATUS_URL)
         .then(response => response.json())
@@ -238,11 +215,4 @@ export class FormSeating {
             body.innerHTML = "";
         }
     }
-
-    // getData(url) { 
-        
-    //     return fetch(url)
-    //         .then(response => response.json())
-    //         .then(responseJson => this.data = responseJson);
-    // }
 }

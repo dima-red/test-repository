@@ -21,6 +21,7 @@
   "devDependencies": {
     "@babel/core": "^7.6.0",
     "@babel/plugin-proposal-class-properties": "^7.5.5",
+    "@babel/polyfill": "^7.6.0",
     "@babel/preset-env": "^7.6.0",
     "parcel-bundler": "^1.12.3",
     "sass": "^1.23.0-module.beta.1"
