@@ -85,8 +85,9 @@ export class FormSeating {
     }
 
     onMouseDown(ev) {
-        if(ev.target.parentNode.className === "row-hower all-students") { //TODO: make the if more specific
-            const selectedRow = ev.target.parentNode;
+        if(ev.target.parentNode.className === "row-hower all-students") {
+            this.allStudentsTableWidth = ev.target.parentNode.clientWidth;
+            this.numberOfDraggedRow = parseInt(ev.target.parentNode.children[0].innerHTML);
             this.fakeRow = document.createElement("div");
             this.fakeRow.className = "draggableRow";
             const fakeDivNumber = document.createElement("div");
@@ -112,9 +113,6 @@ export class FormSeating {
             Array.from(this.fakeRow.children).forEach(child => child.classList.add("fake-row-item"));
             document.body.append(this.fakeRow);
             this.moveAt(ev);
-
-
-            console.log(this.fakeRow);
         }
     }
 
@@ -130,37 +128,46 @@ export class FormSeating {
     }
 
     onMouseUp(ev) {
-        if(this.fakeRow) {
-            console.log(ev);
-            console.log(document.querySelectorAll(".seated-students tbody"));
-            
+        if(this.fakeRow) {            
             const draggedRowArr = document.getElementsByClassName("draggableRow");
             const draggedRow = draggedRowArr[draggedRowArr.length - 1];
+            const mouseX = ev.x;
             const mouseY = ev.y;
-            const toTheTop = 165;
-            const tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight;
-            const amountOfRows = this.facultyAudiences.length + 1;
+            const toTheTop = 202;
+            const tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight - 37;
+            const amountOfRows = this.facultyAudiences.length;
             const rowHeight = tableHeight / amountOfRows;
             const tableY = tableHeight + toTheTop;
-            let j = amountOfRows;
+            let numberOfTheRow = amountOfRows;
+
             for (let i = tableY; i >= toTheTop; i -= rowHeight) {
-                if (mouseY <= i && mouseY > (i - rowHeight)) {
-                    console.log(j);
+                if (mouseY <= i && mouseY > (i - rowHeight) && mouseY > toTheTop && mouseX > this.allStudentsTableWidth) {
+                    const targetAudience = this.facultyAudiences[numberOfTheRow - 1];
+                    const newAmountOfStudents = ++ targetAudience.count;
+                    const updatedSeatedStudentsRow = document.querySelectorAll(".seated-students tr")[numberOfTheRow];
+                    const maxNumberOfStudents = targetAudience.max;
+                    const draggedRow = document.querySelectorAll(".all-students tr")[this.numberOfDraggedRow];
+
+                    if (draggedRow.children[2].innerHTML !== targetAudience.name) {
+                        updatedSeatedStudentsRow.children[1].innerHTML = newAmountOfStudents;
+                        draggedRow.children[2].innerHTML = targetAudience.name;
+                    }
+
+                    if (newAmountOfStudents > maxNumberOfStudents) {
+                        updatedSeatedStudentsRow.classList.add("table-danger");
+                        updatedSeatedStudentsRow.classList.add("row-hower-danger");
+                    }
+                    
+
+                } else if (numberOfTheRow >= 1 && mouseY > toTheTop) {
+                    numberOfTheRow--;
+                } else {
+                    console.info("outside of the seated students");
                 }
-                j--;
             }
-
-
-            console.log(tableY);
-            console.log(mouseY);
-
-           
-
 
             draggedRow.innerHTML = "";
             draggedRow.classList.remove("fake-row");
-
-
         }
     }
 
@@ -173,11 +180,11 @@ export class FormSeating {
 
         for(const faculty of this.buildings) {
             if (faculty.name === facultyName) {
-                this.facultyAudiences.push(...faculty.places[0].audience);
+                faculty.places.forEach(place => this.facultyAudiences.push(...place.audience));
             }
         }
 
-        console.log(this.facultyAudiences);
+        console.info(this.facultyAudiences);
 
         for (const audience of this.facultyAudiences) {
             const tr = document.createElement("tr");
