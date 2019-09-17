@@ -1,31 +1,14 @@
 export class DataService {
-    dictionary = null;
-    buildings = null;
+    constructor () {
 
-    constructor (renderBuildingsSelect, renderAllStudents) {
-        this.renderBuildingsSelect = renderBuildingsSelect;
-        this.renderAllStudents = renderAllStudents;
-        this.getDictionary();
-        this.getBuildings();
     }
 
     getDictionary() {
-        this.getData(process.env.DICTIONARY_URL)
-        .then(dictionaryJson => {
-            this.dictionary = dictionaryJson
-            console.info(this.dictionary);
-        })
-        .catch(err => console.error(err));        
+        return this.getData(process.env.DICTIONARY_URL);  
     }
 
     getBuildings() {
-        this.getData(process.env.BUILDINGS_URL)
-        .then(buildingsJson => {
-            this.buildings = buildingsJson
-            console.info(this.buildings);
-            this.renderBuildingsSelect(this.buildings);
-        })
-        .catch(err => console.error(err));
+        return this.getData(process.env.BUILDINGS_URL);
     }
 
     getStudentsList(value) {

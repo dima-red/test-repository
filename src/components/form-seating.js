@@ -3,30 +3,56 @@ import "@babel/polyfill";
 
 export class FormSeating {
     dataServiceInstance = null;
-    buildingSelectEl = null; 
+    buildingSelectEl = null;
+    buildings = null 
+    dictionary = null;
     appWrapper = null;
     fakeRow = null;
     allStudentsTableWidth = null;
-    facultyAudiences = null;
+    facultyAudiences = [];
     facultyName = null;
     toTheTop = 202;
     tableHeight = null;
     tableY = null;
+    tableHeaderHeight = 37;
+    profiles = [];
 
     constructor() {
+        this.getSelectElements();
+        this.dataServiceInstance = new DataService();
+        this.getBuildingsSelectData();
+        this.getDictionaryData();
+        this.addEventListeners();
+    }
+
+    getSelectElements() {
         this.appWrapper = document.querySelector(".app-wrapper");
         this.buildingSelectEl = this.appWrapper.querySelector(".building");
-        this.dataServiceInstance = new DataService(this.renderBuildingsSelect, this.renderAllStudents);
-        this.buildingSelectEl.addEventListener("change", this.onBuildingSelected.bind(this));
-        this.buildingSelectEl.addEventListener("change", this.onProfileSelected.bind(this));
-        this.buildingSelectEl.addEventListener("change", this.onAudienceSelected.bind(this));
+        this.profileSelectEl = this.appWrapper.querySelector(".profile");
+        this.audienceSelectEl = this.appWrapper.querySelector(".audience");
+    }
+
+    addEventListeners() {
         document.addEventListener("mousedown", this.onMouseDown.bind(this));
         document.addEventListener("mousemove", this.onMouseMove.bind(this));
         document.addEventListener("mouseup", this.onMouseUp.bind(this));
+        document.addEventListener("change", this.onBuildingSelected.bind(this));
+        document.addEventListener("change", this.onProfileSelected.bind(this));
+        document.addEventListener("change", this.onAudienceSelected.bind(this));
     }
 
-    renderBuildingsSelect = (buildings) => {
-        for(const buildingData of buildings) {
+    getBuildingsSelectData() {
+        this.dataServiceInstance.getBuildings()
+            .then(buildingsJson => {
+                this.buildings = buildingsJson
+                console.info(this.buildings);
+                this.renderBuildingsSelect();
+            })
+            .catch(err => console.error(err));
+    }
+
+    renderBuildingsSelect() {
+        for(const buildingData of this.buildings) {
             const building = document.createElement("option");
 
             building.label = buildingData.name;
@@ -36,40 +62,74 @@ export class FormSeating {
         }
     }
 
-    renderProfilesSelect() {
+    getDictionaryData() {
+        this.dataServiceInstance.getDictionary()
+            .then(dictionaryJson => {
+                this.dictionary = dictionaryJson
+                console.info(this.dictionary);
+                
+            })
+            .catch(err => console.error(err));   
+    }
 
+    renderProfilesSelect() {
+        for(const faculty of this.buildings) {
+            if (faculty.name === this.facultyName) {
+                faculty.places.forEach(place => {
+                    const profileOption = document.createElement("option");
+
+                    profileOption.label = place.code;
+                    profileOption.append(place.code);
+                    this.profileSelectEl.append(profileOption);
+                });
+            }
+        }
     }
 
     renderAudiencesSelect() {
+        for (const audience of this.facultyAudiences) {
+            const audienceOption = document.createElement("option");
 
+            audienceOption.label = audience.name;
+            audienceOption.append(audience.name);
+            this.audienceSelectEl.append(audienceOption);
+        }
     }
 
     onBuildingSelected(ev) {
-        const value = ev.target.selectedOptions[0].value;
-        this.facultyName = ev.target.selectedOptions[0].label;
-
-        this.dataServiceInstance.getStudentsList(value)
-            .then(responseJson => {
-                // console.info(responseJson);
-                this.renderAllStudents(responseJson);
-            })
-            .catch(err => console.error(err));
-        this.renderSeatedStudents();
-        this.tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight - 37;
-        this.amountOfRows = this.facultyAudiences.length;
-        this.rowHeight = this.tableHeight / this.amountOfRows;
-        this.tableY = this.tableHeight + this.toTheTop;
+        if (ev.target.className === "building") {
+            const value = ev.target.selectedOptions[0].value;
+            this.facultyName = ev.target.selectedOptions[0].label;
+            this.dataServiceInstance.getStudentsList(value)
+                .then(responseJson => {
+                    // console.info(responseJson);
+                    this.renderAllStudents(responseJson);
+                })
+                .catch(err => console.error(err));
+            
+            this.renderSeatedStudents();
+            this.tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight - this.tableHeaderHeight;;
+            this.amountOfRows = this.facultyAudiences.length;
+            this.rowHeight = this.tableHeight / this.amountOfRows;
+            this.tableY = this.tableHeight + this.toTheTop;
+            this.renderProfilesSelect();
+            this.renderAudiencesSelect();
+        }
     }
 
-    onProfileSelected() {
-
+    onProfileSelected(ev) {
+        if (ev.target.className === "profile") {
+            console.log(ev);
+        }
     }
 
-    onAudienceSelected() {
-
+    onAudienceSelected(ev) {
+        if (ev.target.className === "audience") {
+            console.log(ev);
+        }
     }
 
-    renderAllStudents = (allStudents) => {
+    renderAllStudents(allStudents) {
         if (allStudents) {
             this.allStudents = allStudents;
         }
@@ -89,8 +149,8 @@ export class FormSeating {
 
             tdNumber.append(this.allStudents.indexOf(student) + 1);
             tdName.append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
-            tdRoom.append(this.dataServiceInstance.dictionary.audiences[student.audience]);
-            tdType.append(this.dataServiceInstance.dictionary.profiles[student.profile]);
+            tdRoom.append(this.dictionary.audiences[student.audience]);
+            tdType.append(this.dictionary.profiles[student.profile]);
 
             if (student.needBel) {
                 const div = document.createElement("div");
@@ -98,6 +158,7 @@ export class FormSeating {
                 tdNeedBel.append(div);
             }
             
+            tr.id = "student";
             tr.classList.add("row-hower");
             tr.classList.add("all-students");
             tr.append(tdNumber, tdName, tdRoom, tdType, tdNeedBel);
@@ -110,11 +171,10 @@ export class FormSeating {
     renderSeatedStudents() {
         const tBodyEl = this.appWrapper.querySelector(".seated-students tbody");
         const seatedStudentsFragment = new DocumentFragment();
-        this.facultyAudiences = [];
 
         this.clearTableBody(tBodyEl);
 
-        for(const faculty of this.dataServiceInstance.buildings) {
+        for(const faculty of this.buildings) {
             if (faculty.name === this.facultyName) {
                 faculty.places.forEach(place => this.facultyAudiences.push(...place.audience));
             }
@@ -153,7 +213,7 @@ export class FormSeating {
     }
 
     onMouseDown(ev) {
-        if(ev.target.parentNode.className === "row-hower all-students") {
+        if(ev.target.parentNode.id === "student") {
             this.allStudentsTableWidth = ev.target.parentNode.clientWidth;
             this.numberOfDraggedRow = parseInt(ev.target.parentNode.children[0].innerHTML);
             this.fakeRow = document.createElement("div");
