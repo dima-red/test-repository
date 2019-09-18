@@ -2,11 +2,13 @@ import { DataService } from "./data-service";
 import "@babel/polyfill";
 
 export class FormSeating {
-    dataServiceInstance = null;
+    appWrapper = null;
     buildingSelectEl = null;
+    profileSelectEl = null;
+    audienceSelectEl = null;
+    dataServiceInstance = null;
     buildings = null 
     dictionary = null;
-    appWrapper = null;
     fakeRow = null;
     allStudentsTableWidth = null;
     facultyAudiences = [];
@@ -16,20 +18,32 @@ export class FormSeating {
     tableY = null;
     tableHeaderHeight = 37;
     profiles = [];
+    allStudents = null;
+    sortNameTh = null;
+    sortAudienceTh = null;
+    sortProfileTh = null;
+    sortBelTh = null;
+    compareResult = 1;
+    sortKey = null;
+    sortFlag = false;
 
     constructor() {
-        this.getSelectElements();
+        this.getDomElements();
         this.dataServiceInstance = new DataService();
-        this.getBuildingsSelectData();
         this.getDictionaryData();
+        this.getBuildingsSelectData();
         this.addEventListeners();
     }
 
-    getSelectElements() {
+    getDomElements() {
         this.appWrapper = document.querySelector(".app-wrapper");
         this.buildingSelectEl = this.appWrapper.querySelector(".building");
         this.profileSelectEl = this.appWrapper.querySelector(".profile");
         this.audienceSelectEl = this.appWrapper.querySelector(".audience");
+        this.sortNameTh = this.appWrapper.querySelector(".sort-name");
+        this.sortAudienceTh = this.appWrapper.querySelector(".sort-audience");
+        this.sortProfileTh = this.appWrapper.querySelector(".sort-profile");
+        this.sortBelTh = this.appWrapper.querySelector(".sort-bel");
     }
 
     addEventListeners() {
@@ -39,6 +53,7 @@ export class FormSeating {
         document.addEventListener("change", this.onBuildingSelected.bind(this));
         document.addEventListener("change", this.onProfileSelected.bind(this));
         document.addEventListener("change", this.onAudienceSelected.bind(this));
+        document.addEventListener("click", this.onSortClicked.bind(this));
     }
 
     getBuildingsSelectData() {
@@ -119,7 +134,8 @@ export class FormSeating {
 
     onProfileSelected(ev) {
         if (ev.target.className === "profile") {
-            console.log(ev);
+            // this.filteredStdents = this.allStudents.map(student => student.profile = ev.target.value);
+            // this.renderAllStudents();
         }
     }
 
@@ -144,13 +160,13 @@ export class FormSeating {
             const tdNumber = document.createElement("td");
             const tdName = document.createElement("td");
             const tdRoom = document.createElement("td");
-            const tdType = document.createElement("td");
+            const tdProfile = document.createElement("td");
             const tdNeedBel = document.createElement("td");
 
             tdNumber.append(this.allStudents.indexOf(student) + 1);
             tdName.append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
             tdRoom.append(this.dictionary.audiences[student.audience]);
-            tdType.append(this.dictionary.profiles[student.profile]);
+            tdProfile.append(this.dictionary.profiles[student.profile]);
 
             if (student.needBel) {
                 const div = document.createElement("div");
@@ -161,7 +177,7 @@ export class FormSeating {
             tr.id = "student";
             tr.classList.add("row-hower");
             tr.classList.add("all-students");
-            tr.append(tdNumber, tdName, tdRoom, tdType, tdNeedBel);
+            tr.append(tdNumber, tdName, tdRoom, tdProfile, tdNeedBel);
             allStudentsFragment.append(tr);
         }
 
@@ -169,10 +185,11 @@ export class FormSeating {
     }
 
     renderSeatedStudents() {
-        const tBodyEl = this.appWrapper.querySelector(".seated-students tbody");
+        const seatedSudentsTBody = this.appWrapper.querySelector(".seated-students tbody");
         const seatedStudentsFragment = new DocumentFragment();
-
-        this.clearTableBody(tBodyEl);
+        
+        this.clearTableBody(seatedSudentsTBody);
+        this.facultyAudiences = [];
 
         for(const faculty of this.buildings) {
             if (faculty.name === this.facultyName) {
@@ -209,7 +226,7 @@ export class FormSeating {
             seatedStudentsFragment.append(tr);
         }
 
-        tBodyEl.append(seatedStudentsFragment);
+        seatedSudentsTBody.append(seatedStudentsFragment);
     }
 
     onMouseDown(ev) {
@@ -308,6 +325,39 @@ export class FormSeating {
     clearTableBody(body) {
         if (body.children.length) {
             body.innerHTML = "";
+        }
+    }
+
+    onSortClicked(ev) {
+        if (this.allStudents && ev.target.className === "sort-name") {
+            this.sortHandler("firstName");
+
+        } else if (this.allStudents && ev.target.className === "sort-audience") {
+            this.sortHandler("audience");
+
+        } else if (this.allStudents && ev.target.className === "sort-profile") {
+            this.sortHandler("profile");
+
+        } else if (this.allStudents && ev.target.className === "sort-bel") {
+            this.sortHandler("needBel");
+        }
+    }
+
+    sortHandler(sortKey) {
+        this.sortFlag = !this.sortFlag;
+            this.sortFlag ? this.compareResult = 1 : this.compareResult = -1;
+            this.sortKey = sortKey;
+            this.allStudents.sort(this.compareCb)
+            this.renderAllStudents();
+    }
+
+    compareCb = (firstEl, secondEl) => {
+        if (firstEl[this.sortKey] < secondEl[this.sortKey]) {
+            return -1 * this.compareResult;
+        } else if(firstEl[this.sortKey] > secondEl[this.sortKey]) {
+            return this.compareResult;
+        } else {
+            return 0;
         }
     }
 }

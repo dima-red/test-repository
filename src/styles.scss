@@ -72,12 +72,15 @@
       border-collapse: collapse;
 
       thead {
-
         
         th {
           padding: 10px;
           text-align: left;
           font-size: 15px;
+        }
+
+        .sort-name, .sort-audience, .sort-profile, .sort-bel {
+          cursor: pointer;
         }
       }
 
