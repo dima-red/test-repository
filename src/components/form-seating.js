@@ -19,6 +19,7 @@ export class FormSeating {
     tableHeaderHeight = 37;
     profiles = [];
     allStudents = null;
+    filteredStudents = null;
     sortNameTh = null;
     sortAudienceTh = null;
     sortProfileTh = null;
@@ -44,6 +45,7 @@ export class FormSeating {
         this.sortAudienceTh = this.appWrapper.querySelector(".sort-audience");
         this.sortProfileTh = this.appWrapper.querySelector(".sort-profile");
         this.sortBelTh = this.appWrapper.querySelector(".sort-bel");
+        this.inputEl = this.appWrapper.querySelector(".search");
     }
 
     addEventListeners() {
@@ -54,6 +56,7 @@ export class FormSeating {
         document.addEventListener("change", this.onProfileSelected.bind(this));
         document.addEventListener("change", this.onAudienceSelected.bind(this));
         document.addEventListener("click", this.onSortClicked.bind(this));
+        document.addEventListener("keydown", this.onInputChanged.bind(this));
     }
 
     getBuildingsSelectData() {
@@ -88,6 +91,13 @@ export class FormSeating {
     }
 
     renderProfilesSelect() {
+        this.clearTableBody(this.profileSelectEl);
+        const defaultOption = document.createElement("option");
+        const selectFragment = new DocumentFragment();
+        
+        defaultOption.innerHTML = "Выберите профиль";
+        selectFragment.append(defaultOption);
+
         for(const faculty of this.buildings) {
             if (faculty.name === this.facultyName) {
                 faculty.places.forEach(place => {
@@ -95,20 +105,31 @@ export class FormSeating {
 
                     profileOption.label = place.code;
                     profileOption.append(place.code);
-                    this.profileSelectEl.append(profileOption);
+                    selectFragment.append(profileOption);
                 });
             }
         }
+
+        this.profileSelectEl.append(selectFragment);
     }
 
     renderAudiencesSelect() {
+        this.clearTableBody(this.audienceSelectEl);
+        const defaultOption = document.createElement("option");
+        const selectFragment = new DocumentFragment();
+        
+        defaultOption.innerHTML = "Выберите аудиторию";
+        selectFragment.append(defaultOption);
+
         for (const audience of this.facultyAudiences) {
             const audienceOption = document.createElement("option");
 
             audienceOption.label = audience.name;
             audienceOption.append(audience.name);
-            this.audienceSelectEl.append(audienceOption);
+            selectFragment.append(audienceOption);
         }
+
+        this.audienceSelectEl.append(selectFragment);
     }
 
     onBuildingSelected(ev) {
@@ -118,6 +139,7 @@ export class FormSeating {
             this.dataServiceInstance.getStudentsList(value)
                 .then(responseJson => {
                     // console.info(responseJson);
+                    this.allStudents = responseJson;
                     this.renderAllStudents(responseJson);
                 })
                 .catch(err => console.error(err));
@@ -134,20 +156,21 @@ export class FormSeating {
 
     onProfileSelected(ev) {
         if (ev.target.className === "profile") {
-            // this.filteredStdents = this.allStudents.map(student => student.profile = ev.target.value);
-            // this.renderAllStudents();
+            const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === ev.target.value);
+            this.renderAllStudents(filteredStudents);
         }
     }
 
     onAudienceSelected(ev) {
         if (ev.target.className === "audience") {
-            console.log(ev);
+            const filteredStudents = this.allStudents.filter(student => this.dictionary.audiences[student.audience] === ev.target.value);
+            this.renderAllStudents(filteredStudents);
         }
     }
 
     renderAllStudents(allStudents) {
         if (allStudents) {
-            this.allStudents = allStudents;
+            this.filteredStudents = allStudents;
         }
         
         const tBodyEl = this.appWrapper.querySelector(".all-students tbody");
@@ -155,7 +178,7 @@ export class FormSeating {
 
         this.clearTableBody(tBodyEl);
 
-        for (const student of this.allStudents) {
+        for (const student of this.filteredStudents) {
             const tr = document.createElement("tr");
             const tdNumber = document.createElement("td");
             const tdName = document.createElement("td");
@@ -163,7 +186,7 @@ export class FormSeating {
             const tdProfile = document.createElement("td");
             const tdNeedBel = document.createElement("td");
 
-            tdNumber.append(this.allStudents.indexOf(student) + 1);
+            tdNumber.append(this.filteredStudents.indexOf(student) + 1);
             tdName.append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
             tdRoom.append(this.dictionary.audiences[student.audience]);
             tdProfile.append(this.dictionary.profiles[student.profile]);
@@ -283,19 +306,19 @@ export class FormSeating {
             if (mouseY <= this.tableY && mouseY > this.toTheTop && mouseX > this.allStudentsTableWidth) {
                 const numberOfDroppedRow = parseInt((mouseY - this.toTheTop) / this.rowHeight) + 1;                
                 const targetAudience = this.facultyAudiences[numberOfDroppedRow - 1];
-                const previousAllStudentsAudience = this.allStudents[this.numberOfDraggedRow - 1].audience;
+                const previousAllStudentsAudience = this.filteredStudents[this.numberOfDraggedRow - 1].audience;
 
-                if (this.checkBel(targetAudience, this.allStudents[this.numberOfDraggedRow - 1])) {
+                if (this.checkBel(targetAudience, this.filteredStudents[this.numberOfDraggedRow - 1])) {
                     alert("Попытка посадить белоруса к не белорусам!");
 
                     this.removeFakeRow(theLastDraggedRow);
 
-                } else if (targetAudience._id !== this.allStudents[this.numberOfDraggedRow - 1].audience) {
+                } else if (targetAudience._id !== this.filteredStudents[this.numberOfDraggedRow - 1].audience) {
                     const previousSeatedStudentsAudience = this.facultyAudiences.filter(el => el._id === previousAllStudentsAudience);
 
                     previousSeatedStudentsAudience[0].count --;
                     targetAudience.count ++;
-                    this.allStudents[this.numberOfDraggedRow - 1].audience = targetAudience._id
+                    this.filteredStudents[this.numberOfDraggedRow - 1].audience = targetAudience._id
                     this.renderSeatedStudents();
                     this.renderAllStudents();
                 }
@@ -323,22 +346,20 @@ export class FormSeating {
     }
     
     clearTableBody(body) {
-        if (body.children.length) {
-            body.innerHTML = "";
-        }
+        body.innerHTML = "";
     }
 
     onSortClicked(ev) {
-        if (this.allStudents && ev.target.className === "sort-name") {
+        if (this.filteredStudents && ev.target.className === "sort-name") {
             this.sortHandler("firstName");
 
-        } else if (this.allStudents && ev.target.className === "sort-audience") {
+        } else if (this.filteredStudents && ev.target.className === "sort-audience") {
             this.sortHandler("audience");
 
-        } else if (this.allStudents && ev.target.className === "sort-profile") {
+        } else if (this.filteredStudents && ev.target.className === "sort-profile") {
             this.sortHandler("profile");
 
-        } else if (this.allStudents && ev.target.className === "sort-bel") {
+        } else if (this.filteredStudents && ev.target.className === "sort-bel") {
             this.sortHandler("needBel");
         }
     }
@@ -347,7 +368,7 @@ export class FormSeating {
         this.sortFlag = !this.sortFlag;
             this.sortFlag ? this.compareResult = 1 : this.compareResult = -1;
             this.sortKey = sortKey;
-            this.allStudents.sort(this.compareCb)
+            this.filteredStudents.sort(this.compareCb);
             this.renderAllStudents();
     }
 
@@ -358,6 +379,17 @@ export class FormSeating {
             return this.compareResult;
         } else {
             return 0;
+        }
+    }
+
+    onInputChanged(ev) {
+        if (this.allStudents && ev.target.className === "search") {
+            const inputValue = ev.target.value.toLowerCase();
+            // console.log(this.filteredStudents);
+            console.log(inputValue);
+            // console.log(ev);
+            const detectedStudents = this.allStudents.filter(student => student.firstName.toLowerCase().includes(inputValue));
+            this.renderAllStudents(detectedStudents);
         }
     }
 }
