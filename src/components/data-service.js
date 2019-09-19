@@ -9,7 +9,16 @@ export class DataService {
 
     getBuildings() {
         return this.getData(process.env.BUILDINGS_URL)
-            // then()// arr to obj, keys are aliaces
+                .then(buildngsJSON => this.arrayToObject(buildngsJSON))
+                .catch(err => console.error(err));
+    }
+
+    arrayToObject(arr) {
+        const obj = {};
+
+        arr.forEach(item => obj[item.alias] = item);
+
+        return obj;
     }
 
     getStudentsList(value) {

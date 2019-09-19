@@ -12,7 +12,8 @@ export class FormSeating {
     fakeRow = null;
     allStudentsTableWidth = null;
     facultyAudiences = [];
-    facultyName = null;
+    currentFaculty = null;
+    // facultyName = null;
     toTheTop = 202;
     tableHeight = null;
     tableY = null;
@@ -61,21 +62,26 @@ export class FormSeating {
 
     getBuildingsSelectData() {
         this.dataServiceInstance.getBuildings()
-            .then(buildingsJson => {
-                this.buildings = buildingsJson
+            .then(buildingsObj => {
+                this.buildings = buildingsObj
                 console.info(this.buildings);
                 this.renderBuildingsSelect();
-            })
-            .catch(err => console.error(err));
+            });
+        //     .then(buildingsJson => {
+        //         this.buildings = buildingsJson
+        //         console.info(this.buildings);
+        //         this.renderBuildingsSelect();
+        //     })
+        //     .catch(err => console.error(err));
     }
 
     renderBuildingsSelect() {
-        for(const buildingData of this.buildings) {
+        for(const buildingData in this.buildings) {
             const building = document.createElement("option");
 
-            building.label = buildingData.name;
-            building.value = buildingData.alias;
-            building.append(buildingData.name);
+            building.label = this.buildings[buildingData].name;
+            building.value = this.buildings[buildingData].alias;    //TODO: maybe remove?
+            building.append(this.buildings[buildingData].name);
             this.buildingSelectEl.append(building);
         }
     }
@@ -90,52 +96,52 @@ export class FormSeating {
             .catch(err => console.error(err));   
     }
 
-    renderProfilesSelect() { //TODO:join
-        this.clearTableBody(this.profileSelectEl); // remove arguments
+    renderSelects(domEl, placeholderTxt, items) {
+        this.clearTableBody(domEl);
         const defaultOption = document.createElement("option");
         const selectFragment = new DocumentFragment();
-        
-        defaultOption.innerHTML = "Выберите профиль";
+
+        defaultOption.innerHTML = placeholderTxt;
         selectFragment.append(defaultOption);
 
-        for(const faculty of this.buildings) { //TODO: 
-            if (faculty.name === this.facultyName) {
-                faculty.places.forEach(place => {
-                    const profileOption = document.createElement("option");
+        console.log(items);
 
-                    profileOption.label = place.code;
-                    profileOption.append(place.code);
-                    selectFragment.append(profileOption);
-                });
+        if (Array.isArray(items)) {
+            for (const audience of this.facultyAudiences) {
+                const audienceOption = document.createElement("option");
+    
+                audienceOption.label = audience.name;
+                audienceOption.append(audience.name);
+                selectFragment.append(audienceOption);
             }
+    
+            this.audienceSelectEl.append(selectFragment);
+        } else {
+            items.places.forEach(place => {
+                const selectOption = document.createElement("option");
+    
+                selectOption.label = place.code;
+                selectOption.append(place.code);
+                selectFragment.append(selectOption);
+            });
+    
+            domEl.append(selectFragment);
         }
+    }
 
-        this.profileSelectEl.append(selectFragment);
+    renderProfilesSelect() {
+        this.renderSelects(this.profileSelectEl, "Выберите профиль", this.currentFaculty);
     }
 
     renderAudiencesSelect() {
-        this.clearTableBody(this.audienceSelectEl); // remove arguments
-        const defaultOption = document.createElement("option");
-        const selectFragment = new DocumentFragment();
-        
-        defaultOption.innerHTML = "Выберите аудиторию";
-        selectFragment.append(defaultOption);
-
-        for (const audience of this.facultyAudiences) {
-            const audienceOption = document.createElement("option");
-
-            audienceOption.label = audience.name;
-            audienceOption.append(audience.name);
-            selectFragment.append(audienceOption);
-        }
-
-        this.audienceSelectEl.append(selectFragment);
+        this.renderSelects(this.audienceSelectEl, "Выберите аудиторию", this.facultyAudiences);
     }
 
     onBuildingSelected(ev) {
         if (ev.target.className === "building") {
             const value = ev.target.selectedOptions[0].value;
-            this.facultyName = ev.target.selectedOptions[0].label; // this.currentfaculty 214 102
+            this.currentFaculty = this.buildings[value];
+            // this.facultyName = ev.target.selectedOptions[0].label;
             this.dataServiceInstance.getStudentsList(value)
                 .then(responseJson => {
                     // console.info(responseJson);
@@ -211,11 +217,7 @@ export class FormSeating {
         this.clearTableBody(seatedSudentsTBody);
         this.facultyAudiences = [];
 
-        for(const faculty of this.buildings) {
-            if (faculty.name === this.facultyName) {
-                faculty.places.forEach(place => this.facultyAudiences.push(...place.audience));
-            }
-        }
+        this.currentFaculty.places.forEach(place => this.facultyAudiences.push(...place.audience));
 
         for (const audience of this.facultyAudiences) {
             const tr = document.createElement("tr");
@@ -319,16 +321,12 @@ export class FormSeating {
                     const filteredStudents = this.filteredStudents;
                     this.renderSeatedStudents();
                     this.renderAllStudents(filteredStudents);
-
-                    console.log(filteredStudents);
                 }
 
                 this.fakeRow = null;
             }
 
             this.removeFakeRow(theLastDraggedRow);
-
-            console.log(this.filteredStudents);
         }
     }
 
