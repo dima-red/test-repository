@@ -56,7 +56,7 @@ export class FormSeating {
         document.addEventListener("change", this.onProfileSelected.bind(this));
         document.addEventListener("change", this.onAudienceSelected.bind(this));
         document.addEventListener("click", this.onSortClicked.bind(this));
-        document.addEventListener("keydown", this.onInputChanged.bind(this));
+        document.addEventListener("keyup", this.onInputChanged.bind(this));
     }
 
     getBuildingsSelectData() {
@@ -90,15 +90,15 @@ export class FormSeating {
             .catch(err => console.error(err));   
     }
 
-    renderProfilesSelect() {
-        this.clearTableBody(this.profileSelectEl);
+    renderProfilesSelect() { //TODO:join
+        this.clearTableBody(this.profileSelectEl); // remove arguments
         const defaultOption = document.createElement("option");
         const selectFragment = new DocumentFragment();
         
         defaultOption.innerHTML = "Выберите профиль";
         selectFragment.append(defaultOption);
 
-        for(const faculty of this.buildings) {
+        for(const faculty of this.buildings) { //TODO: 
             if (faculty.name === this.facultyName) {
                 faculty.places.forEach(place => {
                     const profileOption = document.createElement("option");
@@ -114,7 +114,7 @@ export class FormSeating {
     }
 
     renderAudiencesSelect() {
-        this.clearTableBody(this.audienceSelectEl);
+        this.clearTableBody(this.audienceSelectEl); // remove arguments
         const defaultOption = document.createElement("option");
         const selectFragment = new DocumentFragment();
         
@@ -135,17 +135,18 @@ export class FormSeating {
     onBuildingSelected(ev) {
         if (ev.target.className === "building") {
             const value = ev.target.selectedOptions[0].value;
-            this.facultyName = ev.target.selectedOptions[0].label;
+            this.facultyName = ev.target.selectedOptions[0].label; // this.currentfaculty 214 102
             this.dataServiceInstance.getStudentsList(value)
                 .then(responseJson => {
                     // console.info(responseJson);
                     this.allStudents = responseJson;
+                    this.filteredStudents = responseJson;
                     this.renderAllStudents(responseJson);
                 })
                 .catch(err => console.error(err));
             
             this.renderSeatedStudents();
-            this.tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight - this.tableHeaderHeight;;
+            this.tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight - this.tableHeaderHeight; // TODO: by id
             this.amountOfRows = this.facultyAudiences.length;
             this.rowHeight = this.tableHeight / this.amountOfRows;
             this.tableY = this.tableHeight + this.toTheTop;
@@ -154,7 +155,7 @@ export class FormSeating {
         }
     }
 
-    onProfileSelected(ev) {
+    onProfileSelected(ev) { // TODO: join this fn and the next one with if construction inside
         if (ev.target.className === "profile") {
             const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === ev.target.value);
             this.renderAllStudents(filteredStudents);
@@ -168,17 +169,13 @@ export class FormSeating {
         }
     }
 
-    renderAllStudents(allStudents) {
-        if (allStudents) {
-            this.filteredStudents = allStudents;
-        }
-        
-        const tBodyEl = this.appWrapper.querySelector(".all-students tbody");
+    renderAllStudents(studentsArray) {        
+        const tBodyEl = this.appWrapper.querySelector(".all-students tbody"); //TODO: refactor with id
         const allStudentsFragment = new DocumentFragment();
 
         this.clearTableBody(tBodyEl);
 
-        for (const student of this.filteredStudents) {
+        for (const student of studentsArray) { //TODO: empty tr
             const tr = document.createElement("tr");
             const tdNumber = document.createElement("td");
             const tdName = document.createElement("td");
@@ -186,7 +183,7 @@ export class FormSeating {
             const tdProfile = document.createElement("td");
             const tdNeedBel = document.createElement("td");
 
-            tdNumber.append(this.filteredStudents.indexOf(student) + 1);
+            tdNumber.append(studentsArray.indexOf(student) + 1);
             tdName.append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
             tdRoom.append(this.dictionary.audiences[student.audience]);
             tdProfile.append(this.dictionary.profiles[student.profile]);
@@ -318,15 +315,20 @@ export class FormSeating {
 
                     previousSeatedStudentsAudience[0].count --;
                     targetAudience.count ++;
-                    this.filteredStudents[this.numberOfDraggedRow - 1].audience = targetAudience._id
+                    this.filteredStudents[this.numberOfDraggedRow - 1].audience = targetAudience._id;
+                    const filteredStudents = this.filteredStudents;
                     this.renderSeatedStudents();
-                    this.renderAllStudents();
+                    this.renderAllStudents(filteredStudents);
+
+                    console.log(filteredStudents);
                 }
 
                 this.fakeRow = null;
             }
 
             this.removeFakeRow(theLastDraggedRow);
+
+            console.log(this.filteredStudents);
         }
     }
 
@@ -368,8 +370,8 @@ export class FormSeating {
         this.sortFlag = !this.sortFlag;
             this.sortFlag ? this.compareResult = 1 : this.compareResult = -1;
             this.sortKey = sortKey;
-            this.filteredStudents.sort(this.compareCb);
-            this.renderAllStudents();
+            const filteredStudents = this.filteredStudents.sort(this.compareCb);
+            this.renderAllStudents(filteredStudents);
     }
 
     compareCb = (firstEl, secondEl) => {
@@ -385,9 +387,7 @@ export class FormSeating {
     onInputChanged(ev) {
         if (this.allStudents && ev.target.className === "search") {
             const inputValue = ev.target.value.toLowerCase();
-            // console.log(this.filteredStudents);
-            console.log(inputValue);
-            // console.log(ev);
+            console.info(inputValue);
             const detectedStudents = this.allStudents.filter(student => student.firstName.toLowerCase().includes(inputValue));
             this.renderAllStudents(detectedStudents);
         }

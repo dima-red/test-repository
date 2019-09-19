@@ -8,7 +8,8 @@ export class DataService {
     }
 
     getBuildings() {
-        return this.getData(process.env.BUILDINGS_URL);
+        return this.getData(process.env.BUILDINGS_URL)
+            // then()// arr to obj, keys are aliaces
     }
 
     getStudentsList(value) {
