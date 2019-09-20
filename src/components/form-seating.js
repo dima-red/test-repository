@@ -13,7 +13,6 @@ export class FormSeating {
     allStudentsTableWidth = null;
     facultyAudiences = [];
     currentFaculty = null;
-    // facultyName = null;
     toTheTop = 202;
     tableHeight = null;
     tableY = null;
@@ -28,6 +27,9 @@ export class FormSeating {
     compareResult = 1;
     sortKey = null;
     sortFlag = false;
+    inputEl = null;
+    allStudentsBody = null;
+    allStudentsBodyRow = null;
 
     constructor() {
         this.getDomElements();
@@ -47,6 +49,25 @@ export class FormSeating {
         this.sortProfileTh = this.appWrapper.querySelector(".sort-profile");
         this.sortBelTh = this.appWrapper.querySelector(".sort-bel");
         this.inputEl = this.appWrapper.querySelector(".search");
+        this.allStudentsBody = this.appWrapper.querySelector(".all-students #all-body");
+        this.allStudentsBodyRow = this.appWrapper.querySelector(".all-students #student");
+        this.allStudentsBodyRow.remove();
+
+
+
+
+
+        // const e1 = this.allStudentsBodyRow;
+        // const e2 = this.allStudentsBodyRow;
+        // e2.children[0].innerHTML = "LoooooL";
+
+        // console.log(e1);
+        // console.log(e2);
+        // console.log(e1 === e2);
+
+        // const e3 = document.createElement("tr");
+        // const e4 = document.createElement("tr");
+        // console.log(e3 === e4);
     }
 
     addEventListeners() {
@@ -67,12 +88,6 @@ export class FormSeating {
                 console.info(this.buildings);
                 this.renderBuildingsSelect();
             });
-        //     .then(buildingsJson => {
-        //         this.buildings = buildingsJson
-        //         console.info(this.buildings);
-        //         this.renderBuildingsSelect();
-        //     })
-        //     .catch(err => console.error(err));
     }
 
     renderBuildingsSelect() {
@@ -96,6 +111,18 @@ export class FormSeating {
             .catch(err => console.error(err));   
     }
 
+    renderSelectsHelper(domEl, selectFragment, items, target) {
+        for (const item of items) {
+            const selectOption = document.createElement("option");
+
+            selectOption.label = item[target];
+            selectOption.append(item[target]);
+            selectFragment.append(selectOption);
+        }
+
+        domEl.append(selectFragment);
+    }
+
     renderSelects(domEl, placeholderTxt, items) {
         this.clearTableBody(domEl);
         const defaultOption = document.createElement("option");
@@ -104,28 +131,10 @@ export class FormSeating {
         defaultOption.innerHTML = placeholderTxt;
         selectFragment.append(defaultOption);
 
-        console.log(items);
-
         if (Array.isArray(items)) {
-            for (const audience of this.facultyAudiences) {
-                const audienceOption = document.createElement("option");
-    
-                audienceOption.label = audience.name;
-                audienceOption.append(audience.name);
-                selectFragment.append(audienceOption);
-            }
-    
-            this.audienceSelectEl.append(selectFragment);
+            this.renderSelectsHelper(domEl, selectFragment, items, "name");
         } else {
-            items.places.forEach(place => {
-                const selectOption = document.createElement("option");
-    
-                selectOption.label = place.code;
-                selectOption.append(place.code);
-                selectFragment.append(selectOption);
-            });
-    
-            domEl.append(selectFragment);
+            this.renderSelectsHelper(domEl, selectFragment, items.places, "code");
         }
     }
 
@@ -141,7 +150,6 @@ export class FormSeating {
         if (ev.target.className === "building") {
             const value = ev.target.selectedOptions[0].value;
             this.currentFaculty = this.buildings[value];
-            // this.facultyName = ev.target.selectedOptions[0].label;
             this.dataServiceInstance.getStudentsList(value)
                 .then(responseJson => {
                     // console.info(responseJson);
@@ -152,7 +160,7 @@ export class FormSeating {
                 .catch(err => console.error(err));
             
             this.renderSeatedStudents();
-            this.tableHeight = document.querySelectorAll(".seated-students table")[0].clientHeight - this.tableHeaderHeight; // TODO: by id
+            this.tableHeight = document.getElementById("seated").clientHeight - this.tableHeaderHeight;
             this.amountOfRows = this.facultyAudiences.length;
             this.rowHeight = this.tableHeight / this.amountOfRows;
             this.tableY = this.tableHeight + this.toTheTop;
@@ -161,25 +169,82 @@ export class FormSeating {
         }
     }
 
-    onProfileSelected(ev) { // TODO: join this fn and the next one with if construction inside
-        if (ev.target.className === "profile") {
-            const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === ev.target.value);
+    onSelectChosen(targetClassName, targetValue) {
+        if (targetClassName === "profile") {
+            const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === targetValue);
+
+            this.renderAllStudents(filteredStudents);
+
+        } else if (targetClassName === "audience") {
+            const filteredStudents = this.allStudents.filter(student => this.dictionary.audiences[student.audience] === targetValue);
+
             this.renderAllStudents(filteredStudents);
         }
+    }
+
+    onProfileSelected(ev) {
+        if (ev.target.className === "profile") {
+            const targetClassName = ev.target.className;
+            const targetValue = ev.target.value;
+
+            this.onSelectChosen(targetClassName, targetValue);
+        }
+        
+        // if (ev.target.className === "profile") {
+        //     const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === ev.target.value);
+        //     this.renderAllStudents(filteredStudents);
+        // }
     }
 
     onAudienceSelected(ev) {
         if (ev.target.className === "audience") {
-            const filteredStudents = this.allStudents.filter(student => this.dictionary.audiences[student.audience] === ev.target.value);
-            this.renderAllStudents(filteredStudents);
+            const targetClassName = ev.target.className;
+            const targetValue = ev.target.value;
+
+            this.onSelectChosen(targetClassName, targetValue);
         }
+
+        // if (ev.target.className === "audience") {
+        //     const filteredStudents = this.allStudents.filter(student => this.dictionary.audiences[student.audience] === ev.target.value);
+        //     this.renderAllStudents(filteredStudents);
+        // }
     }
 
-    renderAllStudents(studentsArray) {        
-        const tBodyEl = this.appWrapper.querySelector(".all-students tbody"); //TODO: refactor with id
+    renderAllStudents(studentsArray) {
         const allStudentsFragment = new DocumentFragment();
 
-        this.clearTableBody(tBodyEl);
+        this.clearTableBody(this.allStudentsBody);
+
+
+
+        // for (const student of studentsArray) {
+
+        //     const allStudentsRowTemplate = this.allStudentsBodyRow;
+
+        //     allStudentsRowTemplate.innerHTML = studentsArray.indexOf(student) + 1;
+
+        //     // allStudentsRowTemplate.children[0].append(studentsArray.indexOf(student) + 1);
+        //     // allStudentsRowTemplate.children[1].append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
+        //     // allStudentsRowTemplate.children[2].append(this.dictionary.audiences[student.audience]);
+        //     // allStudentsRowTemplate.children[3].append(this.dictionary.profiles[student.profile]);
+
+        //     // if (student.needBel) {
+        //     //     const div = document.createElement("div");
+        //     //     div.classList.add("flag");
+        //     //     allStudentsRowTemplate.children[4].append(div);
+        //     // }
+            
+           
+        //     allStudentsFragment.append(allStudentsRowTemplate);
+
+        //     console.log(student);
+        //     // console.log(allStudentsRowTemplate);
+        // }
+
+
+
+
+
 
         for (const student of studentsArray) { //TODO: empty tr
             const tr = document.createElement("tr");
@@ -202,12 +267,12 @@ export class FormSeating {
             
             tr.id = "student";
             tr.classList.add("row-hower");
-            tr.classList.add("all-students");
+            tr.classList.add("border");
             tr.append(tdNumber, tdName, tdRoom, tdProfile, tdNeedBel);
             allStudentsFragment.append(tr);
         }
 
-        tBodyEl.append(allStudentsFragment);
+        this.allStudentsBody.append(allStudentsFragment);
     }
 
     renderSeatedStudents() {
