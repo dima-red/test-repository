@@ -31,6 +31,8 @@ export class FormSeating {
     allStudentsBody = null;
     allStudentsBodyRow = null;
 
+    
+
     constructor() {
         this.getDomElements();
         this.dataServiceInstance = new DataService();
@@ -52,22 +54,6 @@ export class FormSeating {
         this.allStudentsBody = this.appWrapper.querySelector(".all-students #all-body");
         this.allStudentsBodyRow = this.appWrapper.querySelector(".all-students #student");
         this.allStudentsBodyRow.remove();
-
-
-
-
-
-        // const e1 = this.allStudentsBodyRow;
-        // const e2 = this.allStudentsBodyRow;
-        // e2.children[0].innerHTML = "LoooooL";
-
-        // console.log(e1);
-        // console.log(e2);
-        // console.log(e1 === e2);
-
-        // const e3 = document.createElement("tr");
-        // const e4 = document.createElement("tr");
-        // console.log(e3 === e4);
     }
 
     addEventListeners() {
@@ -85,7 +71,7 @@ export class FormSeating {
         this.dataServiceInstance.getBuildings()
             .then(buildingsObj => {
                 this.buildings = buildingsObj
-                console.info(this.buildings);
+                // console.info(this.buildings);
                 this.renderBuildingsSelect();
             });
     }
@@ -105,7 +91,7 @@ export class FormSeating {
         this.dataServiceInstance.getDictionary()
             .then(dictionaryJson => {
                 this.dictionary = dictionaryJson
-                console.info(this.dictionary);
+                // console.info(this.dictionary);
                 
             })
             .catch(err => console.error(err));   
@@ -154,7 +140,6 @@ export class FormSeating {
                 .then(responseJson => {
                     // console.info(responseJson);
                     this.allStudents = responseJson;
-                    this.filteredStudents = responseJson;
                     this.renderAllStudents(responseJson);
                 })
                 .catch(err => console.error(err));
@@ -169,27 +154,35 @@ export class FormSeating {
         }
     }
 
-    onSelectChosen(targetClassName, targetValue) {
-        if (targetClassName === "profile") {
-            const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === targetValue);
+    selectMethods = {
+        "selectProfile": (student, targetValue) => {
+            return function () {
+                return this.dictionary.places[student.place].code === targetValue;
+            }.apply(this);
+        }, 
 
-            this.renderAllStudents(filteredStudents);
-
-        } else if (targetClassName === "audience") {
-            const filteredStudents = this.allStudents.filter(student => this.dictionary.audiences[student.audience] === targetValue);
-
-            this.renderAllStudents(filteredStudents);
+        "selectAudience": (student, targetValue) => {
+            return function () {
+                return this.dictionary.audiences[student.audience] === targetValue;
+            }.apply(this)
         }
     }
 
-    onProfileSelected(ev) {
-        if (ev.target.className === "profile") {
-            const targetClassName = ev.target.className;
-            const targetValue = ev.target.value;
+    onSelectChosen(target, method) {
+        const targetValue = target.value;
+        const filteredStudents = this.allStudents.filter(student => this.selectMethods[method](student, targetValue));
 
-            this.onSelectChosen(targetClassName, targetValue);
+        this.renderAllStudents(filteredStudents);
+    }
+
+    onProfileSelected(ev) {
+        const target = ev.target;
+
+        if (target.className === "profile") {
+
+            this.onSelectChosen(target, "selectProfile");
         }
-        
+
         // if (ev.target.className === "profile") {
         //     const filteredStudents = this.allStudents.filter(student => this.dictionary.places[student.place].code === ev.target.value);
         //     this.renderAllStudents(filteredStudents);
@@ -197,11 +190,11 @@ export class FormSeating {
     }
 
     onAudienceSelected(ev) {
-        if (ev.target.className === "audience") {
-            const targetClassName = ev.target.className;
-            const targetValue = ev.target.value;
+        const target = ev.target;
 
-            this.onSelectChosen(targetClassName, targetValue);
+        if (target.className === "audience") {
+
+            this.onSelectChosen(target, "selectAudience");
         }
 
         // if (ev.target.className === "audience") {
@@ -219,26 +212,25 @@ export class FormSeating {
 
         // for (const student of studentsArray) {
 
-        //     const allStudentsRowTemplate = this.allStudentsBodyRow;
+        //     const allStudentsRowTemplate = this.allStudentsBodyRow.cloneNode();
 
         //     allStudentsRowTemplate.innerHTML = studentsArray.indexOf(student) + 1;
 
-        //     // allStudentsRowTemplate.children[0].append(studentsArray.indexOf(student) + 1);
-        //     // allStudentsRowTemplate.children[1].append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
-        //     // allStudentsRowTemplate.children[2].append(this.dictionary.audiences[student.audience]);
-        //     // allStudentsRowTemplate.children[3].append(this.dictionary.profiles[student.profile]);
+        //     allStudentsRowTemplate.children[0].append(studentsArray.indexOf(student) + 1);
+        //     allStudentsRowTemplate.children[1].append(student.firstName, ` ${student.lastName}`, ` ${student.parentName}`);
+        //     allStudentsRowTemplate.children[2].append(this.dictionary.audiences[student.audience]);
+        //     allStudentsRowTemplate.children[3].append(this.dictionary.profiles[student.profile]);
 
-        //     // if (student.needBel) {
-        //     //     const div = document.createElement("div");
-        //     //     div.classList.add("flag");
-        //     //     allStudentsRowTemplate.children[4].append(div);
-        //     // }
+        //     if (student.needBel) {
+        //         const div = document.createElement("div");
+        //         div.classList.add("flag");
+        //         allStudentsRowTemplate.children[4].append(div);
+        //     }
             
            
         //     allStudentsFragment.append(allStudentsRowTemplate);
 
         //     console.log(student);
-        //     // console.log(allStudentsRowTemplate);
         // }
 
 
@@ -370,20 +362,20 @@ export class FormSeating {
             if (mouseY <= this.tableY && mouseY > this.toTheTop && mouseX > this.allStudentsTableWidth) {
                 const numberOfDroppedRow = parseInt((mouseY - this.toTheTop) / this.rowHeight) + 1;                
                 const targetAudience = this.facultyAudiences[numberOfDroppedRow - 1];
-                const previousAllStudentsAudience = this.filteredStudents[this.numberOfDraggedRow - 1].audience;
+                const previousAllStudentsAudience = this.allStudents[this.numberOfDraggedRow - 1].audience;
 
-                if (this.checkBel(targetAudience, this.filteredStudents[this.numberOfDraggedRow - 1])) {
+                if (this.checkBel(targetAudience, this.allStudents[this.numberOfDraggedRow - 1])) {
                     alert("Попытка посадить белоруса к не белорусам!");
 
                     this.removeFakeRow(theLastDraggedRow);
 
-                } else if (targetAudience._id !== this.filteredStudents[this.numberOfDraggedRow - 1].audience) {
+                } else if (targetAudience._id !== this.allStudents[this.numberOfDraggedRow - 1].audience) {
                     const previousSeatedStudentsAudience = this.facultyAudiences.filter(el => el._id === previousAllStudentsAudience);
 
                     previousSeatedStudentsAudience[0].count --;
                     targetAudience.count ++;
-                    this.filteredStudents[this.numberOfDraggedRow - 1].audience = targetAudience._id;
-                    const filteredStudents = this.filteredStudents;
+                    this.allStudents[this.numberOfDraggedRow - 1].audience = targetAudience._id;
+                    const filteredStudents = this.allStudents;
                     this.renderSeatedStudents();
                     this.renderAllStudents(filteredStudents);
                 }
@@ -415,16 +407,16 @@ export class FormSeating {
     }
 
     onSortClicked(ev) {
-        if (this.filteredStudents && ev.target.className === "sort-name") {
+        if (this.allStudents && ev.target.className === "sort-name") {
             this.sortHandler("firstName");
 
-        } else if (this.filteredStudents && ev.target.className === "sort-audience") {
+        } else if (this.allStudents && ev.target.className === "sort-audience") {
             this.sortHandler("audience");
 
-        } else if (this.filteredStudents && ev.target.className === "sort-profile") {
+        } else if (this.allStudents && ev.target.className === "sort-profile") {
             this.sortHandler("profile");
 
-        } else if (this.filteredStudents && ev.target.className === "sort-bel") {
+        } else if (this.allStudents && ev.target.className === "sort-bel") {
             this.sortHandler("needBel");
         }
     }
@@ -433,7 +425,7 @@ export class FormSeating {
         this.sortFlag = !this.sortFlag;
             this.sortFlag ? this.compareResult = 1 : this.compareResult = -1;
             this.sortKey = sortKey;
-            const filteredStudents = this.filteredStudents.sort(this.compareCb);
+            const filteredStudents = this.allStudents.sort(this.compareCb);
             this.renderAllStudents(filteredStudents);
     }
 
@@ -450,7 +442,7 @@ export class FormSeating {
     onInputChanged(ev) {
         if (this.allStudents && ev.target.className === "search") {
             const inputValue = ev.target.value.toLowerCase();
-            console.info(inputValue);
+            // console.info(inputValue);
             const detectedStudents = this.allStudents.filter(student => student.firstName.toLowerCase().includes(inputValue));
             this.renderAllStudents(detectedStudents);
         }
