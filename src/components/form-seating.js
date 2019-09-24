@@ -35,17 +35,10 @@ export class FormSeating {
     }
     
     sortingVars = {
-        sortNameTh: null,
-        sortAudienceTh: null,
-        sortProfileTh: null,
-        sortBelTh: null,
         compareResult: 1,
         sortKey: null,
         sortFlag: false,
     }
-    
-
-    
 
     constructor() {
         this.getDomElements();
@@ -60,10 +53,6 @@ export class FormSeating {
         this.domElements.buildingSelectEl = this.domElements.appWrapper.querySelector(".building");
         this.domElements.profileSelectEl = this.domElements.appWrapper.querySelector(".profile");
         this.domElements.audienceSelectEl = this.domElements.appWrapper.querySelector(".audience");
-        this.sortingVars.sortNameTh = this.domElements.appWrapper.querySelector(".sort-name");
-        this.sortingVars.sortAudienceTh = this.domElements.appWrapper.querySelector(".sort-audience");
-        this.sortingVars.sortProfileTh = this.domElements.appWrapper.querySelector(".sort-profile");
-        this.sortingVars.sortBelTh = this.domElements.appWrapper.querySelector(".sort-bel");
         this.domElements.inputEl = this.domElements.appWrapper.querySelector(".search");
         this.domElements.allStudentsBody = this.domElements.appWrapper.querySelector(".all-students #all-body");
         this.domElements.allStudentsBodyRow = this.domElements.appWrapper.querySelector(".all-students #student");
@@ -113,39 +102,31 @@ export class FormSeating {
             .catch(err => console.error(err));   
     }
 
-    renderSelectsHelper(domEl, selectFragment, items, target) {
-        for (const item of items) {
-            const selectOption = document.createElement("option");
-
-            selectOption.label = item[target];
-            selectOption.append(item[target]);
-            selectFragment.append(selectOption);
-        }
-
-        domEl.append(selectFragment);
-    }
-
-    renderSelects(domEl, placeholderTxt, items) {
+    renderSelects(domEl, placeholderTxt, items, fieldName) {
         this.clearTableBody(domEl);
         const defaultOption = document.createElement("option");
         const selectFragment = new DocumentFragment();
 
         defaultOption.innerHTML = placeholderTxt;
         selectFragment.append(defaultOption);
+        
+        for (const item of items) {
+            const selectOption = document.createElement("option");
 
-        if (Array.isArray(items)) {
-            this.renderSelectsHelper(domEl, selectFragment, items, "name");
-        } else {
-            this.renderSelectsHelper(domEl, selectFragment, items.places, "code");
+            selectOption.label = item[fieldName];
+            selectOption.append(item[fieldName]);
+            selectFragment.append(selectOption);
         }
+
+        domEl.append(selectFragment);
     }
 
     renderProfilesSelect() {
-        this.renderSelects(this.domElements.profileSelectEl, "Выберите профиль", this.data.currentFaculty);
+        this.renderSelects(this.domElements.profileSelectEl, "Выберите профиль", this.data.currentFaculty, "name");
     }
 
     renderAudiencesSelect() {
-        this.renderSelects(this.domElements.audienceSelectEl, "Выберите аудиторию", this.data.facultyAudiences);
+        this.renderSelects(this.domElements.audienceSelectEl, "Выберите аудиторию", this.data.facultyAudiences.places, "code");
     }
 
     onBuildingSelected(ev) {
@@ -153,7 +134,7 @@ export class FormSeating {
             const value = ev.target.selectedOptions[0].value;
             this.data.currentFaculty = this.data.buildings[value];
             this.dataServiceInstance.getStudentsList(value)
-                .then(responseJson => {
+                .then(responseJson => { //TODO: name cb
                     // console.info(responseJson);
                     this.data.allStudents = responseJson;
                     this.renderAllStudents(responseJson);
@@ -171,14 +152,14 @@ export class FormSeating {
     }
 
     selectMethods = {
-        "selectProfile": (student, targetValue) => {
-            return function () {
+        "selectProfile": (targetValue) => {
+            return function (student) {
                 return this.data.dictionary.places[student.place].code === targetValue;
             }.apply(this);
         }, 
 
-        "selectAudience": (student, targetValue) => {
-            return function () {
+        "selectAudience": (targetValue) => {
+            return function (student) {
                 return this.data.dictionary.audiences[student.audience] === targetValue;
             }.apply(this)
         }
@@ -186,7 +167,7 @@ export class FormSeating {
 
     onSelectChosen(target, method) {
         const targetValue = target.value;
-        const filteredStudents = this.data.allStudents.filter(student => this.selectMethods[method](student, targetValue));
+        const filteredStudents = this.data.allStudents.filter(this.selectMethods[method](targetValue));
 
         this.renderAllStudents(filteredStudents);
     }
@@ -239,7 +220,7 @@ export class FormSeating {
 
             if (student.needBel) {
                 const tdBel = allStudentsRowTemplate.querySelector(".td-bel");
-                this.createBelFlag(tdBel);
+                this.createBelFlag(tdBel);//TODO: return dom el and then append it
             }
             
             allStudentsFragment.append(allStudentsRowTemplate);
@@ -287,7 +268,7 @@ export class FormSeating {
     }
 
     createBelFlag(parent) {
-        const div = document.createElement("div");
+        const div = document.createElement("div");// return div
         div.classList.add("flag");
         parent.append(div);
     }
@@ -298,7 +279,7 @@ export class FormSeating {
             this.dragAndDropVars.numberOfDraggedRow = parseInt(ev.target.parentNode.children[0].innerHTML);
             this.dragAndDropVars.fakeRow = this.domElements.allStudentsBodyRow.cloneNode(true);
             this.dragAndDropVars.fakeRow.className = "draggableRow";
-            const tdNumber = this.dragAndDropVars.fakeRow.querySelector(".td-number");
+            const tdNumber = this.dragAndDropVars.fakeRow.querySelector(".td-number");// move to separate fn, return an obj
             const tdName = this.dragAndDropVars.fakeRow.querySelector(".td-name");
             const tdAudience = this.dragAndDropVars.fakeRow.querySelector(".td-audience");
             const tdProfile = this.dragAndDropVars.fakeRow.querySelector(".td-profile");
@@ -315,7 +296,7 @@ export class FormSeating {
             }
 
             this.dragAndDropVars.fakeRow.classList.add("fake-row");
-            Array.from(this.dragAndDropVars.fakeRow.children).forEach(child => child.classList.add("fake-row-item"));
+            Array.from(this.dragAndDropVars.fakeRow.children).forEach(child => child.classList.add("fake-row-item")); // move to css
             document.body.append(this.dragAndDropVars.fakeRow);
             this.moveAt(ev);
         }
@@ -350,14 +331,14 @@ export class FormSeating {
                     this.removeFakeRow(theLastDraggedRow);
 
                 } else if (targetAudience._id !== this.data.allStudents[this.dragAndDropVars.numberOfDraggedRow - 1].audience) {
-                    const previousSeatedStudentsAudience = this.data.facultyAudiences.filter(el => el._id === previousAllStudentsAudience);
+                    const previousSeatedStudentsAudience = this.data.facultyAudiences.filter(el => el._id === previousAllStudentsAudience);// move to separate fn
 
                     previousSeatedStudentsAudience[0].count --;
                     targetAudience.count ++;
                     this.data.allStudents[this.dragAndDropVars.numberOfDraggedRow - 1].audience = targetAudience._id;
                     const filteredStudents = this.data.allStudents;
                     this.renderSeatedStudents();
-                    this.renderAllStudents(filteredStudents);
+                    this.renderAllStudents(filteredStudents);/////////////////////////
                 }
 
                 this.dragAndDropVars.fakeRow = null;
@@ -387,7 +368,7 @@ export class FormSeating {
     }
 
     onSortClicked(ev) {
-        if (this.data.allStudents && ev.target.className === "sort-name") {
+        if (this.data.allStudents && ev.target.className === "sort-name") {//make the same classes or data-attrs
             this.sortHandler("firstName");
 
         } else if (this.data.allStudents && ev.target.className === "sort-audience") {
@@ -398,7 +379,7 @@ export class FormSeating {
 
         } else if (this.data.allStudents && ev.target.className === "sort-bel") {
             this.sortHandler("needBel");
-        }
+        }///////////////////
     }
 
     sortHandler(key) {
