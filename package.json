@@ -13,7 +13,5 @@
   "author": "DG",
   "license": "MIT",
   "homepage": "https://bitbucket.org/dmitrygoman/dimagomantraining#readme",
-  "dependencies": {
-    "angular": "^1.7.8"
-  }
+  "dependencies": {}
 }
