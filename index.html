@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en" ng-app="myApp">
+  <head>
+    <meta charset="utf-8">
+    <title>Home Tasks</title>
+    <link rel="stylesheet" href="./app/app.css" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.7.8/angular.min.js"></script>
+    <script src="./app/app.module.js"></script>
+    <script src="./app/scope-dir1/scope-dir1.module.js"></script>
+    <script src="./app/scope-dir1/scope-dir1.component.js"></script>
+    <script src="./app/scope-dir2/scope-dir2.module.js"></script>
+    <script src="./app/scope-dir2/scope-dir2.component.js"></script>
+    <script src="./app/this-dir1/this-dir1.module.js"></script>
+    <script src="./app/this-dir1/this-dir1.component.js"></script>
+    <script src="./app/this-dir2/this-dir2.module.js"></script>
+    <script src="./app/this-dir2/this-dir2.component.js"></script>
+  </head>
+  <body>
+    <div class="container">
+      <h3>With $scope</h3>
+      <scope-dir1></scope-dir1>
+      <h3>With this</h3>
+      <this-dir1></this-dir1>
+    </div>
+  </body>
+</html>

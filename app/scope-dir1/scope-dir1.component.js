@@ -1,7 +1,7 @@
 angular
     .module("scopeDir1")
     .component("scopeDir1", {
-        templateUrl: "scope-dir1/scope-dir1.template.html",
+        templateUrl: "./app/scope-dir1/scope-dir1.template.html",
         controllerAs: "first",
         controller: ScopeDir1Controller
     });

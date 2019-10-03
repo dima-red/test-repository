@@ -1,7 +1,7 @@
 angular
     .module("thisDir1")
     .component("thisDir1", {
-        templateUrl: "this-dir1/this-dir1.template.html",
+        templateUrl: "./app/this-dir1/this-dir1.template.html",
         controllerAs: "third",
         controller: ThisDir1Controller
     });
