@@ -1,0 +1,31 @@
+<html ng-app="demo">
+  <head>
+    <title>My AngularJS HW</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.6/angular.min.js"></script>
+    <script src="./script.js"></script>
+  </head>
+  <body>
+      <div ng-controller="ScopeController1">
+            <h3>With $scope</h3>
+            <p>Name: <input ng-model="name" /></p>
+            <h3>Hello, {{ name }}</h3>
+            <a ng-click="logThisAndScope()" style="cursor: pointer">Parent: Log this and scope</a>
+            <div ng-controller="ScopeController2">
+                <p>Name: <input ng-model="name" /></p>
+                <h3>Hello, {{ name }}</h3>
+                <a ng-click="logThisAndScope()" style="cursor: pointer">Child: Log this and scope</a>
+            </div>
+      </div>
+      <div ng-controller="ThisController1 as test1" style="margin-top: 60px">
+            <h3>With this</h3>
+            <p>Name: <input ng-model="test1.name" /></p>
+            <h3>Hello, {{ test1.name }}</h3>
+            <a ng-click="test1.logThisAndScope()" style="cursor: pointer">Parent: Log this and scope</a>
+            <div ng-controller="ThisController2 as test2">
+                <p>Name: <input ng-model="test2.name" /></p>
+                <h3>Hello, {{ test2.name }}</h3>
+                <a ng-click="test2.logThisAndScope()" style="cursor: pointer">Parent: Log this and scope</a>
+            </div>
+        </div>
+  </body>
+</html>
