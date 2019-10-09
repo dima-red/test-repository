@@ -6,7 +6,8 @@ angular
         controller: ThisDir1Controller
     });
 
-    function ThisDir1Controller($scope) {
+    function ThisDir1Controller($scope, dataService) {
+        this.dataService = dataService;
         this.a = "text string 3";
         this.logThisAndScope = function() {
             console.log(this, $scope);

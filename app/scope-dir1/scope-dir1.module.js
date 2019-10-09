@@ -1,1 +1,3 @@
-angular.module("scopeDir1", []);
+angular.module("scopeDir1", [
+    "scopeDir2"
+]);

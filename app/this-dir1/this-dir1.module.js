@@ -1,1 +1,3 @@
-angular.module("thisDir1", []);
+angular.module("thisDir1", [
+    "thisDir2"
+]);

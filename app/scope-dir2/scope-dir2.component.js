@@ -5,7 +5,8 @@ angular
         controller: ScopeDir2Controller
     });
 
-    function ScopeDir2Controller($scope) {
+    function ScopeDir2Controller($scope, dataService) {
+        $scope.dataService = dataService;
         $scope.a = "text string 2";
         $scope.logThisAndScope = function() {
             console.log(this, $scope);
